@@ -1,0 +1,58 @@
+server:
+  port: 8080
+#  servlet:
+#    context-path: /towako
+
+spring:
+  application:
+    name: towako
+  profiles:
+    include: web, mysql
+    active: local
+
+
+cartisan:
+  jwt:
+    key: cartisan-jwt
+    ttl: 1800000
+  info:
+    title: Towako 后台管理系统
+    serviceUrl: http://www.cartisan.com
+    version: 1.0
+    contact:
+      name: colin
+      url: zhang_colin.github.com
+      email: zhang_colin@163.com
+  security:
+    ignored:
+      urls: # 安全路由白名单
+        - /
+        - /*.html
+        - /**/*.html
+        - /**/*.css
+        - /**/*.js
+        - /**/v2/api-docs/**
+        - /**/v2/api-docs-ext/**
+        - /**/*.png
+        - /**/*.ico
+        - /swagger-ui.html
+        - /swagger-resources/**
+        - /swagger/**
+        - /webjars/springfox-swagger-ui/**
+        - /actuator/**
+        - /druid/**
+        - /system/login
+        - /interface-ui/**
+        - /api/**
+#        - /admin/register
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always

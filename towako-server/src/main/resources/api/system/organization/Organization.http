@@ -1,0 +1,39 @@
+### 获取所有组织
+GET http://{{host}}:{{port}}/system/organizations
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加组织
+POST http://{{host}}:{{port}}/system/organizations
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "cartisan",
+  "parentId": 0,
+  "description": "cartisan",
+  "sort": 10
+}
+
+### 编辑组织
+PUT http://{{host}}:{{port}}/system/organizations/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "cartisan",
+  "parentId": 0,
+  "description": "cartisan",
+  "sort": 20
+}
+
+### 删除组织
+DELETE http://{{host}}:{{port}}/system/organizations/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+###
