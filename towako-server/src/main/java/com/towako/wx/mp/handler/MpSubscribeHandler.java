@@ -1,5 +1,9 @@
 package com.towako.wx.mp.handler;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import com.towako.channel.scanqrcoderecord.ScanQrCodeRecordAppService;
+import com.towako.vip.application.MembershipAppService;
+import com.towako.vip.response.MembershipDto;
 import com.towako.wx.mp.builder.TextBuilder;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -12,6 +16,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author colin
@@ -19,6 +24,17 @@ import java.util.Map;
 @Component
 @Slf4j
 public class MpSubscribeHandler implements WxMpMessageHandler {
+
+    private final MembershipAppService membershipAppService;
+    private final WxMaService wxMaService;
+    private final ScanQrCodeRecordAppService scanQrCodeRecordAppService;
+
+    public MpSubscribeHandler(MembershipAppService membershipAppService, WxMaService wxMaService,
+                              ScanQrCodeRecordAppService scanQrCodeRecordAppService) {
+        this.membershipAppService = membershipAppService;
+        this.wxMaService = wxMaService;
+        this.scanQrCodeRecordAppService = scanQrCodeRecordAppService;
+    }
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -32,7 +48,17 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
             WxMpUser userWxInfo = weixinService.getUserService()
                 .userInfo(wxMessage.getFromUser(), null);
             if (userWxInfo != null) {
-                // TODO 可以添加关注用户到本地数据库
+                final String appId = wxMaService.getWxMaConfig().getAppid();
+
+                String unionId = userWxInfo.getUnionId();
+                if (unionId == null) {
+                    unionId="mock-"+ UUID.randomUUID();
+                }
+                final MembershipDto membershipDto = membershipAppService.registerByWechat(appId, userWxInfo.getOpenId(), unionId,
+                        "", userWxInfo.getNickname(), userWxInfo.getHeadImgUrl(), userWxInfo.getSex(),
+                        userWxInfo.getCity(), userWxInfo.getProvince(), userWxInfo.getCountry(), userWxInfo.getQrSceneStr());
+
+                membershipAppService.recordLogin(membershipDto.getId());
             }
         } catch (WxErrorException e) {
             if (e.getError().getErrorCode() == 48001) {
@@ -67,6 +93,11 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
     private WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage)
         throws Exception {
         //TODO
+
+        final Map<String, Object> allFieldsMap = wxMessage.getAllFieldsMap();
+        scanQrCodeRecordAppService.scanRecord(allFieldsMap.get("EventKey").toString(),
+                allFieldsMap.get("FromUserName").toString(), allFieldsMap.get("Event").toString());
+
         return null;
     }
 

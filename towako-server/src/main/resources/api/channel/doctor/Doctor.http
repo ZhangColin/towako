@@ -1,0 +1,45 @@
+### 搜索医生
+GET http://{{host}}:{{port}}/channel/doctors/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加医生
+POST http://{{host}}:{{port}}/channel/doctors
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "张医生"
+}
+
+### 编辑医生
+PUT http://{{host}}:{{port}}/channel/doctors/1496362605613289472
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "胡医生"
+}
+
+### 删除医生
+DELETE http://{{host}}:{{port}}/channel/doctors/1496362605613289472
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 启用医生
+PUT http://{{host}}:{{port}}/channel/doctors/1496362605613289472/enable
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 禁用医生
+PUT http://{{host}}:{{port}}/channel/doctors/1496362605613289472/disable
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+###

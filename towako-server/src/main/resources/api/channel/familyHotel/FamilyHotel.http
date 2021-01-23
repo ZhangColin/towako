@@ -1,0 +1,45 @@
+### 搜索家庭旅馆
+GET http://{{host}}:{{port}}/channel/familyhotels/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加家庭旅馆
+POST http://{{host}}:{{port}}/channel/familyhotels
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "东升旅馆"
+}
+
+### 编辑家庭旅馆
+PUT http://{{host}}:{{port}}/channel/familyhotels/1496362605613289472
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "希尔顿旅馆"
+}
+
+### 删除家庭旅馆
+DELETE http://{{host}}:{{port}}/channel/familyhotels/1496362605613289472
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 启用家庭旅馆
+PUT http://{{host}}:{{port}}/channel/familyhotels/1496362605613289472/enable
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 禁用家庭旅馆
+PUT http://{{host}}:{{port}}/channel/familyhotels/1496362605613289472/disable
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+###
