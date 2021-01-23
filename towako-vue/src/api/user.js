@@ -21,3 +21,7 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function changePassword(oldPassword, newPassword) {
+  return request.put('/system/users/profile/changePassword', { oldPassword, newPassword })
+}
