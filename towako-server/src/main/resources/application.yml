@@ -42,9 +42,7 @@ cartisan:
         - /actuator/**
         - /druid/**
         - /system/login
-        - /interface-ui/**
-        - /api/**
-#        - /admin/register
+        - /mp/**
 
 management:
   endpoints:
