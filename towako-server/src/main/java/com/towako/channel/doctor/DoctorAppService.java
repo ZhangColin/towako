@@ -44,8 +44,8 @@ public class DoctorAppService {
         this.idWorker = idWorker;
     }
 
-    public PageResult<DoctorDto> searchDoctors(@NonNull DoctorQuery roleQuery, @NonNull Pageable pageable) {
-        final Page<Doctor> searchResult = repository.findAll(querySpecification(roleQuery),
+    public PageResult<DoctorDto> searchDoctors(@NonNull DoctorQuery doctorQuery, @NonNull Pageable pageable) {
+        final Page<Doctor> searchResult = repository.findAll(querySpecification(doctorQuery),
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
         final List<DoctorDto> doctors = doctorConverter.convert(searchResult.getContent());

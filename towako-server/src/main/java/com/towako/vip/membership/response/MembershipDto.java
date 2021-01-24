@@ -1,10 +1,11 @@
-package com.towako.vip.response;
+package com.towako.vip.membership.response;
 
-import com.towako.vip.domain.Gender;
+import com.towako.vip.membership.domain.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author colin
@@ -40,4 +41,7 @@ public class MembershipDto {
 
     @ApiModelProperty(value = "推荐")
     private String recommend;
+
+    @ApiModelProperty(value = "注册时间")
+    private LocalDateTime createDateTime;
 }

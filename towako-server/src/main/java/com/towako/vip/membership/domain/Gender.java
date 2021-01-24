@@ -1,4 +1,4 @@
-package com.towako.vip.domain;
+package com.towako.vip.membership.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

@@ -1,0 +1,5 @@
+### 搜索会员
+GET http://{{host}}:{{port}}/vip/memberships/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

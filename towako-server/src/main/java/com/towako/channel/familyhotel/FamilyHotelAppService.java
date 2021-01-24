@@ -43,8 +43,8 @@ public class FamilyHotelAppService {
         this.idWorker = idWorker;
     }
 
-    public PageResult<FamilyHotelDto> searchFamilyHotels(@NonNull FamilyHotelQuery roleQuery, @NonNull Pageable pageable) {
-        final Page<FamilyHotel> searchResult = repository.findAll(querySpecification(roleQuery),
+    public PageResult<FamilyHotelDto> searchFamilyHotels(@NonNull FamilyHotelQuery familyHotelQuery, @NonNull Pageable pageable) {
+        final Page<FamilyHotel> searchResult = repository.findAll(querySpecification(familyHotelQuery),
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
         final List<FamilyHotelDto> doctors = familyHotelConverter.convert(searchResult.getContent());

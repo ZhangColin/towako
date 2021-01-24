@@ -1,4 +1,4 @@
-package com.towako.vip.domain;
+package com.towako.vip.membership.domain;
 
 import com.cartisan.domains.AggregateRoot;
 import com.cartisan.domains.SoftDeleteEntity;

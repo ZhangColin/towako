@@ -1,19 +1,16 @@
-package com.towako.vip.application;
+package com.towako.vip.membership;
 
 import com.cartisan.dtos.PageResult;
 import com.cartisan.utils.SnowflakeIdWorker;
-import com.towako.channel.doctor.Doctor;
-import com.towako.channel.doctor.request.DoctorQuery;
-import com.towako.channel.doctor.response.DoctorDto;
-import com.towako.channel.wechatqrcode.response.WeChatQrCodeDto;
-import com.towako.vip.domain.Gender;
-import com.towako.vip.domain.Membership;
-import com.towako.vip.domain.WechatMembership;
-import com.towako.vip.repository.MembershipRepository;
-import com.towako.vip.repository.WechatMembershipRepository;
-import com.towako.vip.request.MembershipQuery;
-import com.towako.vip.response.MembershipConverter;
-import com.towako.vip.response.MembershipDto;
+import com.towako.system.user.mapper.UserQueryMapper;
+import com.towako.vip.membership.domain.Gender;
+import com.towako.vip.membership.domain.Membership;
+import com.towako.vip.membership.mapper.MembershipRecommendMapper;
+import com.towako.vip.membership.response.MembershipRecommendDto;
+import com.towako.vip.wechatmembership.WechatMembership;
+import com.towako.vip.wechatmembership.WechatMembershipRepository;
+import com.towako.vip.membership.response.MembershipConverter;
+import com.towako.vip.membership.response.MembershipDto;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
@@ -40,22 +38,40 @@ public class MembershipAppService {
     private final MembershipRepository membershipRepository;
     private final WechatMembershipRepository wechatMembershipRepository;
     private final SnowflakeIdWorker idWorker;
+    private final MembershipRecommendMapper membershipRecommendMapper;
 
-    public MembershipAppService(MembershipRepository membershipRepository, WechatMembershipRepository wechatMembershipRepository, SnowflakeIdWorker idWorker) {
+    public MembershipAppService(MembershipRepository membershipRepository, WechatMembershipRepository wechatMembershipRepository,
+                                SnowflakeIdWorker idWorker, MembershipRecommendMapper membershipRecommendMapper) {
         this.membershipRepository = membershipRepository;
         this.wechatMembershipRepository = wechatMembershipRepository;
         this.idWorker = idWorker;
+        this.membershipRecommendMapper = membershipRecommendMapper;
     }
 
-    public PageResult<MembershipDto> searchDoctors(@NonNull MembershipQuery membershipQuery, @NonNull Pageable pageable) {
+    public PageResult<MembershipDto> searchMemberships(@NonNull MembershipQuery membershipQuery, @NonNull Pageable pageable) {
         final Page<Membership> searchResult = membershipRepository.findAll(querySpecification(membershipQuery),
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
-        final List<MembershipDto> doctors = membershipConverter.convert(searchResult.getContent());
+        final List<Membership> memberships = searchResult.getContent();
+        final List<MembershipDto> membershipDtos = membershipConverter.convert(memberships);
+
+        membershipDtos.forEach(membershipDto -> memberships.stream()
+                .filter(membership->membership.getId().equals(membershipDto.getId())).findFirst()
+                .ifPresent(membership-> membershipDto.setCreateDateTime(membership.getCreateDateTime())));
+
+        final List<MembershipRecommendDto> recommendDtos = membershipRecommendMapper.findByMemberIds(membershipDtos.stream()
+                .map(MembershipDto::getId).collect(toList()));
+
+        membershipDtos.forEach(membershipDto -> recommendDtos.stream()
+                .filter(recommendDto->recommendDto.getId().equals(membershipDto.getId())).findFirst()
+                .ifPresent(recommendDto->{
+            membershipDto.setChannel(recommendDto.getChannel());
+            membershipDto.setRecommend(recommendDto.getRecommend());
+        }));
 
 
         return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
-                doctors);
+                membershipDtos);
     }
 
     public Optional<MembershipDto> findByOpenId(String appId, String openId) {

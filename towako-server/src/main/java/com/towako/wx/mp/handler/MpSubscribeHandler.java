@@ -2,8 +2,8 @@ package com.towako.wx.mp.handler;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.towako.channel.scanqrcoderecord.ScanQrCodeRecordAppService;
-import com.towako.vip.application.MembershipAppService;
-import com.towako.vip.response.MembershipDto;
+import com.towako.vip.membership.MembershipAppService;
+import com.towako.vip.membership.response.MembershipDto;
 import com.towako.wx.mp.builder.TextBuilder;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;

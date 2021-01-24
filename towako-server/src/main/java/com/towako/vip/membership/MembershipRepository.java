@@ -1,7 +1,7 @@
-package com.towako.vip.repository;
+package com.towako.vip.membership;
 
 import com.cartisan.repositories.BaseRepository;
-import com.towako.vip.domain.Membership;
+import com.towako.vip.membership.domain.Membership;
 
 /**
  * @author colin

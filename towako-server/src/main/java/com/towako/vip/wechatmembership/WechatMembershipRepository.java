@@ -1,7 +1,6 @@
-package com.towako.vip.repository;
+package com.towako.vip.wechatmembership;
 
 import com.cartisan.repositories.BaseRepository;
-import com.towako.vip.domain.WechatMembership;
 
 import java.util.List;
 import java.util.Optional;

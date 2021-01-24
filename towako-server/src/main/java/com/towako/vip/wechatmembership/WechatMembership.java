@@ -1,4 +1,4 @@
-package com.towako.vip.domain;
+package com.towako.vip.wechatmembership;
 
 import com.cartisan.domains.AbstractEntity;
 import com.cartisan.domains.AggregateRoot;
