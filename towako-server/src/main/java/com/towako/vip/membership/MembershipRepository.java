@@ -1,4 +1,4 @@
-package com.towako.vip.repositories;
+package com.towako.vip.repository;
 
 import com.cartisan.repositories.BaseRepository;
 import com.towako.vip.domain.Membership;

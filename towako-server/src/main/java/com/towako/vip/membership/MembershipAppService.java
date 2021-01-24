@@ -1,21 +1,33 @@
 package com.towako.vip.application;
 
+import com.cartisan.dtos.PageResult;
 import com.cartisan.utils.SnowflakeIdWorker;
+import com.towako.channel.doctor.Doctor;
+import com.towako.channel.doctor.request.DoctorQuery;
+import com.towako.channel.doctor.response.DoctorDto;
+import com.towako.channel.wechatqrcode.response.WeChatQrCodeDto;
 import com.towako.vip.domain.Gender;
 import com.towako.vip.domain.Membership;
 import com.towako.vip.domain.WechatMembership;
-import com.towako.vip.repositories.MembershipRepository;
-import com.towako.vip.repositories.WechatMembershipRepository;
+import com.towako.vip.repository.MembershipRepository;
+import com.towako.vip.repository.WechatMembershipRepository;
+import com.towako.vip.request.MembershipQuery;
 import com.towako.vip.response.MembershipConverter;
 import com.towako.vip.response.MembershipDto;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author colin
@@ -33,6 +45,17 @@ public class MembershipAppService {
         this.membershipRepository = membershipRepository;
         this.wechatMembershipRepository = wechatMembershipRepository;
         this.idWorker = idWorker;
+    }
+
+    public PageResult<MembershipDto> searchDoctors(@NonNull MembershipQuery membershipQuery, @NonNull Pageable pageable) {
+        final Page<Membership> searchResult = membershipRepository.findAll(querySpecification(membershipQuery),
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+
+        final List<MembershipDto> doctors = membershipConverter.convert(searchResult.getContent());
+
+
+        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
+                doctors);
     }
 
     public Optional<MembershipDto> findByOpenId(String appId, String openId) {

@@ -8,6 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import channel from './modules/channel'
+import vip from './modules/vip'
 import system from './modules/system'
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -88,6 +89,7 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   channel,
+  vip,
   system
 ]
 

@@ -34,4 +34,10 @@ public class MembershipDto {
 
     @ApiModelProperty(value = "省份")
     private String province;
+
+    @ApiModelProperty(value = "渠道")
+    private String channel;
+
+    @ApiModelProperty(value = "推荐")
+    private String recommend;
 }
