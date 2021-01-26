@@ -52,7 +52,7 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
 
                 String unionId = userWxInfo.getUnionId();
                 if (unionId == null) {
-                    unionId="mock-"+ UUID.randomUUID();
+                    unionId="mock";
                 }
                 final MembershipDto membershipDto = membershipAppService.registerByWechat(appId, userWxInfo.getOpenId(), unionId,
                         "", userWxInfo.getNickname(), userWxInfo.getHeadImgUrl(), userWxInfo.getSex(),

@@ -1,5 +1,6 @@
 package com.towako.vip.membership.mapper;
 
+import com.towako.vip.membership.response.MembershipDto;
 import com.towako.vip.membership.response.MembershipRecommendDto;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -23,4 +24,16 @@ public interface MembershipRecommendMapper {
             + "</foreach>" +
     "</script>")
     List<MembershipRecommendDto> findByMemberIds(@Param("memberIds")List<Long> memberIds);
+
+    @Select("select m.id, m.phone, m.nickname, m.created as createDateTime \n" +
+            "from vip_memberships as m \n" +
+            "    inner join vip_wechat_memberships as wm on m.id=wm.member_id \n" +
+            "    inner join chl_doctors as d on concat('DOCTOR_', d.id)=wm.qr_scene_str and d.id=${doctorId}")
+    List<MembershipDto> findByDoctorId(@Param("doctorId")Long doctorId);
+
+    @Select("select m.id, m.phone, m.nickname, m.created as createDateTime \n" +
+            "from vip_memberships as m \n" +
+            "    inner join vip_wechat_memberships as wm on m.id=wm.member_id \n" +
+            "    inner join chl_family_hotels as d on concat('FAMILYHOTEL_', d.id)=wm.qr_scene_str and d.id=${familyHotelId}")
+    List<MembershipDto> findByFamilyHotelId(@Param("familyHotelId") Long familyHotelId);
 }

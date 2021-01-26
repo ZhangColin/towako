@@ -74,6 +74,14 @@ public class MembershipAppService {
                 membershipDtos);
     }
 
+    public List<MembershipDto> findByDoctorId(Long doctorId){
+        return membershipRecommendMapper.findByDoctorId(doctorId);
+    }
+
+    public List<MembershipDto> findByFamilyHotelId(Long familyHotelId){
+        return membershipRecommendMapper.findByFamilyHotelId(familyHotelId);
+    }
+
     public Optional<MembershipDto> findByOpenId(String appId, String openId) {
         return wechatMembershipRepository.findByAppIdAndOpenId(appId, openId)
                 .flatMap(wechatMembership -> membershipRepository.findById(wechatMembership.getMemberId()))
