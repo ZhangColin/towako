@@ -2,15 +2,14 @@ package com.towako.vip.membership;
 
 import com.cartisan.dtos.PageResult;
 import com.cartisan.utils.SnowflakeIdWorker;
-import com.towako.system.user.mapper.UserQueryMapper;
 import com.towako.vip.membership.domain.Gender;
 import com.towako.vip.membership.domain.Membership;
 import com.towako.vip.membership.mapper.MembershipRecommendMapper;
+import com.towako.vip.membership.response.MembershipConverter;
+import com.towako.vip.membership.response.MembershipDto;
 import com.towako.vip.membership.response.MembershipRecommendDto;
 import com.towako.vip.wechatmembership.WechatMembership;
 import com.towako.vip.wechatmembership.WechatMembershipRepository;
-import com.towako.vip.membership.response.MembershipConverter;
-import com.towako.vip.membership.response.MembershipDto;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;

@@ -16,7 +16,6 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author colin
@@ -52,7 +51,8 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
 
                 String unionId = userWxInfo.getUnionId();
                 if (unionId == null) {
-                    unionId="mock";
+                    // TODO: 没有开通第三方公众平台时，使用openId来替代
+                    unionId=userWxInfo.getOpenId();
                 }
                 final MembershipDto membershipDto = membershipAppService.registerByWechat(appId, userWxInfo.getOpenId(), unionId,
                         "", userWxInfo.getNickname(), userWxInfo.getHeadImgUrl(), userWxInfo.getSex(),

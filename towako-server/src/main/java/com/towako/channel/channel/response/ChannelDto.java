@@ -1,4 +1,4 @@
-package com.towako.channel.familyhotel.response;
+package com.towako.channel.channel.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,12 +7,15 @@ import lombok.Data;
  * @author colin
  */
 @Data
-public class FamilyHotelDto {
-    @ApiModelProperty(value = "家庭旅馆Id")
+public class ChannelDto {
+    @ApiModelProperty(value = "渠道Id")
     private Long id;
 
-    @ApiModelProperty(value = "家庭旅馆名称")
+    @ApiModelProperty(value = "渠道名称")
     private String name;
+
+    @ApiModelProperty(value = "渠道类型")
+    private String type;
 
     @ApiModelProperty(value = "获取二维码ticket")
     private String ticket;

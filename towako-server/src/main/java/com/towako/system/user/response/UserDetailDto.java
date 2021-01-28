@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 public class UserDetailDto {
     @ApiModelProperty(value = "用户Id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "用户名")
     private String username;

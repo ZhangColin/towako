@@ -1,19 +1,21 @@
-package com.towako.channel.familyhotel.request;
+package com.towako.channel.channel.request;
 
 import com.cartisan.repositories.Condition;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 /**
  * @author colin
  */
 @Data
-public class FamilyHotelQuery {
-    @ApiModelProperty(value = "家庭旅馆名称", required = true)
-    @Length(min = 2, max = 32, message = "家庭旅馆名称必须在 2 至 32 之间")
+public class ChannelQuery {
+    @ApiModelProperty(value = "渠道名称", required = true)
     @Condition(propName = "name", type = Condition.Type.INNER_LIKE)
     private String name;
+
+    @ApiModelProperty(value = "渠道类型", required = true)
+    @Condition(propName = "type", type = Condition.Type.EQUAL)
+    private String type;
 
     @ApiModelProperty(value = "状态")
     @Condition(propName = "status", type = Condition.Type.EQUAL)

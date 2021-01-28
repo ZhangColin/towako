@@ -1,4 +1,4 @@
-package com.towako.channel.familyhotel;
+package com.towako.channel.channel;
 
 import com.cartisan.domains.AbstractEntity;
 import com.cartisan.domains.AggregateRoot;
@@ -14,26 +14,38 @@ import javax.persistence.Table;
  * @author colin
  */
 @Entity
-@Table(name = "chl_family_hotels")
+@Table(name = "chl_channels")
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class FamilyHotel extends AbstractEntity implements AggregateRoot {
+public class Channel extends AbstractEntity implements AggregateRoot {
     @Id
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "type")
+    private String type;
 
     @Column(name = "status")
     private Integer status;
 
-    private FamilyHotel() {
+    private Channel() {
     }
 
-    public FamilyHotel(Long id, String name) {
+    public Channel(Long id, Long userId, String name, String phone, String type) {
         this.id = id;
+        this.userId = userId;
         this.name = name;
+        this.phone = phone;
+        this.type = type;
         this.status = 1;
     }
 

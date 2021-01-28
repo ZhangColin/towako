@@ -1,6 +1,5 @@
 package com.towako.channel.wechatqrcode;
 
-import com.towako.channel.doctor.response.DoctorConverter;
 import com.towako.channel.wechatqrcode.domain.WeChatQrCodeProvider;
 import com.towako.channel.wechatqrcode.domain.WechatQrCode;
 import com.towako.channel.wechatqrcode.domain.WechatQrCodeTicket;
@@ -27,8 +26,8 @@ public class WeChatQrCodeAppService {
         this.qrCodeProvider = qrCodeProvider;
     }
 
-    public List<WeChatQrCodeDto> findByChannelIds(List<Long> channelIds, String channelType) {
-        return converter.convert(repository.findByChannelIdInAndChannelType(channelIds, channelType));
+    public List<WeChatQrCodeDto> findByChannelIds(List<Long> channelIds) {
+        return converter.convert(repository.findByChannelIdIn(channelIds));
     }
 
     @Transactional(rollbackOn = Exception.class)
