@@ -33,7 +33,7 @@ public class ChannelController {
 
     @ApiOperation(value = "搜索渠道")
     @GetMapping("/search")
-    public ResponseEntity<PageResult<ChannelDto>> searchFamilyHotels(
+    public ResponseEntity<PageResult<ChannelDto>> searchChannels(
             @ApiParam(value = "查询参数") ChannelQuery channelQuery,
             @PageableDefault Pageable pageable) {
         return success(service.searchChannels(channelQuery, pageable));
@@ -44,7 +44,6 @@ public class ChannelController {
     public ResponseEntity<?> addChannel(
             @ApiParam(value = "渠道信息", required = true) @Validated @RequestBody ChannelParam channelParam) {
         service.addChannel(channelParam);
-
 
         return success();
     }

@@ -1,0 +1,9 @@
+
+### 重新申请渠道二维码
+PUT http://{{host}}:{{port}}/traffic/weChatQrCode/reApply/1498851946784755712
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+}

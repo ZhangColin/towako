@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "vip_wechat_event_records")
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class WeChatEventRecord extends AbstractEntity implements AggregateRoot {
+public class WechatEventRecord extends AbstractEntity implements AggregateRoot {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +33,10 @@ public class WeChatEventRecord extends AbstractEntity implements AggregateRoot {
     @Column(name = "event_date")
     private LocalDateTime eventDate;
 
-    private WeChatEventRecord() {
+    private WechatEventRecord() {
     }
 
-    public WeChatEventRecord(String openId, String event, String qrSceneStr) {
+    public WechatEventRecord(String openId, String event, String qrSceneStr) {
         this.qrSceneStr = qrSceneStr;
         this.openId = openId;
         this.event = event;

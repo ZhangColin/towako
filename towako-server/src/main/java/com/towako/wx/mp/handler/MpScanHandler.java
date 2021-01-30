@@ -1,7 +1,6 @@
 package com.towako.wx.mp.handler;
 
-import com.towako.traffic.recommend.RecommendAppService;
-import com.towako.vip.wechateventrecord.WeChatEventRecordAppService;
+import com.towako.vip.wechateventrecord.WechatEventRecordAppService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -19,9 +18,9 @@ import java.util.Map;
 @Component
 @Slf4j
 public class MpScanHandler implements WxMpMessageHandler {
-    private final WeChatEventRecordAppService weChatEventRecordAppService;
+    private final WechatEventRecordAppService weChatEventRecordAppService;
 
-    public MpScanHandler(WeChatEventRecordAppService weChatEventRecordAppService) {
+    public MpScanHandler(WechatEventRecordAppService weChatEventRecordAppService) {
         this.weChatEventRecordAppService = weChatEventRecordAppService;
     }
 

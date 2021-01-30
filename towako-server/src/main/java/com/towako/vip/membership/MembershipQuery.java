@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 public class MembershipQuery {
     @ApiModelProperty(value = "会员名称", required = true)
     @Length(min = 2, max = 32, message = "会员名称必须在 2 至 32 之间")
-    @Condition(propName = "name", type = Condition.Type.INNER_LIKE)
+    @Condition(propName = "nickname", type = Condition.Type.INNER_LIKE)
     private String nickname;
 
     @ApiModelProperty(value = "状态")

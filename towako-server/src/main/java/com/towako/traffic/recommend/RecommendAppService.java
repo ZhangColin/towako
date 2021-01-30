@@ -1,8 +1,24 @@
 package com.towako.traffic.recommend;
 
+import com.cartisan.dtos.PageResult;
+import com.towako.traffic.channel.Channel;
+import com.towako.traffic.channel.request.ChannelQuery;
+import com.towako.traffic.channel.response.ChannelDto;
+import com.towako.traffic.recommend.response.RecommendConverter;
+import com.towako.traffic.recommend.response.RecommendDto;
+import com.towako.traffic.wechatqrcode.response.WeChatQrCodeDto;
+import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+
+import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author colin
@@ -10,9 +26,18 @@ import javax.transaction.Transactional;
 @Service
 public class RecommendAppService {
     private final RecommendRepository repository;
+    private final RecommendConverter converter = RecommendConverter.CONVERTER;
 
     public RecommendAppService(RecommendRepository repository) {
         this.repository = repository;
+    }
+
+    public PageResult<RecommendDto> findByChannelId(@NonNull Long channelId, @NonNull Pageable pageable) {
+        final Page<Recommend> searchResult = repository.findByChannelId(channelId,
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "recommendDate")));
+
+        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
+                converter.convert(searchResult.getContent()));
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -30,4 +55,7 @@ public class RecommendAppService {
         repository.save(recommend);
     }
 
+    public Long getRecommendCount(Long channelId) {
+        return repository.countByChannelId(channelId);
+    }
 }

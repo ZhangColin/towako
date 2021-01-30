@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -48,7 +49,7 @@ public class MembershipAppService {
 
     public PageResult<MembershipDto> searchMemberships(@NonNull MembershipQuery membershipQuery, @NonNull Pageable pageable) {
         final Page<Membership> searchResult = membershipRepository.findAll(querySpecification(membershipQuery),
-                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "createDateTime")));
 
         final List<Membership> memberships = searchResult.getContent();
         final List<MembershipDto> membershipDtos = membershipConverter.convert(memberships);

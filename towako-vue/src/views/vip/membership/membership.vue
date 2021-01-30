@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="24" class="filter-container">
       <el-col :span="6">
-        <el-input v-model="queryParam.name" class="filter-item" placeholder="请输入会员名称查询" />
+        <el-input v-model="queryParam.nickname" class="filter-item" placeholder="请输入会员名称查询" />
       </el-col>
       <el-col :span="12">
         <el-button class="filter-item" type="primary" @click="handleSearch">查询</el-button>
@@ -34,11 +34,20 @@
       </el-table-column>
       <el-table-column align="center" label="渠道" prop="channel">
         <template slot-scope="{row}">
-          <span>{{ row.channel==='DOCTOR'?'医生':row.channel==='FAMILY_HOTEL'?'家庭旅馆':'其它' }}</span>
+          <span>{{ row.channel==='DOCTOR'?'医生':row.channel==='FAMILY_HOTEL'?'家庭旅馆':row.channel==='OTHER'?'其它':'' }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="推荐" prop="recommend" />
+      <el-table-column align="center" label="推荐" prop="recommend">
+        <template slot-scope="{row}">
+          <span>{{ row.recommend||'用户自寻' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="注册时间" prop="createDateTime" />
+      <el-table-column align="center" label="操作" width="120">
+        <template slot-scope="{row}">
+          <el-button type="primary" class="filter-item" @click="handleWechatEventRecord(row.id)">微信事件记录</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       :current-page.sync="page.currentPage"
@@ -69,7 +78,9 @@ export default {
   created() {
   },
   methods: {
-
+    handleWechatEventRecord(memberId) {
+      this.$router.push({ path: '/vip/membership/wechat-event-record', query: { memberId }})
+    }
   }
 }
 </script>

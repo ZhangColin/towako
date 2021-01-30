@@ -21,7 +21,4 @@ public interface MembershipRecommendMapper {
     "</script>")
     List<MembershipRecommendDto> findByMemberIds(@Param("memberIds")List<Long> memberIds);
 
-    @Select("select count(1) as count from vip_wechat_memberships where qr_scene_str like '%#{channelId}';")
-    Long recommendCountByChannelId(Long channelId);
-
 }

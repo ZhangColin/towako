@@ -53,13 +53,14 @@
           </el-popconfirm>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="推荐数" prop="recommends" />
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
           <el-dropdown split-button @click="handleEdit(scope.$index, scope.row)">
             编辑
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="handleShowQr(scope.$index, scope.row)">二维码</el-dropdown-item>
-              <el-dropdown-item @click.native="handleMyRecommend(scope.$index, scope.row)">推荐列表</el-dropdown-item>
+              <el-dropdown-item @click.native="handleRecommendList(scope.$index, scope.row)">推荐列表</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -119,6 +120,44 @@
         </div>
       </div>
     </el-drawer>
+    <el-drawer
+      :title="recommendDrawerTitle"
+      :visible.sync="recommendDrawerVisible"
+      :wrapper-closable="false"
+      size="50%"
+    >
+      <div class="drawer__content">
+        <el-table
+          v-loading="recommendLoading"
+          :data="recommendDataSource"
+          row-key="id"
+          class="table-container"
+          element-loading-text="加载中..."
+          stripe
+          border
+          fit
+          highlight-current-row
+        >
+          <el-table-column align="center" label="昵称" prop="nickName" />
+          <el-table-column align="center" label="推荐时间" prop="recommendDate" />
+        </el-table>
+        <el-pagination
+          :current-page.sync="recommendPage.currentPage"
+          :page-sizes="[5, 10, 20]"
+          :page-size="recommendPage.pageSize"
+          :total="recommendPage.total"
+          class="pagination-container"
+          background
+          align="right"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleRecommendSizeChange"
+          @current-change="handleRecommendCurrentChange"
+        />
+        <div class="drawer__footer">
+          <el-button type="primary" @click="recommendDrawerVisible=false">关闭</el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -127,6 +166,7 @@ import { PaginationMixin } from '@/mixins/pagination-mixin'
 import { CudMixin } from '@/mixins/cud-mixin'
 import { enableChannel, disableChannel }
   from '@/api/traffic/channel-api'
+import { findByChannelId } from '@/api/traffic/recommend-api'
 
 export default {
   name: 'Channel',
@@ -152,7 +192,19 @@ export default {
 
       qrCodeDrawerTitle: '',
       qrCodeDrawerVisible: false,
-      channelQrCodeUrl: ''
+      channelQrCodeUrl: '',
+
+      channelId: 0,
+      recommendDrawerTitle: '',
+      recommendDrawerVisible: false,
+      recommendDataSource: [],
+      recommendQueryParam: {},
+      recommendLoading: true,
+      recommendPage: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
+      }
     }
   },
   created() {
@@ -204,7 +256,35 @@ export default {
     //   a.href = url // 将生成的URL设置为a.href属性
     //   a.dispatchEvent(event) // 触发a的单击事件
     // },
-    handleMyRecommend(index, row) {
+    handleRecommendList(index, row) {
+      this.recommendDrawerTitle = `${row.name} 推荐列表`
+      this.recommendDrawerVisible = true
+      this.channelId = row.id
+      this.handleRecommendSearch()
+    },
+    fetchRecommendData() {
+      this.recommendLoading = true
+      this.recommendQueryParam.page = this.recommendPage.currentPage - 1
+      this.recommendQueryParam.size = this.recommendPage.pageSize
+
+      findByChannelId(this.channelId, this.recommendQueryParam).then(response => {
+        this.recommendDataSource = response.data.rows
+        this.recommendPage.total = response.data.total
+        this.recommendLoading = false
+      })
+    },
+    handleRecommendSearch() {
+      this.recommendPage.currentPage = 1
+      this.fetchRecommendData()
+    },
+    handleRecommendSizeChange(pageSize) {
+      this.recommendPage.currentPage = 1
+      this.recommendPage.pageSize = pageSize
+      this.fetchRecommendData()
+    },
+    handleRecommendCurrentChange(currentPage) {
+      this.recommendPage.currentPage = currentPage
+      this.fetchRecommendData()
     }
   }
 }

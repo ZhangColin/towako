@@ -54,4 +54,13 @@ public class WechatQrCode extends AbstractEntity implements AggregateRoot {
         this.expireSeconds = expireSeconds;
         this.url = url;
     }
+
+    public void updateWeChatInfo(String qrSceneStr, String imageUrl,
+                                 String ticket, Integer expireSeconds, String url) {
+        this.qrSceneStr = qrSceneStr;
+        this.imageUrl = imageUrl;
+        this.ticket = ticket;
+        this.expireSeconds = expireSeconds;
+        this.url = url;
+    }
 }

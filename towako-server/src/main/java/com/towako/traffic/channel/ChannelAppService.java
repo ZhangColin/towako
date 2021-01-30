@@ -8,6 +8,7 @@ import com.towako.traffic.channel.request.ChannelParam;
 import com.towako.traffic.channel.request.ChannelQuery;
 import com.towako.traffic.channel.response.ChannelConverter;
 import com.towako.traffic.channel.response.ChannelDto;
+import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.traffic.wechatqrcode.WeChatQrCodeAppService;
 import com.towako.traffic.wechatqrcode.response.WeChatQrCodeDto;
 import com.towako.system.user.application.UserAppService;
@@ -38,14 +39,18 @@ public class ChannelAppService {
     private final WeChatQrCodeAppService weChatQrCodeAppService;
     private final SnowflakeIdWorker idWorker;
     private final UserAppService userAppService;
+    private final RecommendAppService recommendAppService;
 
     private final ChannelConverter channelConverter = ChannelConverter.CONVERTER;
 
-    public ChannelAppService(ChannelRepository repository, WeChatQrCodeAppService weChatQrCodeAppService, SnowflakeIdWorker idWorker, UserAppService userAppService) {
+    public ChannelAppService(ChannelRepository repository, WeChatQrCodeAppService weChatQrCodeAppService,
+                             UserAppService userAppService, RecommendAppService recommendAppService,
+                             SnowflakeIdWorker idWorker) {
         this.repository = repository;
         this.weChatQrCodeAppService = weChatQrCodeAppService;
         this.idWorker = idWorker;
         this.userAppService = userAppService;
+        this.recommendAppService = recommendAppService;
     }
 
     public PageResult<ChannelDto> searchChannels(@NonNull ChannelQuery channelQuery, @NonNull Pageable pageable) {
@@ -61,6 +66,8 @@ public class ChannelAppService {
                 .filter(qrCodeDto->qrCodeDto.getChannelId().equals(channelDto.getId()))
                 .findFirst().ifPresent(qrCodeDto->{
             channelDto.setPhone(channelDto.getPhone().substring(0, 3)+"****"+channelDto.getPhone().substring(7));
+
+            channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
 
             channelDto.setTicket(qrCodeDto.getTicket());
             channelDto.setImageUrl(qrCodeDto.getImageUrl());
@@ -78,9 +85,9 @@ public class ChannelAppService {
             throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs(ERR_NAME_EXISTS));
         }
 
-        final long doctorId = idWorker.nextId();
+        final long channelId = idWorker.nextId();
 
-        weChatQrCodeAppService.applyWechatQrCode(doctorId, channelParam.getType());
+        weChatQrCodeAppService.applyWechatQrCode(channelId, channelParam.getType());
 
         final CreateAccountCommand createAccountCommand = new CreateAccountCommand();
         createAccountCommand.setUsername(channelParam.getPhone());
@@ -103,7 +110,7 @@ public class ChannelAppService {
         createAccountCommand.setRoleIds(asList(roleId));
         final UserDetailDto account = userAppService.createAccount(createAccountCommand);
 
-        final Channel channel = new Channel(doctorId, account.getId(), channelParam.getName(), channelParam.getPhone(),
+        final Channel channel = new Channel(channelId, account.getId(), channelParam.getName(), channelParam.getPhone(),
                 channelParam.getType());
         repository.save(channel);
     }

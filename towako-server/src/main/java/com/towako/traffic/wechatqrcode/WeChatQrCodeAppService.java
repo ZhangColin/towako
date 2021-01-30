@@ -40,4 +40,19 @@ public class WeChatQrCodeAppService {
         repository.save(wechatQrCode);
     }
 
+    @Transactional(rollbackOn = Exception.class)
+    public void reApplyWechatQrCode(Long channelId) {
+        repository.findByChannelId(channelId).ifPresent(wechatQrCode -> {
+            final String qrSceneStr = wechatQrCode.getChannelType() + "_" + wechatQrCode.getChannelId();
+            final WechatQrCodeTicket qrCodeTicket = qrCodeProvider.apply(qrSceneStr);
+
+            wechatQrCode.updateWeChatInfo(qrSceneStr, "",
+                    qrCodeTicket.getTicket(), qrCodeTicket.getExpireSeconds(), qrCodeTicket.getUrl());
+
+            repository.save(wechatQrCode);
+        });
+
+
+    }
+
 }

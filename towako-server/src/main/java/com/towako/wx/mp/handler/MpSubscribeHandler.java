@@ -4,7 +4,7 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.vip.membership.MembershipAppService;
 import com.towako.vip.membership.response.MembershipDto;
-import com.towako.vip.wechateventrecord.WeChatEventRecordAppService;
+import com.towako.vip.wechateventrecord.WechatEventRecordAppService;
 import com.towako.wx.mp.builder.TextBuilder;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -29,10 +29,10 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
     private final MembershipAppService membershipAppService;
     private final WxMaService wxMaService;
     private final RecommendAppService recommendAppService;
-    private final WeChatEventRecordAppService weChatEventRecordAppService;
+    private final WechatEventRecordAppService weChatEventRecordAppService;
 
     public MpSubscribeHandler(MembershipAppService membershipAppService, WxMaService wxMaService,
-                              RecommendAppService recommendAppService, WeChatEventRecordAppService weChatEventRecordAppService) {
+                              RecommendAppService recommendAppService, WechatEventRecordAppService weChatEventRecordAppService) {
         this.membershipAppService = membershipAppService;
         this.wxMaService = wxMaService;
         this.recommendAppService = recommendAppService;
