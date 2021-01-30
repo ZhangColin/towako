@@ -1,5 +1,5 @@
 -- 菜单
-INSERT INTO `sys_menus`(`id`, `parent_id`, `title`, `name`, `icon`, `hidden`, `sort`) VALUES (8, 0, '渠道管理', 'traffic', 'component', 0, 10);
+INSERT INTO `sys_menus`(`id`, `parent_id`, `title`, `name`, `icon`, `hidden`, `sort`) VALUES (8, 0, '渠道管理', 'channel', 'component', 0, 10);
 INSERT INTO `sys_menus`(`id`, `parent_id`, `title`, `name`, `icon`, `hidden`, `sort`) VALUES (9, 8, '医生管理', 'doctor', 'component', 0, 10);
 INSERT INTO `sys_menus`(`id`, `parent_id`, `title`, `name`, `icon`, `hidden`, `sort`) VALUES (10, 8, '家庭旅馆管理', 'family-hotel', 'component', 0, 20);
 INSERT INTO `sys_menus`(`id`, `parent_id`, `title`, `name`, `icon`, `hidden`, `sort`) VALUES (11, 0, '会员管理', 'vip', 'component', 0, 10);
