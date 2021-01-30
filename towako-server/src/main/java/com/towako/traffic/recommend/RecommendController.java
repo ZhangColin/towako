@@ -1,6 +1,7 @@
 package com.towako.traffic.recommend;
 
 import com.cartisan.dtos.PageResult;
+import com.towako.security.CurrentUser;
 import com.towako.traffic.channel.ChannelAppService;
 import com.towako.traffic.channel.request.ChannelParam;
 import com.towako.traffic.channel.request.ChannelQuery;
@@ -28,9 +29,11 @@ import static com.cartisan.responses.ResponseUtil.success;
 @Slf4j
 public class RecommendController {
     private final RecommendAppService service;
+    private final CurrentUser currentUser;
 
-    public RecommendController(RecommendAppService service) {
+    public RecommendController(RecommendAppService service, CurrentUser currentUser) {
         this.service = service;
+        this.currentUser = currentUser;
     }
 
     @ApiOperation(value = "渠道推荐列表")
@@ -39,5 +42,12 @@ public class RecommendController {
             @ApiParam(value = "查询参数") @PathVariable Long channelId,
             @PageableDefault Pageable pageable) {
         return success(service.findByChannelId(channelId, pageable));
+    }
+
+    @ApiOperation(value = "我的推荐列表")
+    @GetMapping("/myRecommends")
+    public ResponseEntity<PageResult<RecommendDto>> myRecommends(@PageableDefault Pageable pageable) {
+        final Long userId = currentUser.getUserId();
+        return success(service.myRecommends(userId, pageable));
     }
 }

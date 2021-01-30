@@ -2,6 +2,8 @@ package com.towako.traffic.recommend;
 
 import com.cartisan.dtos.PageResult;
 import com.towako.traffic.channel.Channel;
+import com.towako.traffic.channel.ChannelAppService;
+import com.towako.traffic.channel.ChannelRepository;
 import com.towako.traffic.channel.request.ChannelQuery;
 import com.towako.traffic.channel.response.ChannelDto;
 import com.towako.traffic.recommend.response.RecommendConverter;
@@ -18,6 +20,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
+import static com.cartisan.utils.AssertionUtil.requirePresent;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -27,9 +30,11 @@ import static java.util.stream.Collectors.toList;
 public class RecommendAppService {
     private final RecommendRepository repository;
     private final RecommendConverter converter = RecommendConverter.CONVERTER;
+    private final ChannelRepository channelRepository;
 
-    public RecommendAppService(RecommendRepository repository) {
+    public RecommendAppService(RecommendRepository repository, ChannelRepository channelRepository) {
         this.repository = repository;
+        this.channelRepository = channelRepository;
     }
 
     public PageResult<RecommendDto> findByChannelId(@NonNull Long channelId, @NonNull Pageable pageable) {
@@ -39,6 +44,12 @@ public class RecommendAppService {
         return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
                 converter.convert(searchResult.getContent()));
     }
+
+    public PageResult<RecommendDto> myRecommends(Long userId, Pageable pageable) {
+        final Long channelId = requirePresent(channelRepository.findByUserId(userId), "你不是渠道用户").getId();
+        return findByChannelId(channelId, pageable);
+    }
+
 
     @Transactional(rollbackOn = Exception.class)
     public void recommend(String qrSceneStr, Long memberId, String nickName) {
@@ -58,4 +69,6 @@ public class RecommendAppService {
     public Long getRecommendCount(Long channelId) {
         return repository.countByChannelId(channelId);
     }
+
+
 }

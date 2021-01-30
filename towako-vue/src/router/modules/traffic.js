@@ -13,6 +13,11 @@ const traffic = {
     name: 'channel',
     component: () => import('@/views/traffic/channel/channel'),
     meta: { title: '渠道管理', icon: 'nested' }
+  }, {
+    path: '/my-recommend',
+    name: 'my-recommend',
+    component: () => import('@/views/traffic/recommend/my-recommend'),
+    meta: { title: '我的推荐', icon: 'nested' }
   }]
 }
 

@@ -79,6 +79,10 @@ public class ChannelAppService {
                 channels);
     }
 
+    public ChannelDto getChannelByUserId(Long userId) {
+        return channelConverter.convert(requirePresent(repository.findByUserId(userId)));
+    }
+
     @Transactional(rollbackOn = Exception.class)
     public void addChannel(ChannelParam channelParam) {
         if (repository.existsByName(channelParam.getName())) {

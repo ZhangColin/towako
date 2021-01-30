@@ -3,3 +3,9 @@ GET http://{{host}}:{{port}}/traffic/recommends/findByChannelId/1498851946784755
 Accept: application/json
 Content-Type: application/json;charset=UTF-8
 Authorization: {{auth_token}}
+
+### 我的推荐列表
+GET http://{{host}}:{{port}}/traffic/recommends/myRecommends?page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
