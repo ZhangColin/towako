@@ -20,6 +20,9 @@ public class ChannelDto {
     @ApiModelProperty(value = "渠道类型")
     private String type;
 
+    @ApiModelProperty(value = "推荐数")
+    private Long recommends;
+
     @ApiModelProperty(value = "获取二维码ticket")
     private String ticket;
 

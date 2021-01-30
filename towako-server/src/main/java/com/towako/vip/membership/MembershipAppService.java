@@ -69,14 +69,9 @@ public class MembershipAppService {
         return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
                 membershipDtos);
     }
-
-//    public List<MembershipDto> findByDoctorId(Long doctorId){
-//        return membershipRecommendMapper.findByDoctorId(doctorId);
-//    }
-//
-//    public List<MembershipDto> findByFamilyHotelId(Long familyHotelId){
-//        return membershipRecommendMapper.findByFamilyHotelId(familyHotelId);
-//    }
+    public PageResult<MembershipDto> findByChannelId(Long channelId, Pageable pageable) {
+        return null;
+    }
 
     public Optional<MembershipDto> findByOpenId(String appId, String openId) {
         return wechatMembershipRepository.findByAppIdAndOpenId(appId, openId)
@@ -133,4 +128,6 @@ public class MembershipAppService {
 
         membershipRepository.save(user);
     }
+
+
 }

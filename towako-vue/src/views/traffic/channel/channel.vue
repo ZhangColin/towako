@@ -59,7 +59,7 @@
             编辑
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="handleShowQr(scope.$index, scope.row)">二维码</el-dropdown-item>
-              <el-dropdown-item @click.native="handleMyRecommend(scope.$index, scope.row)">推荐</el-dropdown-item>
+              <el-dropdown-item @click.native="handleMyRecommend(scope.$index, scope.row)">推荐列表</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -105,6 +105,20 @@
         </div>
       </div>
     </el-drawer>
+    <el-drawer
+      :title="qrCodeDrawerTitle"
+      :visible.sync="qrCodeDrawerVisible"
+      :wrapper-closable="false"
+      size="50%"
+    >
+      <div class="drawer__content">
+        <img ref="qrCodeImage" :src="channelQrCodeUrl" :alt="qrCodeDrawerTitle">
+        <div class="drawer__footer">
+          <!--          <el-button type="primary" @click="downloadQrCode()">下载</el-button>-->
+          <el-button type="primary" @click="qrCodeDrawerVisible=false">关闭</el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -134,7 +148,11 @@ export default {
         phone: [
           { required: true, message: '请输入手机号', trigger: 'blur' }
         ]
-      }
+      },
+
+      qrCodeDrawerTitle: '',
+      qrCodeDrawerVisible: false,
+      channelQrCodeUrl: ''
     }
   },
   created() {
@@ -165,8 +183,27 @@ export default {
       row.status = row.status === 1 ? 0 : 1
     },
     handleShowQr(index, row) {
-      window.open(`https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${row.ticket}`)
+      this.qrCodeDrawerTitle = `${row.name} 二维码`
+      this.qrCodeDrawerVisible = true
+      this.channelQrCodeUrl = `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${row.ticket}`
     },
+
+    // downloadQrCode() { // 下载图片地址和图片名
+    //   const image = this.$refs.qrCodeImage
+    //   image.setAttribute('crossOrigin', 'anonymous')
+    //   const canvas = document.createElement('canvas')
+    //   canvas.width = image.width
+    //   canvas.height = image.height
+    //   const context = canvas.getContext('2d')
+    //   context.drawImage(image, 0, 0, image.width, image.height)
+    //   const url = canvas.toDataURL('image/jpeg') // 得到图片的base64编码数据
+    //
+    //   const a = document.createElement('a') // 生成一个a元素
+    //   const event = new MouseEvent('click') // 创建一个单击事件
+    //   a.download = this.qrCodeDrawerTitle || 'qrCode' // 设置图片名称
+    //   a.href = url // 将生成的URL设置为a.href属性
+    //   a.dispatchEvent(event) // 触发a的单击事件
+    // },
     handleMyRecommend(index, row) {
     }
   }

@@ -1,4 +1,4 @@
-package com.towako.traffic.scanqrcoderecord;
+package com.towako.vip.wechateventrecord;
 
 import com.cartisan.domains.AbstractEntity;
 import com.cartisan.domains.AggregateRoot;
@@ -6,25 +6,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author colin
  */
 @Entity
-@Table(name = "tfc_scan_qr_code_records")
+@Table(name = "vip_wechat_event_records")
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class ScanQrCodeRecord extends AbstractEntity implements AggregateRoot {
+public class WeChatEventRecord extends AbstractEntity implements AggregateRoot {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "channel_id")
-    private Long channelId;
-
-    @Column(name = "channel_type")
-    private String channelType;
 
     @Column(name = "qr_scene_str")
     private String qrSceneStr;
@@ -35,14 +30,16 @@ public class ScanQrCodeRecord extends AbstractEntity implements AggregateRoot {
     @Column(name = "event")
     private String event;
 
-    private ScanQrCodeRecord() {
+    @Column(name = "event_date")
+    private LocalDateTime eventDate;
+
+    private WeChatEventRecord() {
     }
 
-    public ScanQrCodeRecord(Long channelId, String channelType, String qrSceneStr, String openId, String event) {
-        this.channelId = channelId;
-        this.channelType = channelType;
+    public WeChatEventRecord(String openId, String event, String qrSceneStr) {
         this.qrSceneStr = qrSceneStr;
         this.openId = openId;
         this.event = event;
+        this.eventDate = LocalDateTime.now();
     }
 }

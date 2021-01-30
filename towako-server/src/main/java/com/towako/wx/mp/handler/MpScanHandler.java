@@ -1,6 +1,7 @@
 package com.towako.wx.mp.handler;
 
-import com.towako.traffic.scanqrcoderecord.ScanQrCodeRecordAppService;
+import com.towako.traffic.recommend.RecommendAppService;
+import com.towako.vip.wechateventrecord.WeChatEventRecordAppService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -18,10 +19,10 @@ import java.util.Map;
 @Component
 @Slf4j
 public class MpScanHandler implements WxMpMessageHandler {
-    private final ScanQrCodeRecordAppService scanQrCodeRecordAppService;
+    private final WeChatEventRecordAppService weChatEventRecordAppService;
 
-    public MpScanHandler(ScanQrCodeRecordAppService scanQrCodeRecordAppService) {
-        this.scanQrCodeRecordAppService = scanQrCodeRecordAppService;
+    public MpScanHandler(WeChatEventRecordAppService weChatEventRecordAppService) {
+        this.weChatEventRecordAppService = weChatEventRecordAppService;
     }
 
     @Override
@@ -29,8 +30,8 @@ public class MpScanHandler implements WxMpMessageHandler {
                                     WxMpService wxMpService, WxSessionManager wxSessionManager) throws WxErrorException {
         // 扫码事件处理
         final Map<String, Object> allFieldsMap = wxMpXmlMessage.getAllFieldsMap();
-        scanQrCodeRecordAppService.scanRecord(allFieldsMap.get("EventKey").toString(),
-                allFieldsMap.get("FromUserName").toString(), allFieldsMap.get("Event").toString());
+        weChatEventRecordAppService.eventRecord(allFieldsMap.get("FromUserName").toString(),
+                allFieldsMap.get("Event").toString(), allFieldsMap.get("EventKey").toString());
         return null;
     }
 }
