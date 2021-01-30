@@ -7,7 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import channel from './modules/channel'
+import traffic from './modules/traffic'
 import vip from './modules/vip'
 import system from './modules/system'
 /**
@@ -88,7 +88,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  channel,
+  traffic,
   vip,
   system
 ]

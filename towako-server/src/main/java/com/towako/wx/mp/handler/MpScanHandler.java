@@ -1,6 +1,6 @@
 package com.towako.wx.mp.handler;
 
-import com.towako.channel.scanqrcoderecord.ScanQrCodeRecordAppService;
+import com.towako.traffic.scanqrcoderecord.ScanQrCodeRecordAppService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;

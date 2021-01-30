@@ -42,14 +42,14 @@ public class MembershipController {
         return success(service.searchMemberships(membershipQuery, pageable));
     }
 
-    @GetMapping("/findByDoctor/{doctorId}")
-    public ResponseEntity<List<MembershipDto>> findByDoctorId(@PathVariable Long doctorId){
-        return success(service.findByDoctorId(doctorId));
-    }
-
-    @GetMapping("/findByFamilyHotelId/{familyHotelId}")
-    public ResponseEntity<List<MembershipDto>> findByFamilyHotelId(@PathVariable Long familyHotelId){
-        return success(service.findByFamilyHotelId(familyHotelId));
-    }
+//    @GetMapping("/findByDoctor/{doctorId}")
+//    public ResponseEntity<List<MembershipDto>> findByDoctorId(@PathVariable Long doctorId){
+//        return success(service.findByDoctorId(doctorId));
+//    }
+//
+//    @GetMapping("/findByFamilyHotelId/{familyHotelId}")
+//    public ResponseEntity<List<MembershipDto>> findByFamilyHotelId(@PathVariable Long familyHotelId){
+//        return success(service.findByFamilyHotelId(familyHotelId));
+//    }
 
 }

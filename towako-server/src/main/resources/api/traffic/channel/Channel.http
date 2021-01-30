@@ -1,0 +1,71 @@
+### 搜索渠道
+GET http://{{host}}:{{port}}/traffic/channels/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加医生渠道
+POST http://{{host}}:{{port}}/traffic/channels
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "张医生",
+  "phone": "13962830605",
+  "type": "DOCTOR"
+}
+
+### 添加家庭旅馆渠道
+POST http://{{host}}:{{port}}/traffic/channels
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "东升旅馆",
+  "phone": "13962830604",
+  "type": "FAMILY_HOTEL"
+}
+
+### 添加其它渠道
+POST http://{{host}}:{{port}}/traffic/channels
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "曼联球迷会",
+  "phone": "13962830603",
+  "type": "OTHER"
+}
+
+### 编辑渠道
+PUT http://{{host}}:{{port}}/traffic/channels/1496362605613289472
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  "name": "希尔顿旅馆"
+}
+
+### 删除渠道
+DELETE http://{{host}}:{{port}}/traffic/channels/1496362605613289472
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 启用渠道
+PUT http://{{host}}:{{port}}/traffic/channels/1496362605613289472/enable
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 禁用渠道
+PUT http://{{host}}:{{port}}/traffic/channels/1496362605613289472/disable
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+###

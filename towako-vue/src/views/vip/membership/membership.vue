@@ -32,7 +32,7 @@
           <img :src="scope.row.avatar">
         </template>
       </el-table-column>
-      <el-table-column align="center" label="渠道" prop="channel" />
+      <el-table-column align="center" label="渠道" prop="traffic" />
       <el-table-column align="center" label="推荐" prop="recommend" />
       <el-table-column align="center" label="注册时间" prop="createDateTime" />
     </el-table>

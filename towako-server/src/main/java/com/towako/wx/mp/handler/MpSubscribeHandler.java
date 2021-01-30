@@ -1,7 +1,7 @@
 package com.towako.wx.mp.handler;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import com.towako.channel.scanqrcoderecord.ScanQrCodeRecordAppService;
+import com.towako.traffic.scanqrcoderecord.ScanQrCodeRecordAppService;
 import com.towako.vip.membership.MembershipAppService;
 import com.towako.vip.membership.response.MembershipDto;
 import com.towako.wx.mp.builder.TextBuilder;

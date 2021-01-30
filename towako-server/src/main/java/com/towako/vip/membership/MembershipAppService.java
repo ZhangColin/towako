@@ -53,32 +53,30 @@ public class MembershipAppService {
         final List<Membership> memberships = searchResult.getContent();
         final List<MembershipDto> membershipDtos = membershipConverter.convert(memberships);
 
-        membershipDtos.forEach(membershipDto -> memberships.stream()
-                .filter(membership->membership.getId().equals(membershipDto.getId())).findFirst()
-                .ifPresent(membership-> membershipDto.setCreateDateTime(membership.getCreateDateTime())));
+        if(membershipDtos.size()>0) {
 
-        final List<MembershipRecommendDto> recommendDtos = membershipRecommendMapper.findByMemberIds(membershipDtos.stream()
-                .map(MembershipDto::getId).collect(toList()));
+            final List<MembershipRecommendDto> recommendDtos = membershipRecommendMapper.findByMemberIds(membershipDtos.stream()
+                    .map(MembershipDto::getId).collect(toList()));
 
-        membershipDtos.forEach(membershipDto -> recommendDtos.stream()
-                .filter(recommendDto->recommendDto.getId().equals(membershipDto.getId())).findFirst()
-                .ifPresent(recommendDto->{
-            membershipDto.setChannel(recommendDto.getChannel());
-            membershipDto.setRecommend(recommendDto.getRecommend());
-        }));
-
+            membershipDtos.forEach(membershipDto -> recommendDtos.stream()
+                    .filter(recommendDto -> recommendDto.getId().equals(membershipDto.getId())).findFirst()
+                    .ifPresent(recommendDto -> {
+                        membershipDto.setChannel(recommendDto.getChannel());
+                        membershipDto.setRecommend(recommendDto.getRecommend());
+                    }));
+        }
 
         return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
                 membershipDtos);
     }
 
-    public List<MembershipDto> findByDoctorId(Long doctorId){
-        return membershipRecommendMapper.findByDoctorId(doctorId);
-    }
-
-    public List<MembershipDto> findByFamilyHotelId(Long familyHotelId){
-        return membershipRecommendMapper.findByFamilyHotelId(familyHotelId);
-    }
+//    public List<MembershipDto> findByDoctorId(Long doctorId){
+//        return membershipRecommendMapper.findByDoctorId(doctorId);
+//    }
+//
+//    public List<MembershipDto> findByFamilyHotelId(Long familyHotelId){
+//        return membershipRecommendMapper.findByFamilyHotelId(familyHotelId);
+//    }
 
     public Optional<MembershipDto> findByOpenId(String appId, String openId) {
         return wechatMembershipRepository.findByAppIdAndOpenId(appId, openId)

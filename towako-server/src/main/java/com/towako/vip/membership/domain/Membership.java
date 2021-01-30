@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author colin
@@ -41,7 +42,7 @@ public class Membership extends SoftDeleteEntity implements AggregateRoot {
     @Column(name = "country")
     private String country;
     @Column(name = "last_login_time")
-    private LocalDate lastLoginTime;
+    private LocalDateTime lastLoginTime;
     @Column(name = "last_login_ip")
     private String lastLoginIp;
 
@@ -56,23 +57,23 @@ public class Membership extends SoftDeleteEntity implements AggregateRoot {
     public static Membership createByWechat(Long id, String phone, String nickname,
                                             String avatar, Gender gender, LocalDate birthday,
                                             String city, String province, String country) {
-        final Membership user = new Membership();
-        user.id = id;
-        user.phone = phone;
-        user.nickname = nickname;
-        user.avatar = avatar;
-        user.gender = gender;
-        user.birthday = birthday;
-        user.city = city;
-        user.province = province;
-        user.country = country;
+        final Membership membership = new Membership();
+        membership.id = id;
+        membership.phone = phone;
+        membership.nickname = nickname;
+        membership.avatar = avatar;
+        membership.gender = gender;
+        membership.birthday = birthday;
+        membership.city = city;
+        membership.province = province;
+        membership.country = country;
 
-        return user;
+        return membership;
     }
 
     public void recordLogin(String ip) {
         this.lastLoginIp = ip;
-        this.lastLoginTime = LocalDate.now();
+        this.lastLoginTime = LocalDateTime.now();
     }
 }
 
