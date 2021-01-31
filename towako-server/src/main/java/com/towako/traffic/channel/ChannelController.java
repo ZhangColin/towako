@@ -57,6 +57,14 @@ public class ChannelController {
         return success();
     }
 
+    @ApiOperation(value = "给渠道创建账号")
+    @PutMapping("/{id}/createAccount")
+    public ResponseEntity<?> createAccount(
+            @ApiParam(value = "渠道Id", required = true) @PathVariable Long id) {
+        service.createAccount(id);
+        return success();
+    }
+
     @ApiOperation(value = "删除渠道")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeChannel(

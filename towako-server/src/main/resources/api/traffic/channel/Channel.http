@@ -40,14 +40,22 @@ Authorization: {{auth_token}}
   "type": "OTHER"
 }
 
+### 给渠道补账户
+PUT http://{{host}}:{{port}}/traffic/channels/1498034446165741568/createAccount
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
 ### 编辑渠道
-PUT http://{{host}}:{{port}}/traffic/channels/1496362605613289472
+PUT http://{{host}}:{{port}}/traffic/channels/1498034446165741568
 Accept: application/json
 Content-Type: application/json;charset=UTF-8
 Authorization: {{auth_token}}
 
 {
-  "name": "希尔顿旅馆"
+  "name": "匡主任",
+  "phone": "18001828301",
+  "type": "OTHER"
 }
 
 ### 删除渠道

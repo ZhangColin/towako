@@ -15,12 +15,14 @@ import com.towako.system.user.application.UserAppService;
 import com.towako.system.user.request.CreateAccountCommand;
 import com.towako.system.user.response.UserDetailDto;
 import lombok.NonNull;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
@@ -65,7 +67,9 @@ public class ChannelAppService {
         channels.forEach(channelDto -> qrCodeDtos.stream()
                 .filter(qrCodeDto->qrCodeDto.getChannelId().equals(channelDto.getId()))
                 .findFirst().ifPresent(qrCodeDto->{
-            channelDto.setPhone(channelDto.getPhone().substring(0, 3)+"****"+channelDto.getPhone().substring(7));
+            if(!channelDto.getPhone().isEmpty()) {
+                channelDto.setPhone(channelDto.getPhone().substring(0, 3)+"****"+channelDto.getPhone().substring(7));
+            }
 
             channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
 
@@ -93,19 +97,27 @@ public class ChannelAppService {
 
         weChatQrCodeAppService.applyWechatQrCode(channelId, channelParam.getType());
 
+        final UserDetailDto account = createUserAccount(channelParam.getName(), channelParam.getPhone(), channelParam.getType());
+
+        final Channel channel = new Channel(channelId, account.getId(), channelParam.getName(), channelParam.getPhone(),
+                channelParam.getType());
+        repository.save(channel);
+    }
+
+    private UserDetailDto createUserAccount(String name, String phone, String type) {
         final CreateAccountCommand createAccountCommand = new CreateAccountCommand();
-        createAccountCommand.setUsername(channelParam.getPhone());
-        createAccountCommand.setPhone(channelParam.getPhone());
-        createAccountCommand.setRealName(channelParam.getName());
+        createAccountCommand.setUsername(phone);
+        createAccountCommand.setPhone(phone);
+        createAccountCommand.setRealName(name);
         createAccountCommand.setOrganizationIds(asList(1377345482606645249L));
         Long roleId = 0L;
-        if (channelParam.getType().equals(ChannelType.DOCTOR)){
+        if (type.equals(ChannelType.DOCTOR)){
             roleId = 3L;
         }
-        else if (channelParam.getType().equals(ChannelType.FAMILY_HOTEL)){
+        else if (type.equals(ChannelType.FAMILY_HOTEL)){
             roleId = 4L;
         }
-        else if (channelParam.getType().equals(ChannelType.OTHER)){
+        else if (type.equals(ChannelType.OTHER)){
             roleId = 5L;
         }
         else {
@@ -113,10 +125,18 @@ public class ChannelAppService {
         }
         createAccountCommand.setRoleIds(asList(roleId));
         final UserDetailDto account = userAppService.createAccount(createAccountCommand);
+        return account;
+    }
 
-        final Channel channel = new Channel(channelId, account.getId(), channelParam.getName(), channelParam.getPhone(),
-                channelParam.getType());
-        repository.save(channel);
+    @Transactional(rollbackOn = Exception.class)
+    public void createAccount(Long id) {
+        final Channel channel = requirePresent(repository.findById(id));
+        if (channel.getUserId()==null){
+            final UserDetailDto userAccount = createUserAccount(channel.getName(), channel.getPhone(), channel.getType());
+            channel.setUserId(userAccount.getId());
+
+            repository.save(channel);
+        }
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -126,7 +146,7 @@ public class ChannelAppService {
         }
         final Channel channel = requirePresent(repository.findById(id));
 
-        channel.describe(channelParam.getName());
+        channel.describe(channelParam.getName(), channelParam.getPhone());
 
         repository.save(channel);
     }
@@ -150,4 +170,6 @@ public class ChannelAppService {
         channel.disable();
         repository.save(channel);
     }
+
+
 }
