@@ -10,3 +10,9 @@ GET http://{{host}}:{{port}}/vip/memberships/findByDoctor/1496650510277677056
 Accept: application/json
 Content-Type: application/json;charset=UTF-8
 Authorization: {{auth_token}}
+
+### 重建缺失的会员
+POST http://{{host}}:{{port}}/vip/memberships/updateWechatInfo/
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

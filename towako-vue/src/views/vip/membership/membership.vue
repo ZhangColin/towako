@@ -29,12 +29,12 @@
       </el-table-column>
       <el-table-column align="center" label="头像" prop="avatar">
         <template slot-scope="scope">
-          <img :src="scope.row.avatar">
+          <img :src="scope.row.avatar" style="width: 50px; height: 50px" alt="">
         </template>
       </el-table-column>
       <el-table-column align="center" label="渠道" prop="channel">
         <template slot-scope="{row}">
-          <span>{{ row.channel==='DOCTOR'?'医生':row.channel==='FAMILY_HOTEL'?'家庭旅馆':row.channel==='OTHER'?'其它':'' }}</span>
+          <span>{{ row.channel==='DOCTOR'?'医生':row.channel==='FAMILYHOTEL'?'家庭旅馆':row.channel==='OTHER'?'其它':'' }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="推荐" prop="recommend">

@@ -10,10 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,9 +26,11 @@ import static com.cartisan.responses.ResponseUtil.success;
 @Slf4j
 public class MembershipController {
     private final MembershipAppService service;
+    private final UpdateMembershipAppService updateMembershipAppService;
 
-    public MembershipController(MembershipAppService service) {
+    public MembershipController(MembershipAppService service, UpdateMembershipAppService updateMembershipAppService) {
         this.service = service;
+        this.updateMembershipAppService = updateMembershipAppService;
     }
 
     @ApiOperation(value = "搜索医生")
@@ -46,6 +45,13 @@ public class MembershipController {
     public ResponseEntity<PageResult<MembershipDto>> findByChannelId(@PathVariable Long channelId,
                                                                      @PageableDefault Pageable pageable) {
         return success(service.findByChannelId(channelId, pageable));
+    }
+
+    @ApiOperation(value = "更新用户微信信息")
+    @PostMapping("/updateWechatInfo/")
+    public ResponseEntity<?> updateWechatInfo() {
+        updateMembershipAppService.updateWechatInfo();
+        return success();
     }
 
 }

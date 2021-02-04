@@ -114,7 +114,7 @@ public class ChannelAppService {
         if (type.equals(ChannelType.DOCTOR)){
             roleId = 3L;
         }
-        else if (type.equals(ChannelType.FAMILY_HOTEL)){
+        else if (type.equals(ChannelType.FAMILYHOTEL)){
             roleId = 4L;
         }
         else if (type.equals(ChannelType.OTHER)){

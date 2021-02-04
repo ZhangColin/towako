@@ -58,11 +58,11 @@
       <el-table-column align="center" label="真实姓名" prop="realName" />
       <el-table-column align="center" label="手机" prop="phone" />
       <el-table-column align="center" label="邮箱" prop="email" />
-      <el-table-column align="center" label="性别" prop="gender">
-        <template slot-scope="scope">
-          <span>{{ scope.row.gender===1?'男':'女' }}</span>
-        </template>
-      </el-table-column>
+      <!--      <el-table-column align="center" label="性别" prop="gender">-->
+      <!--        <template slot-scope="scope">-->
+      <!--          <span>{{ scope.row.gender===1?'男':'女' }}</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
       <el-table-column align="center" label="状态" prop="status">
         <template slot-scope="scope">
           <el-popconfirm

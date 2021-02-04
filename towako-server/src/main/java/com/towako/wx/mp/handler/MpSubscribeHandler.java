@@ -1,6 +1,5 @@
 package com.towako.wx.mp.handler;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.vip.membership.MembershipAppService;
 import com.towako.vip.membership.response.MembershipDto;
@@ -27,14 +26,12 @@ import java.util.Map;
 public class MpSubscribeHandler implements WxMpMessageHandler {
 
     private final MembershipAppService membershipAppService;
-    private final WxMaService wxMaService;
     private final RecommendAppService recommendAppService;
     private final WechatEventRecordAppService weChatEventRecordAppService;
 
-    public MpSubscribeHandler(MembershipAppService membershipAppService, WxMaService wxMaService,
+    public MpSubscribeHandler(MembershipAppService membershipAppService,
                               RecommendAppService recommendAppService, WechatEventRecordAppService weChatEventRecordAppService) {
         this.membershipAppService = membershipAppService;
-        this.wxMaService = wxMaService;
         this.recommendAppService = recommendAppService;
         this.weChatEventRecordAppService = weChatEventRecordAppService;
     }
@@ -52,7 +49,7 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
             WxMpUser userWxInfo = weixinService.getUserService()
                 .userInfo(wxMessage.getFromUser(), null);
             if (userWxInfo != null) {
-                final String appId = wxMaService.getWxMaConfig().getAppid();
+                final String appId = weixinService.getWxMpConfigStorage().getAppId();
 
                 String unionId = userWxInfo.getUnionId();
                 if (unionId == null) {

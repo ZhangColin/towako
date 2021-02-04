@@ -25,7 +25,7 @@ Authorization: {{auth_token}}
 {
   "name": "东升旅馆",
   "phone": "13962830604",
-  "type": "FAMILY_HOTEL"
+  "type": "FAMILYHOTEL"
 }
 
 ### 添加其它渠道

@@ -114,8 +114,9 @@ public class MembershipAppService {
             final WechatMembership wechatMembership = new WechatMembership(membershipId, appId, openId, unionId, qrSceneStr, source);
             wechatMembershipRepository.save(wechatMembership);
 
+            Gender sex = gender==null?Gender.UNKNOWN:Gender.getInstance(gender);
             final Membership membership = Membership.createByWechat(membershipId, phone, nickName, avatarUrl,
-                    Gender.getInstance(gender), null, city, province, country);
+                    sex, null, city, province, country);
             membershipRepository.save(membership);
 
             return membershipConverter.convert(membership);
@@ -123,11 +124,11 @@ public class MembershipAppService {
     }
 
     public void recordLogin(Long userId) {
-        final Membership user = requirePresent(membershipRepository.findById(userId));
+        final Membership membership = requirePresent(membershipRepository.findById(userId));
 
-        user.recordLogin("");
+        membership.recordLogin("");
 
-        membershipRepository.save(user);
+        membershipRepository.save(membership);
     }
 
 

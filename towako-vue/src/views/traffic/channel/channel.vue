@@ -7,7 +7,7 @@
       <el-col :span="6">
         <el-select v-model="queryParam.type" placeholder="请选择渠道类型" clearable style="width: 100%">
           <el-option label="医生" value="DOCTOR" />
-          <el-option label="家庭旅馆" value="FAMILY_HOTEL" />
+          <el-option label="家庭旅馆" value="FAMILYHOTEL" />
           <el-option label="其它" value="OTHER" />
         </el-select>
       </el-col>
@@ -32,7 +32,7 @@
       <el-table-column align="center" label="手机" prop="phone" />
       <el-table-column align="center" label="类型" prop="type">
         <template slot-scope="{row}">
-          <span>{{ row.type==='DOCTOR'?'医生':row.type==='FAMILY_HOTEL'?'家庭旅馆':'其它' }}</span>
+          <span>{{ row.type==='DOCTOR'?'医生':row.type==='FAMILYHOTEL'?'家庭旅馆':'其它' }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="是否启用" prop="status">
@@ -95,7 +95,7 @@
           <el-form-item label="类型" prop="type">
             <el-select v-model="entityData.type" placeholder="请选择渠道类型" style="width: 100%">
               <el-option label="医生" value="DOCTOR" />
-              <el-option label="家庭旅馆" value="FAMILY_HOTEL" />
+              <el-option label="家庭旅馆" value="FAMILYHOTEL" />
               <el-option label="其它" value="OTHER" />
             </el-select>
           </el-form-item>
