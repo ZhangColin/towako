@@ -54,7 +54,7 @@ public class MembershipAppService {
         final List<Membership> memberships = searchResult.getContent();
         final List<MembershipDto> membershipDtos = membershipConverter.convert(memberships);
 
-        if(membershipDtos.size()>0) {
+        if (membershipDtos.size() > 0) {
 
             final List<MembershipRecommendDto> recommendDtos = membershipRecommendMapper.findByMemberIds(membershipDtos.stream()
                     .map(MembershipDto::getId).collect(toList()));
@@ -70,6 +70,7 @@ public class MembershipAppService {
         return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
                 membershipDtos);
     }
+
     public PageResult<MembershipDto> findByChannelId(Long channelId, Pageable pageable) {
         return null;
     }
@@ -82,9 +83,19 @@ public class MembershipAppService {
 
     @Transactional(rollbackOn = Exception.class)
     public MembershipDto registerByWechat(String appId, String openId, String unionId, String phone,
-                                           String nickName, String avatarUrl, Integer gender, String city,
-                                           String province, String country, String qrSceneStr) {
+                                          String nickName, String avatarUrl, Integer gender, String city,
+                                          String province, String country, String qrSceneStr) {
         return register(appId, openId, unionId, phone, nickName, avatarUrl, gender, city, province, country, qrSceneStr, "Wechat");
+
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void unsubscribe(String appId, String openId) {
+        final Optional<WechatMembership> wechatMembershipOptional = wechatMembershipRepository.findByAppIdAndOpenId(appId, openId);
+        wechatMembershipOptional.ifPresent(wechatMembership -> {
+            wechatMembership.unSubscribe();
+            wechatMembershipRepository.save(wechatMembership);
+        });
 
     }
 
@@ -114,7 +125,7 @@ public class MembershipAppService {
             final WechatMembership wechatMembership = new WechatMembership(membershipId, appId, openId, unionId, qrSceneStr, source);
             wechatMembershipRepository.save(wechatMembership);
 
-            Gender sex = gender==null?Gender.UNKNOWN:Gender.getInstance(gender);
+            Gender sex = gender == null ? Gender.UNKNOWN : Gender.getInstance(gender);
             final Membership membership = Membership.createByWechat(membershipId, phone, nickName, avatarUrl,
                     sex, null, city, province, country);
             membershipRepository.save(membership);

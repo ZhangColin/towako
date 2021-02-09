@@ -30,7 +30,8 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
     private final WechatEventRecordAppService weChatEventRecordAppService;
 
     public MpSubscribeHandler(MembershipAppService membershipAppService,
-                              RecommendAppService recommendAppService, WechatEventRecordAppService weChatEventRecordAppService) {
+                              RecommendAppService recommendAppService,
+                              WechatEventRecordAppService weChatEventRecordAppService) {
         this.membershipAppService = membershipAppService;
         this.recommendAppService = recommendAppService;
         this.weChatEventRecordAppService = weChatEventRecordAppService;
@@ -39,17 +40,17 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
     @Override
     @Transactional
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
-                                    Map<String, Object> context, WxMpService weixinService,
+                                    Map<String, Object> context, WxMpService wxMpService,
                                     WxSessionManager sessionManager) throws WxErrorException {
 
         log.info("新关注用户 OPENID: " + wxMessage.getFromUser());
 
         // 获取微信用户基本信息
         try {
-            WxMpUser userWxInfo = weixinService.getUserService()
+            WxMpUser userWxInfo = wxMpService.getUserService()
                 .userInfo(wxMessage.getFromUser(), null);
             if (userWxInfo != null) {
-                final String appId = weixinService.getWxMpConfigStorage().getAppId();
+                final String appId = wxMpService.getWxMpConfigStorage().getAppId();
 
                 String unionId = userWxInfo.getUnionId();
                 if (unionId == null) {
@@ -88,7 +89,19 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
         }
 
         try {
-            return new TextBuilder().build("感谢关注", wxMessage, weixinService);
+            String content = "感谢关注优生慧公众平台，在这里我们将为诸多备孕家庭提供一系列的国内外医生大咖助孕宝典、就医指南以及优生通道。平台将不定期发放患者福利，敬请期待！\n\n"
+                    + "回复数字了解详情：\n"
+                    + "1. 上海方法介绍\n"
+                    + "2. 永远幸初诊指南\n"
+                    + "3. 九院初诊指南\n"
+                    + "4. 匡延平主任科普园地\n"
+                    + "5. 永远幸介绍\n"
+                    + "6. 永远幸实验室介绍\n"
+                    + "7. 宫腔镜手术介绍及预约流程\n"
+                    + "8. 在线预约挂号\n"
+                    + "9. 专家亲诊\n\n"
+                    + "名医助孕，智慧优生！\n";
+            return new TextBuilder().build(content, wxMessage, wxMpService);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

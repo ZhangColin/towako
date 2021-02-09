@@ -23,16 +23,18 @@ public class MpMenuHandler implements WxMpMessageHandler {
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
                                     Map<String, Object> context, WxMpService weixinService,
                                     WxSessionManager sessionManager) {
-        String msg = String.format("type:%s, event:%s, key:%s",
-            wxMessage.getMsgType(), wxMessage.getEvent(),
-            wxMessage.getEventKey());
-        if (EventType.VIEW.equals(wxMessage.getEvent())) {
-            return null;
-        }
+//        String msg = String.format("type:%s, event:%s, key:%s",
+//            wxMessage.getMsgType(), wxMessage.getEvent(),
+//            wxMessage.getEventKey());
+//        if (EventType.VIEW.equals(wxMessage.getEvent())) {
+//            return null;
+//        }
+//
+//        return WxMpXmlOutMessage.TEXT().content(msg)
+//            .fromUser(wxMessage.getToUser()).toUser(wxMessage.getFromUser())
+//            .build();
 
-        return WxMpXmlOutMessage.TEXT().content(msg)
-            .fromUser(wxMessage.getToUser()).toUser(wxMessage.getFromUser())
-            .build();
+        return null;
     }
 
 }

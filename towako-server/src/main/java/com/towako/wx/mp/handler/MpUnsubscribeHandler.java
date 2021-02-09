@@ -1,5 +1,6 @@
 package com.towako.wx.mp.handler;
 
+import com.towako.vip.membership.MembershipAppService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;
@@ -16,6 +17,11 @@ import java.util.Map;
 @Component
 @Slf4j
 public class MpUnsubscribeHandler implements WxMpMessageHandler {
+    private final MembershipAppService membershipAppService;
+
+    public MpUnsubscribeHandler(MembershipAppService membershipAppService) {
+        this.membershipAppService = membershipAppService;
+    }
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -23,7 +29,10 @@ public class MpUnsubscribeHandler implements WxMpMessageHandler {
                                     WxSessionManager sessionManager) {
         String openId = wxMessage.getFromUser();
         log.info("取消关注用户 OPENID: " + openId);
-        // TODO 可以更新本地数据库为取消关注状态
+
+        final String appId = wxMpService.getWxMpConfigStorage().getAppId();
+        membershipAppService.unsubscribe(appId, wxMessage.getOpenId());
+
         return null;
     }
 

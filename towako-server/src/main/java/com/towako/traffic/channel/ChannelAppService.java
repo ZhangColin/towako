@@ -4,6 +4,9 @@ import com.cartisan.constants.CodeMessage;
 import com.cartisan.dtos.PageResult;
 import com.cartisan.exceptions.CartisanException;
 import com.cartisan.utils.SnowflakeIdWorker;
+import com.towako.system.user.application.UserAppService;
+import com.towako.system.user.request.CreateAccountCommand;
+import com.towako.system.user.response.UserDetailDto;
 import com.towako.traffic.channel.request.ChannelParam;
 import com.towako.traffic.channel.request.ChannelQuery;
 import com.towako.traffic.channel.response.ChannelConverter;
@@ -11,18 +14,13 @@ import com.towako.traffic.channel.response.ChannelDto;
 import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.traffic.wechatqrcode.WeChatQrCodeAppService;
 import com.towako.traffic.wechatqrcode.response.WeChatQrCodeDto;
-import com.towako.system.user.application.UserAppService;
-import com.towako.system.user.request.CreateAccountCommand;
-import com.towako.system.user.response.UserDetailDto;
 import lombok.NonNull;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
@@ -67,10 +65,6 @@ public class ChannelAppService {
         channels.forEach(channelDto -> qrCodeDtos.stream()
                 .filter(qrCodeDto->qrCodeDto.getChannelId().equals(channelDto.getId()))
                 .findFirst().ifPresent(qrCodeDto->{
-            if(!channelDto.getPhone().isEmpty()) {
-                channelDto.setPhone(channelDto.getPhone().substring(0, 3)+"****"+channelDto.getPhone().substring(7));
-            }
-
             channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
 
             channelDto.setTicket(qrCodeDto.getTicket());
