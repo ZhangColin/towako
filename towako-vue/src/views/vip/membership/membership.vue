@@ -34,12 +34,14 @@
       </el-table-column>
       <el-table-column align="center" label="渠道" prop="channel">
         <template slot-scope="{row}">
-          <span>{{ row.channel==='DOCTOR'?'医生':row.channel==='FAMILYHOTEL'?'家庭旅馆':row.channel==='OTHER'?'其它':'' }}</span>
+          <span>{{
+            {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', OTHER: '其它'}[row.channel] || ''
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="推荐" prop="recommend">
         <template slot-scope="{row}">
-          <span>{{ row.recommend||'用户自寻' }}</span>
+          <span>{{ row.recommend || '用户自寻' }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="注册时间" prop="createDateTime" />
