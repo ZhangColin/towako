@@ -154,6 +154,7 @@
           @current-change="handleRecommendCurrentChange"
         />
         <div class="drawer__footer">
+          <el-button type="primary" @click="handleDownload()">导出</el-button>
           <el-button type="primary" @click="recommendDrawerVisible=false">关闭</el-button>
         </div>
       </div>
@@ -261,6 +262,18 @@ export default {
       this.recommendDrawerVisible = true
       this.channelId = row.id
       this.handleRecommendSearch()
+    },
+    handleDownload() {
+      findByChannelId(this.channelId, { page: 0, size: 10000 }).then(response => {
+        import('@/vendor/Export2Excel').then(excel => {
+          const tHeader = ['昵称', '推荐时间']
+          excel.export_json_to_excel({
+            header: tHeader,
+            data: response.data.rows.map(v => ['nickName', 'recommendDate'].map(fieldName => v[fieldName])),
+            filename: this.recommendDrawerTitle
+          })
+        })
+      })
     },
     fetchRecommendData() {
       this.recommendLoading = true
