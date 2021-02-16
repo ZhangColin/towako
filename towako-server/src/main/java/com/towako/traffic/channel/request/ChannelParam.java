@@ -11,6 +11,9 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 public class ChannelParam {
+    @ApiModelProperty(value = "上级渠道", required = true)
+    private Long parentId;
+
     @ApiModelProperty(value = "渠道名称", required = true)
     @NotBlank(message = "渠道名称不能为空")
     @Length(min = 2, max = 32, message = "渠道名称必须在 2 至 32 之间")

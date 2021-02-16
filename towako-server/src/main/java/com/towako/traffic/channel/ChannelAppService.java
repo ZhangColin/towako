@@ -9,6 +9,8 @@ import com.towako.system.user.request.CreateAccountCommand;
 import com.towako.system.user.response.UserDetailDto;
 import com.towako.traffic.channel.request.ChannelParam;
 import com.towako.traffic.channel.request.ChannelQuery;
+import com.towako.traffic.channel.response.ChannelBaseInfoConverter;
+import com.towako.traffic.channel.response.ChannelBaseInfoDto;
 import com.towako.traffic.channel.response.ChannelConverter;
 import com.towako.traffic.channel.response.ChannelDto;
 import com.towako.traffic.recommend.RecommendAppService;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
@@ -77,6 +80,11 @@ public class ChannelAppService {
                 channels);
     }
 
+    public List<ChannelBaseInfoDto> findAllEffectiveChannels(){
+        return ChannelBaseInfoConverter.CONVERTER.convert(repository.findByStatus(1));
+    }
+
+
     public ChannelDto getChannelByUserId(Long userId) {
         return channelConverter.convert(requirePresent(repository.findByUserId(userId)));
     }
@@ -93,7 +101,9 @@ public class ChannelAppService {
 
         final UserDetailDto account = createUserAccount(channelParam.getName(), channelParam.getPhone(), channelParam.getType());
 
-        final Channel channel = new Channel(channelId, account.getId(), channelParam.getName(), channelParam.getPhone(),
+        final Channel channel = new Channel(channelId,
+                Optional.ofNullable(channelParam.getParentId()).orElse(0L),
+                account.getId(), channelParam.getName(), channelParam.getPhone(),
                 channelParam.getType());
         repository.save(channel);
     }
@@ -140,7 +150,8 @@ public class ChannelAppService {
         }
         final Channel channel = requirePresent(repository.findById(id));
 
-        channel.describe(channelParam.getName(), channelParam.getPhone(), channelParam.getType());
+        channel.describe(Optional.ofNullable(channelParam.getParentId()).orElse(0L),
+                channelParam.getName(), channelParam.getPhone(), channelParam.getType());
 
         repository.save(channel);
     }

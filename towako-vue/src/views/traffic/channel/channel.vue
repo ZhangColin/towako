@@ -31,6 +31,11 @@
       <el-table-column align="center" label="编号" prop="id" />
       <el-table-column align="center" label="名称" prop="name" />
       <el-table-column align="center" label="手机" prop="phone" />
+      <el-table-column align="center" label="上级渠道" prop="parentId">
+        <template slot-scope="{row}">
+          <span>{{ showParentChannel(row) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="类型" prop="type">
         <template slot-scope="{row}">
           <span>{{
@@ -96,6 +101,11 @@
           </el-form-item>
           <el-form-item label="手机" prop="phone">
             <el-input v-model="entityData.phone" />
+          </el-form-item>
+          <el-form-item label="上级渠道" prop="parentId">
+            <el-select v-model="entityData.parentId" placeholder="请选择上級渠道" filterable clearable style="width: 100%">
+              <el-option v-for="channel in allEffectiveChannels" :key="channel.id" :value="channel.id" :label="channel.name" />
+            </el-select>
           </el-form-item>
           <el-form-item label="类型" prop="type">
             <el-select v-model="entityData.type" placeholder="请选择渠道类型" style="width: 100%">
@@ -171,7 +181,7 @@
 <script>
 import { PaginationMixin } from '@/mixins/pagination-mixin'
 import { CudMixin } from '@/mixins/cud-mixin'
-import { enableChannel, disableChannel }
+import { enableChannel, disableChannel, getAllEffectiveChannels }
   from '@/api/traffic/channel-api'
 import { findByChannelId } from '@/api/traffic/recommend-api'
 
@@ -183,6 +193,7 @@ export default {
       apiBaseUrl: '/traffic/channels',
 
       defaultData: {
+        parentId: '',
         name: '',
         phone: '',
         type: 'DOCTOR'
@@ -196,6 +207,8 @@ export default {
           { required: true, message: '请输入手机号', trigger: 'blur' }
         ]
       },
+
+      allEffectiveChannels: [],
 
       qrCodeDrawerTitle: '',
       qrCodeDrawerVisible: false,
@@ -215,6 +228,7 @@ export default {
     }
   },
   created() {
+    getAllEffectiveChannels().then(response => { this.allEffectiveChannels = response.data })
   },
   methods: {
     handleStatusConfirmChange(index, row) {
@@ -304,6 +318,26 @@ export default {
     handleRecommendCurrentChange(currentPage) {
       this.recommendPage.currentPage = currentPage
       this.fetchRecommendData()
+    },
+    showParentChannel(row) {
+      if (row.parentId === '0') {
+        this.$set(row, 'parentId', '')
+        return ''
+      }
+
+      const channelTree = this.getChannelTree(row.parentId)
+      return channelTree.map(channel => channel.name).join(' -> ')
+    },
+    getChannelTree(channelId) {
+      const channel = this.allEffectiveChannels.find(channel => channel.id === channelId)
+      if (channel) {
+        const channels = this.getChannelTree(channel.parentId)
+        channels.push(channel)
+
+        return channels
+      } else {
+        return []
+      }
     }
   }
 }

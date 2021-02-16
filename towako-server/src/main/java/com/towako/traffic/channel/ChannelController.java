@@ -3,6 +3,7 @@ package com.towako.traffic.channel;
 import com.cartisan.dtos.PageResult;
 import com.towako.traffic.channel.request.ChannelParam;
 import com.towako.traffic.channel.request.ChannelQuery;
+import com.towako.traffic.channel.response.ChannelBaseInfoDto;
 import com.towako.traffic.channel.response.ChannelDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.cartisan.responses.ResponseUtil.success;
 
@@ -37,6 +40,12 @@ public class ChannelController {
             @ApiParam(value = "查询参数") ChannelQuery channelQuery,
             @PageableDefault Pageable pageable) {
         return success(service.searchChannels(channelQuery, pageable));
+    }
+
+    @ApiOperation(value = "获取所有有效渠道")
+    @GetMapping("/allEffectiveChannels")
+    public ResponseEntity<List<ChannelBaseInfoDto>> findAllEffectiveChannels() {
+        return success(service.findAllEffectiveChannels());
     }
 
     @ApiOperation(value = "添加渠道")

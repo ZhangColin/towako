@@ -23,6 +23,9 @@ public class Channel extends AbstractEntity implements AggregateRoot {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "parent_id")
+    private Long parentId;
+
     @Column(name = "user_id")
     @Setter
     private Long userId;
@@ -42,16 +45,18 @@ public class Channel extends AbstractEntity implements AggregateRoot {
     private Channel() {
     }
 
-    public Channel(Long id, Long userId, String name, String phone, String type) {
+    public Channel(Long id, Long parentId, Long userId, String name, String phone, String type) {
         this.id = id;
         this.userId = userId;
+        this.parentId = parentId;
         this.name = name;
         this.phone = phone;
         this.type = type;
         this.status = 1;
     }
 
-    public void describe(String name, String phone, String type){
+    public void describe(Long parentId, String name, String phone, String type){
+        this.parentId = parentId;
         this.name = name;
         this.phone = phone;
         this.type = type;

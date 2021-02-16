@@ -11,6 +11,9 @@ public class ChannelDto {
     @ApiModelProperty(value = "渠道Id")
     private Long id;
 
+    @ApiModelProperty(value = "上级渠道Id")
+    private Long parentId;
+
     @ApiModelProperty(value = "渠道名称")
     private String name;
 
