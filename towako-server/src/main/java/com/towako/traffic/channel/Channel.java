@@ -51,9 +51,10 @@ public class Channel extends AbstractEntity implements AggregateRoot {
         this.status = 1;
     }
 
-    public void describe(String name, String phone){
+    public void describe(String name, String phone, String type){
         this.name = name;
         this.phone = phone;
+        this.type = type;
     }
 
     public void enable() {

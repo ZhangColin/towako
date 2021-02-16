@@ -140,7 +140,7 @@ public class ChannelAppService {
         }
         final Channel channel = requirePresent(repository.findById(id));
 
-        channel.describe(channelParam.getName(), channelParam.getPhone());
+        channel.describe(channelParam.getName(), channelParam.getPhone(), channelParam.getType());
 
         repository.save(channel);
     }
