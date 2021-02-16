@@ -24,9 +24,6 @@ public class Recommend extends AbstractEntity implements AggregateRoot {
     @Column(name = "channel_id")
     private Long channelId;
 
-    @Column(name = "channel_type")
-    private String channelType;
-
     @Column(name = "member_id")
     private Long memberId;
 
@@ -39,9 +36,8 @@ public class Recommend extends AbstractEntity implements AggregateRoot {
     private Recommend() {
     }
 
-    public Recommend(Long channelId, String channelType, Long memberId, String nickName) {
+    public Recommend(Long channelId, Long memberId, String nickName) {
         this.channelId = channelId;
-        this.channelType = channelType;
         this.memberId = memberId;
         this.nickName = nickName;
 

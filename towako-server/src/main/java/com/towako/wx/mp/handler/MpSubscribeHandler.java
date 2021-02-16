@@ -48,14 +48,14 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
         // 获取微信用户基本信息
         try {
             WxMpUser userWxInfo = wxMpService.getUserService()
-                .userInfo(wxMessage.getFromUser(), null);
+                    .userInfo(wxMessage.getFromUser(), null);
             if (userWxInfo != null) {
                 final String appId = wxMpService.getWxMpConfigStorage().getAppId();
 
                 String unionId = userWxInfo.getUnionId();
                 if (unionId == null) {
-                    // TODO: 没有开通第三方公众平台时，使用openId来替代
-                    unionId=userWxInfo.getOpenId();
+                    // 没有开通第三方公众平台时，使用openId来替代
+                    unionId = userWxInfo.getOpenId();
                 }
 
                 final Map<String, Object> allFieldsMap = wxMessage.getAllFieldsMap();
@@ -113,7 +113,7 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
      * 处理特殊请求，比如如果是扫码进来的，可以做相应处理
      */
     private WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage)
-        throws Exception {
+            throws Exception {
 
         return null;
     }

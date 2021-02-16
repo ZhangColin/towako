@@ -31,11 +31,11 @@ public class WeChatQrCodeAppService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public void applyWechatQrCode(Long channelId, String channelType) {
-        final String qrSceneStr = channelType + "_" + channelId;
+    public void applyWechatQrCode(Long channelId) {
+        final String qrSceneStr = channelId.toString();
         final WechatQrCodeTicket qrCodeTicket = qrCodeProvider.apply(qrSceneStr);
 
-        final WechatQrCode wechatQrCode = new WechatQrCode(channelId, channelType, qrSceneStr, "",
+        final WechatQrCode wechatQrCode = new WechatQrCode(channelId, qrSceneStr, "",
                 qrCodeTicket.getTicket(), qrCodeTicket.getExpireSeconds(), qrCodeTicket.getUrl());
         repository.save(wechatQrCode);
     }
@@ -43,7 +43,7 @@ public class WeChatQrCodeAppService {
     @Transactional(rollbackOn = Exception.class)
     public void reApplyWechatQrCode(Long channelId) {
         repository.findByChannelId(channelId).ifPresent(wechatQrCode -> {
-            final String qrSceneStr = wechatQrCode.getChannelType() + "_" + wechatQrCode.getChannelId();
+            final String qrSceneStr = wechatQrCode.getChannelId().toString();
             final WechatQrCodeTicket qrCodeTicket = qrCodeProvider.apply(qrSceneStr);
 
             wechatQrCode.updateWeChatInfo(qrSceneStr, "",

@@ -33,7 +33,7 @@ public class MembershipController {
         this.updateMembershipAppService = updateMembershipAppService;
     }
 
-    @ApiOperation(value = "搜索医生")
+    @ApiOperation(value = "搜索会员")
     @GetMapping("/search")
     public ResponseEntity<PageResult<MembershipDto>> searchMemberships(
             @ApiParam(value = "查询参数") MembershipQuery membershipQuery,
@@ -47,7 +47,7 @@ public class MembershipController {
         return success(service.findByChannelId(channelId, pageable));
     }
 
-    @ApiOperation(value = "更新用户微信信息")
+    @ApiOperation(value = "更新会员微信信息")
     @PostMapping("/updateWechatInfo/")
     public ResponseEntity<?> updateWechatInfo() {
         updateMembershipAppService.updateWechatInfo();

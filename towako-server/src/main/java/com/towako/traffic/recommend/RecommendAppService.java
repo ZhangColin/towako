@@ -63,10 +63,9 @@ public class RecommendAppService {
         //首次扫码关注是qrscene_开头
         final String[] strings = qrSceneStr.split("_");
 
-        Long channelId = Long.parseLong(strings[2]);
-        String channelType = strings[1];
+        Long channelId = Long.parseLong(strings[strings.length-1]);
 
-        final Recommend recommend = new Recommend(channelId, channelType, memberId, nickName);
+        final Recommend recommend = new Recommend(channelId, memberId, nickName);
 
         repository.save(recommend);
     }

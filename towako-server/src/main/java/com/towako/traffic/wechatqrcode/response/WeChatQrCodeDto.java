@@ -11,9 +11,6 @@ public class WeChatQrCodeDto {
     @ApiModelProperty(value = "渠道Id")
     private Long channelId;
 
-    @ApiModelProperty(value = "渠道类型")
-    private String channelType;
-
     @ApiModelProperty(value = "场景值")
     private String qrSceneStr;
 

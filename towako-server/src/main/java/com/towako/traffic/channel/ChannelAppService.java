@@ -89,7 +89,7 @@ public class ChannelAppService {
 
         final long channelId = idWorker.nextId();
 
-        weChatQrCodeAppService.applyWechatQrCode(channelId, channelParam.getType());
+        weChatQrCodeAppService.applyWechatQrCode(channelId);
 
         final UserDetailDto account = createUserAccount(channelParam.getName(), channelParam.getPhone(), channelParam.getType());
 

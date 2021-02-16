@@ -23,9 +23,6 @@ public class WechatQrCode extends AbstractEntity implements AggregateRoot {
     @Column(name = "channel_id")
     private Long channelId;
 
-    @Column(name = "channel_type")
-    private String channelType;
-
     @Column(name = "qr_scene_str")
     private String qrSceneStr;
 
@@ -44,10 +41,9 @@ public class WechatQrCode extends AbstractEntity implements AggregateRoot {
     private WechatQrCode() {
     }
 
-    public WechatQrCode(Long channelId, String channelType, String qrSceneStr, String imageUrl,
+    public WechatQrCode(Long channelId, String qrSceneStr, String imageUrl,
                         String ticket, Integer expireSeconds, String url) {
         this.channelId = channelId;
-        this.channelType = channelType;
         this.qrSceneStr = qrSceneStr;
         this.imageUrl = imageUrl;
         this.ticket = ticket;

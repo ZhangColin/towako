@@ -13,7 +13,7 @@ public interface MembershipRecommendMapper {
     @Select("<script>" +
             "select m.member_id as id, c.name as recommend, c.type as channel \n" +
             "from vip_wechat_memberships as m \n" +
-            "    left join tfc_channels as c on concat(c.type, '_', c.id)=m.qr_scene_str \n"+
+            "    left join tfc_channels as c on locate(c.id, m.qr_scene_str)>0 \n"+
             "    where m.member_id in "+
              "<foreach item='memberId' index='index' collection='memberIds' open='(' separator=',' close=')'>"
             + "#{memberId}"
