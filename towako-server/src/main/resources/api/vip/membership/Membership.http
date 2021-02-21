@@ -12,7 +12,13 @@ Content-Type: application/json;charset=UTF-8
 Authorization: {{auth_token}}
 
 ### 重建缺失的会员
-POST http://{{host}}:{{port}}/vip/memberships/updateWechatInfo/
+POST http://{{host}}:{{port}}/vip/memberships/updateWechatInfo
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 同步有赞数据
+PUT http://{{host}}:{{port}}/vip/memberships/syncYzData
 Accept: application/json
 Content-Type: application/json;charset=UTF-8
 Authorization: {{auth_token}}

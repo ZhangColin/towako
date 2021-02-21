@@ -9,6 +9,8 @@ import com.towako.traffic.channel.response.ChannelDto;
 import com.towako.traffic.recommend.response.RecommendConverter;
 import com.towako.traffic.recommend.response.RecommendDto;
 import com.towako.traffic.wechatqrcode.response.WeChatQrCodeDto;
+import com.towako.vip.membership.MembershipRepository;
+import com.towako.vip.membership.domain.Membership;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,18 +33,30 @@ public class RecommendAppService {
     private final RecommendRepository repository;
     private final RecommendConverter converter = RecommendConverter.CONVERTER;
     private final ChannelRepository channelRepository;
+    private final MembershipRepository membershipRepository;
 
-    public RecommendAppService(RecommendRepository repository, ChannelRepository channelRepository) {
+    public RecommendAppService(RecommendRepository repository, ChannelRepository channelRepository, MembershipRepository membershipRepository) {
         this.repository = repository;
         this.channelRepository = channelRepository;
+        this.membershipRepository = membershipRepository;
     }
 
     public PageResult<RecommendDto> findByChannelId(@NonNull Long channelId, @NonNull Pageable pageable) {
         final Page<Recommend> searchResult = repository.findByChannelId(channelId,
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "recommendDate")));
 
-        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
-                converter.convert(searchResult.getContent()));
+
+        final List<Membership> memberships = membershipRepository.findByIdIn(searchResult.getContent().stream().map(Recommend::getMemberId).collect(toList()));
+
+        final List<RecommendDto> results = searchResult.getContent().stream().map(recommend -> {
+            final RecommendDto dto = converter.convert(recommend);
+            dto.setPhone(memberships.stream().filter(membership -> membership.getId().equals(recommend.getMemberId()))
+                    .findFirst().map(Membership::getPhone).orElse(""));
+
+            return dto;
+        }).collect(toList());
+
+        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(), results);
     }
 
     public PageResult<RecommendDto> myRecommends(Long userId, Pageable pageable) {

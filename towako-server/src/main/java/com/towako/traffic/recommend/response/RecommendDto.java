@@ -14,6 +14,9 @@ public class RecommendDto {
     @ApiModelProperty(value = "昵称")
     private String nickName;
 
+    @ApiModelProperty(value = "手机号")
+    private String phone;
+
     @ApiModelProperty(value = "推荐时间")
     private LocalDateTime recommendDate;
 }

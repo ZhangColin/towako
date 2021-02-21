@@ -155,6 +155,7 @@
           highlight-current-row
         >
           <el-table-column align="center" label="昵称" prop="nickName" />
+          <el-table-column align="center" label="手机" prop="phone" />
           <el-table-column align="center" label="推荐时间" prop="recommendDate" />
         </el-table>
         <el-pagination
@@ -286,10 +287,10 @@ export default {
     handleDownload() {
       findByChannelId(this.channelId, { page: 0, size: 10000 }).then(response => {
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['昵称', '推荐时间']
+          const tHeader = ['昵称', '手机', '推荐时间']
           excel.export_json_to_excel({
             header: tHeader,
-            data: response.data.rows.map(v => ['nickName', 'recommendDate'].map(fieldName => v[fieldName])),
+            data: response.data.rows.map(v => ['nickName', 'phone', 'recommendDate'].map(fieldName => v[fieldName])),
             filename: this.recommendDrawerTitle
           })
         })
