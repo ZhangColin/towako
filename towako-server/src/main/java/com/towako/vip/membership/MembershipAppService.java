@@ -141,6 +141,4 @@ public class MembershipAppService {
 
         membershipRepository.save(membership);
     }
-
-
 }

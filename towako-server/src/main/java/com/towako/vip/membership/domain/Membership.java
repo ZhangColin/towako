@@ -4,6 +4,7 @@ import com.cartisan.domains.AggregateRoot;
 import com.cartisan.domains.SoftDeleteEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Membership extends SoftDeleteEntity implements AggregateRoot {
     private Long id;
 
     @Column(name = "phone")
+    @Setter
     private String phone;
     @Column(name = "nickname")
     private String nickname;

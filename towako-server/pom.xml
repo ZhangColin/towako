@@ -42,6 +42,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.youzan.cloud</groupId>
+            <artifactId>open-sdk-core</artifactId>
+            <version>1.0.7-RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.youzan.cloud</groupId>
+            <artifactId>open-sdk-gen</artifactId>
+            <version>1.0.7.202012071102-RELEASE</version>
+        </dependency>
+
         <!-- WxJava -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
@@ -154,5 +166,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

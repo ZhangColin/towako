@@ -16,4 +16,8 @@ public class WechatMembershipAppService {
     public String getOpenId(Long memberId){
         return repository.findByMemberId(memberId).stream().findFirst().map(WechatMembership::getOpenId).orElse("");
     }
+
+    public String getUnionId(Long memberId){
+        return repository.findByMemberId(memberId).stream().findFirst().map(WechatMembership::getUnionId).orElse("");
+    }
 }
