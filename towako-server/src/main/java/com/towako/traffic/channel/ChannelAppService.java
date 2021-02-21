@@ -84,6 +84,10 @@ public class ChannelAppService {
         return ChannelBaseInfoConverter.CONVERTER.convert(repository.findByStatus(1));
     }
 
+    public Optional<ChannelDto> findById(Long channelId) {
+        return repository.findById(channelId).map(channelConverter::convert);
+    }
+
 
     public ChannelDto getChannelByUserId(Long userId) {
         return channelConverter.convert(requirePresent(repository.findByUserId(userId)));
@@ -175,6 +179,4 @@ public class ChannelAppService {
         channel.disable();
         repository.save(channel);
     }
-
-
 }

@@ -40,33 +40,6 @@ public class MpMessageHandler implements WxMpMessageHandler {
         if (!wxMessage.getMsgType().equals(XmlMsgType.EVENT)) {
             //TODO 可以选择将消息保存到本地
         }
-
-        //当用户输入关键词如“你好”，“客服”等，并且有客服在线时，把消息转发给在线客服
-//        try {
-//            if (StringUtils.startsWithAny(wxMessage.getContent(), "你好", "客服")
-//                && weixinService.getKefuService().kfOnlineList()
-//                .getKfOnlineList().size() > 0) {
-//                return WxMpXmlOutMessage.TRANSFER_CUSTOMER_SERVICE()
-//                    .fromUser(wxMessage.getToUser())
-//                    .toUser(wxMessage.getFromUser()).build();
-//            }
-//        } catch (WxErrorException e) {
-//            e.printStackTrace();
-//        }
-
-//        String content = "感谢关注优生慧公众平台，在这里我们将为诸多备孕家庭提供一系列的国内外医生大咖助孕宝典、就医指南以及优生通道。平台将不定期发放患者福利，敬请期待！\n\n"
-//                + "回复数字了解详情：\n"
-//                + "1. 上海方法介绍\n"
-//                + "2. 初诊指南\n"
-//                + "3. 匡延平主任科普园地\n"
-//                + "4. 没有标题\n"
-//                + "5. 永远幸介绍\n"
-//                + "6. 永远幸实验室介绍\n"
-//                + "7. 在线预约挂号\n"
-//                + "8. 会员专享优惠\n"
-//                + "9. 宫腔镜手术介绍及预约流程\n"
-//                + "10. 专家亲诊\n\n"
-//                + "名医助孕，智慧优生！\n";
         String content = "感谢关注优生慧公众平台，在这里我们将为诸多备孕家庭提供一系列的国内外医生大咖助孕宝典、就医指南以及优生通道。平台将不定期发放患者福利，敬请期待！\n\n"
                 + "回复数字了解详情：\n"
                 + "1. 上海方法介绍\n"
