@@ -66,22 +66,26 @@ public class ChannelAppService {
                 channels.stream().map(ChannelDto::getId).collect(toList()));
 
         channels.forEach(channelDto -> qrCodeDtos.stream()
-                .filter(qrCodeDto->qrCodeDto.getChannelId().equals(channelDto.getId()))
-                .findFirst().ifPresent(qrCodeDto->{
-            channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
+                .filter(qrCodeDto -> qrCodeDto.getChannelId().equals(channelDto.getId()))
+                .findFirst().ifPresent(qrCodeDto -> {
+                    channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
 
-            channelDto.setTicket(qrCodeDto.getTicket());
-            channelDto.setImageUrl(qrCodeDto.getImageUrl());
-            channelDto.setExpireSeconds(qrCodeDto.getExpireSeconds());
-            channelDto.setUrl(qrCodeDto.getUrl());
-        }));
+                    channelDto.setTicket(qrCodeDto.getTicket());
+                    channelDto.setImageUrl(qrCodeDto.getImageUrl());
+                    channelDto.setExpireSeconds(qrCodeDto.getExpireSeconds());
+                    channelDto.setUrl(qrCodeDto.getUrl());
+                }));
 
         return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
                 channels);
     }
 
-    public List<ChannelBaseInfoDto> findAllEffectiveChannels(){
+    public List<ChannelBaseInfoDto> findAllEffectiveChannels() {
         return ChannelBaseInfoConverter.CONVERTER.convert(repository.findByStatus(1));
+    }
+
+    public Optional<ChannelDto> findByUserId(Long userId) {
+        return repository.findByUserId(userId).map(channelConverter::convert);
     }
 
     public Optional<ChannelDto> findById(Long channelId) {
@@ -90,7 +94,22 @@ public class ChannelAppService {
 
 
     public ChannelDto getChannelByUserId(Long userId) {
-        return channelConverter.convert(requirePresent(repository.findByUserId(userId)));
+        final ChannelDto channelDto = channelConverter.convert(requirePresent(repository.findByUserId(userId)));
+
+        final List<WeChatQrCodeDto> qrCodeDtos = weChatQrCodeAppService.findByChannelIds(asList(channelDto.getId()));
+
+        channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
+
+        qrCodeDtos.stream().filter(qrCodeDto -> qrCodeDto.getChannelId().equals(channelDto.getId()))
+                .findFirst().ifPresent(qrCodeDto -> {
+            channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
+
+            channelDto.setTicket(qrCodeDto.getTicket());
+            channelDto.setImageUrl(qrCodeDto.getImageUrl());
+            channelDto.setExpireSeconds(qrCodeDto.getExpireSeconds());
+            channelDto.setUrl(qrCodeDto.getUrl());
+        });
+        return channelDto;
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -119,16 +138,13 @@ public class ChannelAppService {
         createAccountCommand.setRealName(name);
         createAccountCommand.setOrganizationIds(asList(1377345482606645249L));
         Long roleId = 0L;
-        if (type.equals(ChannelType.DOCTOR)){
+        if (type.equals(ChannelType.DOCTOR)) {
             roleId = 3L;
-        }
-        else if (type.equals(ChannelType.FAMILY_HOTEL)){
+        } else if (type.equals(ChannelType.FAMILY_HOTEL)) {
             roleId = 4L;
-        }
-        else if (type.equals(ChannelType.OTHER)){
+        } else if (type.equals(ChannelType.OTHER)) {
             roleId = 5L;
-        }
-        else {
+        } else {
             throw new CartisanException(CodeMessage.FAIL.fillArgs("渠道类型不正确"));
         }
         createAccountCommand.setRoleIds(asList(roleId));
@@ -139,7 +155,7 @@ public class ChannelAppService {
     @Transactional(rollbackOn = Exception.class)
     public void createAccount(Long id) {
         final Channel channel = requirePresent(repository.findById(id));
-        if (channel.getUserId()==null){
+        if (channel.getUserId() == null) {
             final UserDetailDto userAccount = createUserAccount(channel.getName(), channel.getPhone(), channel.getType());
             channel.setUserId(userAccount.getId());
 

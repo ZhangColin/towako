@@ -115,9 +115,10 @@ public class MembershipAppService {
         if (wechatMemberships.size() > 0) {
             final Long memberId = wechatMemberships.get(0).getMemberId();
 
-            final WechatMembership wechatMembership = new WechatMembership(memberId, appId, openId, unionId, qrSceneStr, source);
-
-            wechatMembershipRepository.save(wechatMembership);
+            if(wechatMemberships.stream().noneMatch(wechatMembership -> wechatMembership.getOpenId().equals(openId))) {
+                final WechatMembership wechatMembership = new WechatMembership(memberId, appId, openId, unionId, qrSceneStr, source);
+                wechatMembershipRepository.save(wechatMembership);
+            }
 
             return membershipConverter.convert(requirePresent(membershipRepository.findById(memberId)));
         } else {

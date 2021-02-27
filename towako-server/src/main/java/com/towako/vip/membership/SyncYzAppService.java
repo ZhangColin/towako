@@ -15,6 +15,7 @@ import com.youzan.cloud.open.sdk.gen.v1_0_1.api.YouzanScrmCustomerDetailGet;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.model.YouzanScrmCustomerDetailGetParams;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.model.YouzanScrmCustomerDetailGetResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,7 @@ public class SyncYzAppService {
     }
 
     @Transactional(rollbackOn = Exception.class)
+    @Scheduled(cron = "0 0 3 ? * *")
     public void syncYzData() {
         try {
             final Token token = getYzToken();

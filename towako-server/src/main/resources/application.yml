@@ -43,6 +43,7 @@ cartisan:
         - /druid/**
         - /system/login
         - /mp/**
+        - /traffic/mychannel/qrcode
 
 management:
   endpoints:

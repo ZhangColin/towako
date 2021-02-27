@@ -60,7 +60,6 @@ public class MembershipController {
 
     @ApiOperation(value = "同步有赞数据")
     @PutMapping("/syncYzData")
-    @Scheduled(cron = "0 0 3 ? * *")
     public ResponseEntity<?> syncYzData() {
         syncYzAppService.syncYzData();
         return success();
