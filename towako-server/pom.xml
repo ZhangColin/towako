@@ -54,6 +54,12 @@
             <version>1.0.7.202012071102-RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.1.62</version>
+        </dependency>
+
         <!-- WxJava -->
         <dependency>
             <groupId>com.github.binarywang</groupId>

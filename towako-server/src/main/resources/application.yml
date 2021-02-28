@@ -44,6 +44,7 @@ cartisan:
         - /system/login
         - /mp/**
         - /traffic/mychannel/qrcode
+        - /captcha/**
 
 management:
   endpoints:
