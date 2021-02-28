@@ -1,26 +1,18 @@
 package com.towako.traffic.channel;
 
-import com.cartisan.dtos.PageResult;
 import com.cartisan.utils.QrCodeUtil;
 import com.towako.security.CurrentUser;
-import com.towako.traffic.channel.request.ChannelParam;
-import com.towako.traffic.channel.request.ChannelQuery;
-import com.towako.traffic.channel.response.ChannelBaseInfoDto;
+import com.towako.traffic.channel.request.RegisterChannelCommand;
 import com.towako.traffic.channel.response.ChannelDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 
 import static com.cartisan.responses.ResponseUtil.success;
 
@@ -55,6 +47,13 @@ public class MyChannelController {
         QrCodeUtil.encode("http://channel-h5.lanmedical.com/#/register?pId="+channelId, response.getOutputStream());
     }
 
+    @ApiOperation(value = "注册渠道")
+    @PostMapping("/register")
+    public ResponseEntity<?> registerChannel(
+            @ApiParam(value = "注册信息", required = true) @Validated @RequestBody RegisterChannelCommand command) {
+        service.registerChannel(command);
 
+        return success();
+    }
 
 }

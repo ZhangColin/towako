@@ -5,10 +5,13 @@ import com.cartisan.dtos.PageResult;
 import com.cartisan.exceptions.CartisanException;
 import com.cartisan.utils.SnowflakeIdWorker;
 import com.towako.system.user.application.UserAppService;
+import com.towako.system.user.application.UserProfileAppService;
+import com.towako.system.user.request.ChangePasswordCommand;
 import com.towako.system.user.request.CreateAccountCommand;
 import com.towako.system.user.response.UserDetailDto;
 import com.towako.traffic.channel.request.ChannelParam;
 import com.towako.traffic.channel.request.ChannelQuery;
+import com.towako.traffic.channel.request.RegisterChannelCommand;
 import com.towako.traffic.channel.response.ChannelBaseInfoConverter;
 import com.towako.traffic.channel.response.ChannelBaseInfoDto;
 import com.towako.traffic.channel.response.ChannelConverter;
@@ -20,6 +23,7 @@ import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,17 +47,19 @@ public class ChannelAppService {
     private final SnowflakeIdWorker idWorker;
     private final UserAppService userAppService;
     private final RecommendAppService recommendAppService;
+    private final ValueOperations<String, String> valueOperations;
 
     private final ChannelConverter channelConverter = ChannelConverter.CONVERTER;
 
     public ChannelAppService(ChannelRepository repository, WeChatQrCodeAppService weChatQrCodeAppService,
                              UserAppService userAppService, RecommendAppService recommendAppService,
-                             SnowflakeIdWorker idWorker) {
+                             SnowflakeIdWorker idWorker, ValueOperations<String, String> valueOperations) {
         this.repository = repository;
         this.weChatQrCodeAppService = weChatQrCodeAppService;
         this.idWorker = idWorker;
         this.userAppService = userAppService;
         this.recommendAppService = recommendAppService;
+        this.valueOperations = valueOperations;
     }
 
     public PageResult<ChannelDto> searchChannels(@NonNull ChannelQuery channelQuery, @NonNull Pageable pageable) {
@@ -113,6 +119,37 @@ public class ChannelAppService {
     }
 
     @Transactional(rollbackOn = Exception.class)
+    public void registerChannel(RegisterChannelCommand command) {
+        final String code = valueOperations.get(command.getPhone());
+
+        if (code==null || !code.equals(command.getCode())){
+            throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs("验证码不正确。"));
+        }
+
+        if (repository.existsByName(command.getName())) {
+            throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs(ERR_NAME_EXISTS));
+        }
+
+        if (!repository.findById(command.getParentId()).isPresent()){
+            throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs("推荐渠道不存在。"));
+        }
+
+        final long channelId = idWorker.nextId();
+
+        weChatQrCodeAppService.applyWechatQrCode(channelId);
+
+        final UserDetailDto account = createUserAccount(command.getName(), command.getPhone(), command.getEmail(), ChannelType.OTHER);
+
+        userAppService.changePassword(account.getId(), command.getPassword());
+
+        final Channel channel = new Channel(channelId,
+                command.getParentId(),
+                account.getId(), command.getName(), command.getPhone(),
+                ChannelType.OTHER);
+        repository.save(channel);
+    }
+
+    @Transactional(rollbackOn = Exception.class)
     public void addChannel(ChannelParam channelParam) {
         if (repository.existsByName(channelParam.getName())) {
             throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs(ERR_NAME_EXISTS));
@@ -122,7 +159,7 @@ public class ChannelAppService {
 
         weChatQrCodeAppService.applyWechatQrCode(channelId);
 
-        final UserDetailDto account = createUserAccount(channelParam.getName(), channelParam.getPhone(), channelParam.getType());
+        final UserDetailDto account = createUserAccount(channelParam.getName(), channelParam.getPhone(), "", channelParam.getType());
 
         final Channel channel = new Channel(channelId,
                 Optional.ofNullable(channelParam.getParentId()).orElse(0L),
@@ -131,11 +168,12 @@ public class ChannelAppService {
         repository.save(channel);
     }
 
-    private UserDetailDto createUserAccount(String name, String phone, String type) {
+    private UserDetailDto createUserAccount(String name, String phone, String email, String type) {
         final CreateAccountCommand createAccountCommand = new CreateAccountCommand();
         createAccountCommand.setUsername(phone);
         createAccountCommand.setPhone(phone);
         createAccountCommand.setRealName(name);
+        createAccountCommand.setEmail(email);
         createAccountCommand.setOrganizationIds(asList(1377345482606645249L));
         Long roleId = 0L;
         if (type.equals(ChannelType.DOCTOR)) {
@@ -156,7 +194,7 @@ public class ChannelAppService {
     public void createAccount(Long id) {
         final Channel channel = requirePresent(repository.findById(id));
         if (channel.getUserId() == null) {
-            final UserDetailDto userAccount = createUserAccount(channel.getName(), channel.getPhone(), channel.getType());
+            final UserDetailDto userAccount = createUserAccount(channel.getName(), channel.getPhone(), "", channel.getType());
             channel.setUserId(userAccount.getId());
 
             repository.save(channel);
@@ -195,4 +233,6 @@ public class ChannelAppService {
         channel.disable();
         repository.save(channel);
     }
+
+
 }

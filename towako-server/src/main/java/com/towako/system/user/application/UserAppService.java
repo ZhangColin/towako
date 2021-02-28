@@ -2,6 +2,7 @@ package com.towako.system.user.application;
 
 import com.cartisan.dtos.PageResult;
 import com.cartisan.security.LoginService;
+import com.cartisan.utils.AesUtil;
 import com.towako.system.user.UserRepository;
 import com.towako.system.user.domain.AssignService;
 import com.towako.system.user.domain.ChangePasswordService;
@@ -131,6 +132,19 @@ public class UserAppService {
         changePasswordService.resetPassword(user);
 
         loginService.logoutByUsername(user.getUsername());
+
+        repository.save(user);
+    }
+
+    /**
+     * TODO: 临时用来修改用户密码
+     * @param userId
+     * @param newPassword
+     */
+    @Transactional(rollbackOn = Exception.class)
+    public void changePassword(Long userId, String newPassword){
+        final User user = requirePresent(repository.findById(userId));
+        changePasswordService.changePassword(user, AesUtil.aesDecode(newPassword));
 
         repository.save(user);
     }

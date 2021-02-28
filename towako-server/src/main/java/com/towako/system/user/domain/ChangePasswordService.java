@@ -45,4 +45,15 @@ public class ChangePasswordService {
         log.info("[{}] reset password, from [{}] to [{}]", user.getUsername(), user.getPassword(), encodePassword);
         user.changePassword(encodePassword);
     }
+
+    /**
+     * TODO: 临时修改用户密码
+     * @param user
+     */
+    public void changePassword(User user, String newPassword) {
+        final String encodePassword =  passwordEncoder.encode(newPassword);
+
+        log.info("[{}] reset password, from [{}] to [{}]", user.getUsername(), user.getPassword(), encodePassword);
+        user.changePassword(encodePassword);
+    }
 }

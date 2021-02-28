@@ -67,7 +67,9 @@
           <el-dropdown split-button @click="handleEdit(scope.$index, scope.row)">
             编辑
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="handleShowQr(scope.$index, scope.row)">二维码
+              <el-dropdown-item @click.native="handleShowQr(scope.$index, scope.row)">推广码
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="handleShowChannelQr(scope.$index, scope.row)">渠道码
               </el-dropdown-item>
               <el-dropdown-item @click.native="handleRecommendList(scope.$index, scope.row)">推荐列表
               </el-dropdown-item>
@@ -129,7 +131,7 @@
       size="50%"
     >
       <div class="drawer__content">
-        <img ref="qrCodeImage" :src="channelQrCodeUrl" :alt="qrCodeDrawerTitle">
+        <img ref="qrCodeImage" :src="qrCodeUrl" :alt="qrCodeDrawerTitle">
         <div class="drawer__footer">
           <!--          <el-button type="primary" @click="downloadQrCode()">下载</el-button>-->
           <el-button type="primary" @click="qrCodeDrawerVisible=false">关闭</el-button>
@@ -213,7 +215,7 @@ export default {
 
       qrCodeDrawerTitle: '',
       qrCodeDrawerVisible: false,
-      channelQrCodeUrl: '',
+      qrCodeUrl: '',
 
       channelId: 0,
       recommendDrawerTitle: '',
@@ -257,9 +259,14 @@ export default {
       row.status = row.status === 1 ? 0 : 1
     },
     handleShowQr(index, row) {
-      this.qrCodeDrawerTitle = `${row.name} 二维码`
+      this.qrCodeDrawerTitle = `${row.name} 推广码`
       this.qrCodeDrawerVisible = true
-      this.channelQrCodeUrl = `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${row.ticket}`
+      this.qrCodeUrl = `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${row.ticket}`
+    },
+    handleShowChannelQr(index, row) {
+      this.qrCodeDrawerTitle = `${row.name} 渠道码`
+      this.qrCodeDrawerVisible = true
+      this.qrCodeUrl = `http://service.lanmedical.com/traffic/mychannel/qrcode?channelId=${row.id}`
     },
 
     // downloadQrCode() { // 下载图片地址和图片名
