@@ -4,9 +4,14 @@ import com.cartisan.constants.CodeMessage;
 import com.cartisan.dtos.PageResult;
 import com.cartisan.exceptions.CartisanException;
 import com.cartisan.utils.SnowflakeIdWorker;
+import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.common.profile.HttpProfile;
+import com.tencentcloudapi.sms.v20190711.SmsClient;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import com.towako.system.user.application.UserAppService;
-import com.towako.system.user.application.UserProfileAppService;
-import com.towako.system.user.request.ChangePasswordCommand;
 import com.towako.system.user.request.CreateAccountCommand;
 import com.towako.system.user.response.UserDetailDto;
 import com.towako.traffic.channel.request.ChannelParam;
@@ -20,6 +25,7 @@ import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.traffic.wechatqrcode.WeChatQrCodeAppService;
 import com.towako.traffic.wechatqrcode.response.WeChatQrCodeDto;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +45,7 @@ import static java.util.stream.Collectors.toList;
  * @author colin
  */
 @Service
+@Slf4j
 public class ChannelAppService {
     public static final String ERR_NAME_EXISTS = "渠道已存在。";
 
@@ -147,6 +154,37 @@ public class ChannelAppService {
                 account.getId(), command.getName(), command.getPhone(),
                 ChannelType.OTHER);
         repository.save(channel);
+
+        sendSuccessSms(channel.getPhone());
+    }
+
+    private void sendSuccessSms(String phone) {
+        try {
+            Credential cred = new Credential("AKIDLbgsjNrGlmbXFjKSilbEfs6NSLHxuccP", "vTFduoW45EsrYIuWDjTCiZEmdCfw7221");
+            HttpProfile httpProfile = new HttpProfile();
+            httpProfile.setReqMethod("POST");
+            httpProfile.setConnTimeout(60);
+            httpProfile.setEndpoint("sms.tencentcloudapi.com");
+            ClientProfile clientProfile = new ClientProfile();
+            clientProfile.setSignMethod("HmacSHA256");
+            clientProfile.setHttpProfile(httpProfile);
+            SmsClient client = new SmsClient(cred, "",clientProfile);
+            SendSmsRequest req = new SendSmsRequest();
+            String appid = "1400486413";
+            req.setSmsSdkAppid(appid);
+            String sign = "优生慧";
+            req.setSign(sign);
+            String templateID = "880371";
+            req.setTemplateID(templateID);
+
+            String[] phoneNumbers = {"+86"+ phone};
+            req.setPhoneNumberSet(phoneNumbers);
+
+            SendSmsResponse res = client.SendSms(req);
+            log.info("腾讯短信接口返回结果：[{}]", SendSmsResponse.toJsonString(res) );
+        } catch (TencentCloudSDKException e) {
+            log.error("腾讯短信接口调用失败：[{}]", e.getMessage());
+        }
     }
 
     @Transactional(rollbackOn = Exception.class)

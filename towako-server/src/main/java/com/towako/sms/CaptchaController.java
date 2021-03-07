@@ -71,7 +71,7 @@ public class CaptchaController {
 
             valueOperations.set(phone, code, 30, TimeUnit.MINUTES);
         } catch (TencentCloudSDKException e) {
-            log.info("验证码发送失败：[{}]", e.getMessage());
+            log.error("验证码发送失败：[{}]", e.getMessage());
         }
 
         return success();
