@@ -106,6 +106,22 @@ public class ChannelAppService {
                 channels);
     }
 
+    public ChannelDto getByChannelId(Long channelId){
+        final ChannelDto channelDto = channelConverter.convert(requirePresent(repository.findById(channelId)));
+
+        final List<WeChatQrCodeDto> qrCodeDtos = weChatQrCodeAppService.findByChannelIds(asList(channelId));
+        qrCodeDtos.stream().findFirst().ifPresent(qrCodeDto -> {
+            channelDto.setRecommends(recommendAppService.getRecommendCount(channelDto.getId()));
+
+            channelDto.setTicket(qrCodeDto.getTicket());
+            channelDto.setImageUrl(qrCodeDto.getImageUrl());
+            channelDto.setExpireSeconds(qrCodeDto.getExpireSeconds());
+            channelDto.setUrl(qrCodeDto.getUrl());
+        });
+
+        return channelDto;
+    }
+
     public List<ChannelBaseInfoDto> findAllEffectiveChannels() {
         return ChannelBaseInfoConverter.CONVERTER.convert(repository.findByStatus(1));
     }
@@ -392,6 +408,4 @@ public class ChannelAppService {
         channel.disable();
         repository.save(channel);
     }
-
-
 }

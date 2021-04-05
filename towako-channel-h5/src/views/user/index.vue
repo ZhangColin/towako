@@ -54,7 +54,7 @@
     <div class="list">
       <van-cell title="我的推广码" />
       <van-row>
-        <van-col span="24"><van-image ref="qrCodeImage" :src="`https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${channelInfo.ticket}`" alt="" /></van-col>
+        <van-col span="24"><van-image ref="qrCodeImage" :src="`http://service.lanmedical.com/traffic/mychannel/recommendPoster?channelId=${channelInfo.id}`" alt="" /></van-col>
       </van-row>
     </div>
 

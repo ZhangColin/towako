@@ -51,7 +51,7 @@
         <dependency>
             <groupId>com.youzan.cloud</groupId>
             <artifactId>open-sdk-gen</artifactId>
-            <version>1.0.7.202012071102-RELEASE</version>
+            <version>1.0.7.78801202104041915-RELEASE</version>
         </dependency>
 
         <dependency>

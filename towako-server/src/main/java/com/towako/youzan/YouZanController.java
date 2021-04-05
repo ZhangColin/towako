@@ -2,13 +2,15 @@ package com.towako.youzan;
 
 import com.youzan.cloud.open.sdk.common.exception.SDKException;
 import com.youzan.cloud.open.sdk.core.client.auth.Token;
-import com.youzan.cloud.open.sdk.core.client.core.DefaultYZClient;
 import com.youzan.cloud.open.sdk.core.client.core.YouZanClient;
 import com.youzan.cloud.open.sdk.core.oauth.model.OAuthToken;
 import com.youzan.cloud.open.sdk.core.oauth.token.TokenParameter;
-import com.youzan.cloud.open.sdk.gen.v1_0_0.api.YouzanUserUnionidGet;
-import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanUserUnionidGetParams;
-import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanUserUnionidGetResult;
+import com.youzan.cloud.open.sdk.gen.v1_0_0.api.YouzanScrmCustomerList;
+import com.youzan.cloud.open.sdk.gen.v1_0_0.api.YouzanUsersInfoQuery;
+import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanScrmCustomerListParams;
+import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanScrmCustomerListResult;
+import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanUsersInfoQueryParams;
+import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanUsersInfoQueryResult;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.api.YouzanScrmCustomerDetailGet;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.model.YouzanScrmCustomerDetailGetParams;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.model.YouzanScrmCustomerDetailGetResult;
@@ -54,36 +56,69 @@ public class YouZanController {
     }
 
 
-    @ApiOperation(value = "获取有赞OpenId")
-    @GetMapping("/yzopenid")
-    public ResponseEntity<YouzanUserUnionidGetResult> getYzOpenId(@RequestParam String tokenStr, @RequestParam String unionId) throws SDKException {
+    @ApiOperation(value = "获取有赞用户信息")
+    @GetMapping("/yzuserinfo")
+    public ResponseEntity<YouzanUsersInfoQueryResult> getYzUserInfo(@RequestParam String tokenStr, @RequestParam String unionId) throws SDKException {
         Token token = new Token(tokenStr);
 
-        YouzanUserUnionidGet youzanUserUnionidGet = new YouzanUserUnionidGet();
+        final YouzanUsersInfoQuery youzanUsersInfoQuery = new YouzanUsersInfoQuery();
 
-        YouzanUserUnionidGetParams youzanUserUnionidGetParams = new YouzanUserUnionidGetParams();
-        youzanUserUnionidGetParams.setUnionId(unionId);
-        youzanUserUnionidGet.setAPIParams(youzanUserUnionidGetParams);
+        final YouzanUsersInfoQueryParams youzanUsersInfoQueryParams = new YouzanUsersInfoQueryParams();
+        youzanUsersInfoQueryParams.setWeixinUnionId(unionId);
+        youzanUsersInfoQuery.setAPIParams(youzanUsersInfoQueryParams);
 
-        YouzanUserUnionidGetResult result = youZanClient.invoke(youzanUserUnionidGet, token, YouzanUserUnionidGetResult.class);
+        YouzanUsersInfoQueryResult result = youZanClient.invoke(youzanUsersInfoQuery, token, YouzanUsersInfoQueryResult.class);
+
+        return success(result);
+    }
+
+    @ApiOperation(value = "获取有赞用户信息")
+    @GetMapping("/yzuserinfo1")
+    public ResponseEntity<YouzanUsersInfoQueryResult> getYzUserInfo1(@RequestParam String tokenStr, @RequestParam String yzOpenId) throws SDKException {
+        Token token = new Token(tokenStr);
+
+        final YouzanUsersInfoQuery youzanUsersInfoQuery = new YouzanUsersInfoQuery();
+
+        final YouzanUsersInfoQueryParams youzanUsersInfoQueryParams = new YouzanUsersInfoQueryParams();
+        youzanUsersInfoQueryParams.setYzOpenId(yzOpenId);
+        youzanUsersInfoQuery.setAPIParams(youzanUsersInfoQueryParams);
+
+        YouzanUsersInfoQueryResult result = youZanClient.invoke(youzanUsersInfoQuery, token, YouzanUsersInfoQueryResult.class);
 
         return success(result);
     }
 
 
-    @ApiOperation(value = "获取有赞OpenId")
-    @GetMapping("/customerDetail")
-    public ResponseEntity<YouzanScrmCustomerDetailGetResult> getCustomerDetail(@RequestParam String tokenStr, @RequestParam String yzOpenId) throws SDKException {
+//    @ApiOperation(value = "获取有赞客户详情")
+//    @GetMapping("/customerDetail")
+//    public ResponseEntity<YouzanScrmCustomerDetailGetResult> getCustomerDetail(@RequestParam String tokenStr, @RequestParam String yzOpenId) throws SDKException {
+//        Token token = new Token(tokenStr);
+//
+//        YouzanScrmCustomerDetailGet youzanScrmCustomerDetailGet = new YouzanScrmCustomerDetailGet();
+//
+//        YouzanScrmCustomerDetailGetParams youzanScrmCustomerDetailGetParams = new YouzanScrmCustomerDetailGetParams();
+//        youzanScrmCustomerDetailGetParams.setYzOpenId(yzOpenId);
+//        youzanScrmCustomerDetailGetParams.setFields("user_base");
+//        youzanScrmCustomerDetailGet.setAPIParams(youzanScrmCustomerDetailGetParams);
+//
+//        YouzanScrmCustomerDetailGetResult result = youZanClient.invoke(youzanScrmCustomerDetailGet, token, YouzanScrmCustomerDetailGetResult.class);
+//
+//        return success(result);
+//    }
+
+    @ApiOperation(value = "获取有赞客户列表")
+    @GetMapping("/customerList")
+    public ResponseEntity<YouzanScrmCustomerListResult> getCustomerList(@RequestParam String tokenStr) throws SDKException {
         Token token = new Token(tokenStr);
 
-        YouzanScrmCustomerDetailGet youzanScrmCustomerDetailGet = new YouzanScrmCustomerDetailGet();
+        final YouzanScrmCustomerList youzanScrmCustomerList = new YouzanScrmCustomerList();
 
-        YouzanScrmCustomerDetailGetParams youzanScrmCustomerDetailGetParams = new YouzanScrmCustomerDetailGetParams();
-        youzanScrmCustomerDetailGetParams.setYzOpenId(yzOpenId);
-        youzanScrmCustomerDetailGetParams.setFields("user_base");
-        youzanScrmCustomerDetailGet.setAPIParams(youzanScrmCustomerDetailGetParams);
+        final YouzanScrmCustomerListParams youzanScrmCustomerListParams = new YouzanScrmCustomerListParams();
+        youzanScrmCustomerListParams.setPageNo(1);
+        youzanScrmCustomerListParams.setPageSize(50);
+        youzanScrmCustomerList.setAPIParams(youzanScrmCustomerListParams);
 
-        YouzanScrmCustomerDetailGetResult result = youZanClient.invoke(youzanScrmCustomerDetailGet, token, YouzanScrmCustomerDetailGetResult.class);
+        final YouzanScrmCustomerListResult result = youZanClient.invoke(youzanScrmCustomerList, token, YouzanScrmCustomerListResult.class);
 
         return success(result);
     }

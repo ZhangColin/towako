@@ -8,9 +8,6 @@ import com.youzan.cloud.open.sdk.core.client.auth.Token;
 import com.youzan.cloud.open.sdk.core.client.core.YouZanClient;
 import com.youzan.cloud.open.sdk.core.oauth.model.OAuthToken;
 import com.youzan.cloud.open.sdk.core.oauth.token.TokenParameter;
-import com.youzan.cloud.open.sdk.gen.v1_0_0.api.YouzanUserUnionidGet;
-import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanUserUnionidGetParams;
-import com.youzan.cloud.open.sdk.gen.v1_0_0.model.YouzanUserUnionidGetResult;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.api.YouzanScrmCustomerDetailGet;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.model.YouzanScrmCustomerDetailGetParams;
 import com.youzan.cloud.open.sdk.gen.v1_0_1.model.YouzanScrmCustomerDetailGetResult;
@@ -95,26 +92,27 @@ public class SyncYzAppService {
 
     public Optional<String> getYzOpenId(Token token, String unionId) throws SDKException {
         log.info("使用token[{}]获取微信unionId[{}]对应的YzOpenId", token.getAccessToken(), unionId);
-        YouzanUserUnionidGet youzanUserUnionidGet = new YouzanUserUnionidGet();
+//        YouzanUserUnionidGet youzanUserUnionidGet = new YouzanUserUnionidGet();
+//
+//        YouzanUserUnionidGetParams youzanUserUnionidGetParams = new YouzanUserUnionidGetParams();
+//        youzanUserUnionidGetParams.setUnionId(unionId);
+//        youzanUserUnionidGet.setAPIParams(youzanUserUnionidGetParams);
+//
+//        YouzanUserUnionidGetResult result = youZanClient.invoke(youzanUserUnionidGet, token, YouzanUserUnionidGetResult.class);
+//
+//        final Optional<String> yzOpenId = Optional.ofNullable(result.getData()).map(YouzanUserUnionidGetResult.YouzanUserUnionidGetResultData::getYzOpenId);
+//
+//        String resultString = null;
+//        try {
+//            resultString = objectMapper.writeValueAsString(result);
+//        } catch (JsonProcessingException e) {
+//            log.error(e.getMessage());
+//        }
 
-        YouzanUserUnionidGetParams youzanUserUnionidGetParams = new YouzanUserUnionidGetParams();
-        youzanUserUnionidGetParams.setUnionId(unionId);
-        youzanUserUnionidGet.setAPIParams(youzanUserUnionidGetParams);
+//        log.info("使用token[{}]获取微信unionId[{}]对应的YzOpenId，YzOpenId: [{}], 完整结果: [{}]", token.getAccessToken(), unionId, yzOpenId, resultString);
 
-        YouzanUserUnionidGetResult result = youZanClient.invoke(youzanUserUnionidGet, token, YouzanUserUnionidGetResult.class);
-
-        final Optional<String> yzOpenId = Optional.ofNullable(result.getData()).map(YouzanUserUnionidGetResult.YouzanUserUnionidGetResultData::getYzOpenId);
-
-        String resultString = null;
-        try {
-            resultString = objectMapper.writeValueAsString(result);
-        } catch (JsonProcessingException e) {
-            log.error(e.getMessage());
-        }
-
-        log.info("使用token[{}]获取微信unionId[{}]对应的YzOpenId，YzOpenId: [{}], 完整结果: [{}]", token.getAccessToken(), unionId, yzOpenId, resultString);
-
-        return yzOpenId;
+//        return yzOpenId;
+        return null;
     }
 
 

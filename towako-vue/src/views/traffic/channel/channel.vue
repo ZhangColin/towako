@@ -131,7 +131,7 @@
       size="50%"
     >
       <div class="drawer__content">
-        <img ref="qrCodeImage" :src="qrCodeUrl" :alt="qrCodeDrawerTitle">
+        <img ref="qrCodeImage" style="width: 300px;" :src="qrCodeUrl" :alt="qrCodeDrawerTitle">
         <div class="drawer__footer">
           <!--          <el-button type="primary" @click="downloadQrCode()">下载</el-button>-->
           <el-button type="primary" @click="qrCodeDrawerVisible=false">关闭</el-button>
@@ -261,7 +261,7 @@ export default {
     handleShowQr(index, row) {
       this.qrCodeDrawerTitle = `${row.name} 推广码`
       this.qrCodeDrawerVisible = true
-      this.qrCodeUrl = `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${row.ticket}`
+      this.qrCodeUrl = `http://service.lanmedical.com/traffic/mychannel/recommendPoster?channelId=${row.id}`
     },
     handleShowChannelQr(index, row) {
       this.qrCodeDrawerTitle = `${row.name} 渠道码`
