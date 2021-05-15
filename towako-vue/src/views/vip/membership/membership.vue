@@ -3,8 +3,10 @@
     <el-row :gutter="24" class="filter-container">
       <el-col :span="6">
         <el-input v-model="queryParam.nickname" class="filter-item" placeholder="请输入会员名称查询" />
+      </el-col><el-col :span="6">
+        <el-input v-model="queryParam.phone" class="filter-item" placeholder="请输入会员手机查询" />
       </el-col>
-      <el-col :span="9">
+      <el-col :span="6">
         <el-date-picker
           v-model="registerRange"
           type="daterange"
@@ -18,7 +20,7 @@
           :default-time="['00:00:00', '23:59:59']"
         />
       </el-col>
-      <el-col :span="9">
+      <el-col :span="6">
         <el-button class="filter-item" type="primary" @click="handleSearch">查询</el-button>
         <el-button class="filter-item" type="primary" @click="handleExport">导出</el-button>
       </el-col>
@@ -50,7 +52,7 @@
       <el-table-column align="center" label="渠道" prop="channel">
         <template slot-scope="{row}">
           <span>{{
-            {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', OTHER: '其它'}[row.channel] || ''
+            {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', YOUZAN: '有赞', OTHER: '其它'}[row.channel] || ''
           }}</span>
         </template>
       </el-table-column>
@@ -187,7 +189,7 @@ export default {
             header: tHeader,
             data: response.data.rows.map(v => ['nickname', 'phone', 'channel', 'recommend', 'createDateTime'].map(fieldName => {
               if (fieldName === 'channel') {
-                return { DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', OTHER: '其它' }[v[fieldName]] || ''
+                return { DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', YOUZAN: '有赞', OTHER: '其它' }[v[fieldName]] || ''
               } else if (fieldName === 'recommend') {
                 return v[fieldName] || '用户自寻'
               }

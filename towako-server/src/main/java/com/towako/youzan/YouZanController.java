@@ -88,24 +88,6 @@ public class YouZanController {
         return success(result);
     }
 
-
-//    @ApiOperation(value = "获取有赞客户详情")
-//    @GetMapping("/customerDetail")
-//    public ResponseEntity<YouzanScrmCustomerDetailGetResult> getCustomerDetail(@RequestParam String tokenStr, @RequestParam String yzOpenId) throws SDKException {
-//        Token token = new Token(tokenStr);
-//
-//        YouzanScrmCustomerDetailGet youzanScrmCustomerDetailGet = new YouzanScrmCustomerDetailGet();
-//
-//        YouzanScrmCustomerDetailGetParams youzanScrmCustomerDetailGetParams = new YouzanScrmCustomerDetailGetParams();
-//        youzanScrmCustomerDetailGetParams.setYzOpenId(yzOpenId);
-//        youzanScrmCustomerDetailGetParams.setFields("user_base");
-//        youzanScrmCustomerDetailGet.setAPIParams(youzanScrmCustomerDetailGetParams);
-//
-//        YouzanScrmCustomerDetailGetResult result = youZanClient.invoke(youzanScrmCustomerDetailGet, token, YouzanScrmCustomerDetailGetResult.class);
-//
-//        return success(result);
-//    }
-
     @ApiOperation(value = "获取有赞客户列表")
     @GetMapping("/customerList")
     public ResponseEntity<YouzanScrmCustomerListResult> getCustomerList(@RequestParam String tokenStr) throws SDKException {

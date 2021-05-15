@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface RecommendRepository extends BaseRepository<Recommend, Long> {
     boolean existsByMemberId(Long memberId);
+    Recommend findByMemberId(Long memberId);
 
     Long countByChannelId(Long channelId);
 

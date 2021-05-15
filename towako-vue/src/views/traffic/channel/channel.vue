@@ -39,7 +39,7 @@
       <el-table-column align="center" label="类型" prop="type">
         <template slot-scope="{row}">
           <span>{{
-            {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', OTHER: '其它'}[row.type] || ''
+            {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', YOUZAN: '有赞', OTHER: '其它'}[row.type] || ''
           }}</span>
         </template>
       </el-table-column>

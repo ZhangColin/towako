@@ -43,7 +43,7 @@
               </div>
             </div>
             <div class="aui-me-content-card">
-              <h3><i class="aui-icon aui-card-me" />{{ {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', OTHER: '其它'}[channelInfo.type] || '' }}</h3>
+              <h3><i class="aui-icon aui-card-me" />{{ {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', YOUZAN: '有赞', OTHER: '其它'}[channelInfo.type] || '' }}</h3>
             </div>
           </div>
         </div>

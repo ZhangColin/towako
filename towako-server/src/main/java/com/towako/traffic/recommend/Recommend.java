@@ -4,6 +4,7 @@ import com.cartisan.domains.AbstractEntity;
 import com.cartisan.domains.AggregateRoot;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,9 +26,11 @@ public class Recommend extends AbstractEntity implements AggregateRoot {
     private Long channelId;
 
     @Column(name = "member_id")
+    @Setter
     private Long memberId;
 
     @Column(name = "nickname")
+    @Setter
     private String nickName;
 
     @Column(name = "recommend_date")

@@ -12,4 +12,5 @@ public interface WechatMembershipRepository extends BaseRepository<WechatMembers
     Optional<WechatMembership> findByAppIdAndOpenId(String appId, String openId);
     List<WechatMembership> findByAppIdAndUnionId(String appId, String unionId);
     List<WechatMembership> findByMemberId(Long memberId);
+    List<WechatMembership> findByMemberIdIn(List<Long> memberIds);
 }

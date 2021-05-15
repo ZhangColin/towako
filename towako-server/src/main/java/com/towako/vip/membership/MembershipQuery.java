@@ -32,5 +32,7 @@ public class MembershipQuery {
     @Condition(propName = "createDateTime", type = Condition.Type.LESS_EQUAL)
     private LocalDateTime endDate;
 
-
+    @ApiModelProperty(value = "手机")
+    @Condition(propName = "phone", type = Condition.Type.EQUAL)
+    private String phone;
 }

@@ -71,10 +71,6 @@ public class MembershipAppService {
                 membershipDtos);
     }
 
-    public PageResult<MembershipDto> findByChannelId(Long channelId, Pageable pageable) {
-        return null;
-    }
-
     public Optional<MembershipDto> findByOpenId(String appId, String openId) {
         return wechatMembershipRepository.findByAppIdAndOpenId(appId, openId)
                 .flatMap(wechatMembership -> membershipRepository.findById(wechatMembership.getMemberId()))
