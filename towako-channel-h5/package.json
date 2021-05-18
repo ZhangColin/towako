@@ -11,6 +11,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:brain": "vue-cli-service build --mode brain",
     "build:log": "vue-cli-service build --profile --json > build.log",
     "mock": "node mock/start.js",
     "lint": "vue-cli-service lint"
