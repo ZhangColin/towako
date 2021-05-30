@@ -43,7 +43,15 @@
               </div>
             </div>
             <div class="aui-me-content-card">
-              <h3><i class="aui-icon aui-card-me" />{{ {DOCTOR: '医生', TOWAKO_DOCTOR: '永远幸医生', FAMILY_HOTEL: '家庭旅馆', YOUZAN: '有赞', OTHER: '其它'}[channelInfo.type] || '' }}</h3>
+              <h3><i class="aui-icon aui-card-me" />{{
+                {
+                  DOCTOR: '医生',
+                  TOWAKO_DOCTOR: '永远幸医生',
+                  FAMILY_HOTEL: '家庭旅馆',
+                  YOUZAN: '有赞',
+                  OTHER: '其它'
+                }[channelInfo.type] || ''
+              }}</h3>
             </div>
           </div>
         </div>
@@ -54,7 +62,13 @@
     <div class="list">
       <van-cell title="我的推广码" />
       <van-row>
-        <van-col span="24"><van-image ref="qrCodeImage" :src="`http://service.lanmedical.com/traffic/mychannel/recommendPoster?channelId=${channelInfo.id}`" alt="" /></van-col>
+        <van-col span="24">
+          <van-image
+            ref="qrCodeImage"
+            :src="`http://service.lanmedical.com/traffic/mychannel/recommendPoster?channelId=${channelInfo.id}`"
+            alt=""
+          />
+        </van-col>
       </van-row>
     </div>
 
@@ -62,17 +76,41 @@
     <div class="list">
       <van-cell title="我的渠道码" />
       <van-row>
-        <van-col span="24"><van-image ref="channelQrCodeImage" :src="`http://service.lanmedical.com/traffic/mychannel/qrcode?channelId=${channelInfo.id}`" alt="" /></van-col>
+        <van-col span="24">
+          <van-image
+            ref="channelQrCodeImage"
+            :src="`http://service.lanmedical.com/traffic/mychannel/qrcode?channelId=${channelInfo.id}`"
+            alt=""
+          />
+        </van-col>
       </van-row>
     </div>
 
     <div class="gp-h10" />
 
+    <div class="list">
+      <van-row>
+        <van-col span="2" />
+        <van-col span="20">
+          <van-button
+            class="login_btn"
+            type="primary"
+            round
+            block
+            size="normal"
+            @click="goChangePassword"
+          >修改密码
+          </van-button>
+        </van-col>
+        <van-col span="2" />
+      </van-row>
+
+    </div>
+
     <gp-footer />
 
     <div class="gp-h50" />
     <div class="gp-h50" />
-
     <gp-bottom-tabbar />
   </div>
 </template>
@@ -107,7 +145,9 @@ export default {
     })
   },
   methods: {
-
+    goChangePassword() {
+      this.$router.push({ path: '/changePassword' })
+    }
   }
 }
 </script>

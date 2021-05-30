@@ -64,6 +64,14 @@ const routes = [
       title: '登录'
     }
   },
+  {
+    path: '/changePassword',
+    name: 'ChangePassword',
+    component: () => import('@/views/changePassword/index.vue'),
+    meta: {
+      title: '修改密码'
+    }
+  },
 
   {
     path: '/register',

@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: 'Towako',
+      title: '优生慧',
       logo: ''
     }
   }
