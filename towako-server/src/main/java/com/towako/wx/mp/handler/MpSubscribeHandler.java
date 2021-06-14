@@ -126,14 +126,14 @@ public class MpSubscribeHandler implements WxMpMessageHandler {
         String content = "感谢关注优生慧公众平台，在这里我们将为诸多备孕家庭提供一系列的国内外医生大咖助孕宝典、就医指南以及优生通道。平台将不定期发放患者福利，敬请期待！\n\n"
                 + "回复数字了解详情：\n"
                 + "1. 上海方法介绍\n"
-                + "2. 永远幸初诊指南\n"
+                + "2. 东方医院初诊指南\n"
                 + "3. 九院初诊指南\n"
-                + "4. 匡延平主任科普园地\n"
-                + "5. 永远幸介绍\n"
-                + "6. 永远幸实验室介绍\n"
+                + "4. 匡延平主任之试管问答\n"
+                + "5. 好孕喜报\n"
+                + "6. 胚胎实验室的秘密\n"
                 + "7. 宫腔镜手术介绍及预约流程\n"
                 + "8. 在线预约挂号\n"
-                + "9. 专家亲诊\n\n"
+                + "9. 指定专家亲诊\n\n"
                 + "名医助孕，智慧优生！\n";
         return new TextBuilder().build(content, wxMessage, wxMpService);
     }
