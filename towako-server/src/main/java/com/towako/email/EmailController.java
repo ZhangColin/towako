@@ -1,9 +1,12 @@
 package com.towako.email;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,37 +33,32 @@ import static com.cartisan.responses.ResponseUtil.success;
 @Validated
 @Slf4j
 public class EmailController {
+    private final JavaMailSender javaMailSender;
+
+    public EmailController(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
     @ApiOperation(value = "发送邮件")
     @GetMapping("/send")
     public ResponseEntity<?> sendEmail() throws Exception {
-        final Session session = initSession();
-        // 3. 创建一封邮件
-        MimeMessage message = createMimeMessage(session, "service@lanmedical.com", "colin.zhang@lanmedical.com");
 
-        // 4. 根据 Session 获取邮件传输对象
-        Transport transport = session.getTransport();
+        final MimeMessage message = javaMailSender.createMimeMessage();
+        message.setFrom(new InternetAddress("service@lanmedical.com", "我的测试邮件_发件人昵称", "UTF-8"));
+        message.addRecipient(MimeMessage.RecipientType.TO, new InternetAddress("colin.zhang@lanmedical.com", "我的测试邮件_收件人昵称", "UTF-8"));
+        message.setSubject("TEST邮件主题（文本+图片+附件）", "UTF-8");
 
-        // 5. 使用 邮箱账号 和 密码 连接邮件服务器, 这里认证的邮箱必须与 message 中的发件人邮箱一致, 否则报错
-        //
-        //    PS_01: 成败的判断关键在此一句, 如果连接服务器失败, 都会在控制台输出相应失败原因的 log,
-        //           仔细查看失败原因, 有些邮箱服务器会返回错误码或查看错误类型的链接, 根据给出的错误
-        //           类型到对应邮件服务器的帮助网站上查看具体失败原因。
-        //
-        //    PS_02: 连接失败的原因通常为以下几点, 仔细检查代码:
-        //           (1) 邮箱没有开启 SMTP 服务;
-        //           (2) 邮箱密码错误, 例如某些邮箱开启了独立密码;
-        //           (3) 邮箱服务器要求必须要使用 SSL 安全连接;
-        //           (4) 请求过于频繁或其他原因, 被邮件服务器拒绝服务;
-        //           (5) 如果以上几点都确定无误, 到邮件服务器网站查找帮助。
-        //
-        //    PS_03: 仔细看log, 认真看log, 看懂log, 错误原因都在log已说明。
-        transport.connect("service@lanmedical.com", "LqhqzBbUKckqem2n");
+        MimeBodyPart text = new MimeBodyPart();
+        text.setContent("<table cellpadding=\"0\" align=\"center\" style=\"width: 600px; margin: 0px auto; text-align: left; position: relative; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; font-size: 14px; font-family:微软雅黑, 黑体; line-height: 1.5; box-shadow: rgb(153, 153, 153) 0px 0px 5px; border-collapse: collapse; background-position: initial initial; background-repeat: initial initial;background:#fff;\"><tbody><tr><th valign=\"middle\" style=\"height: 25px; line-height: 25px; padding: 15px 35px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #42a3d3; background-color: #49bcff; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font face=\"微软雅黑\" size=\"5\" style=\"color: rgb(255, 255, 255); \">注册成功! （优生慧）</font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </th></tr><tr><td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div style=\"padding:25px 35px 40px; background-color:#fff;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <h2 style=\"margin: 5px 0px; \"><font color=\"#333333\" style=\"line-height: 20px; \"><font style=\"line-height: 22px; \" size=\"4\">亲爱的 XXX</font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </h2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>感谢您加入优生慧推广渠道！</p><p>下面是您的账号信息：<br><br>登录地址：<a href=\"http://channel-h5.lanmedical.com/\" target=\"_blank\">http://channel-h5.lanmedical.com/</a></p><p>账号：<b>111111</b><br>密码：<b>123456</b><br>邮箱：<b>123@**.com</b><br><br></p><p>附件为优生慧推广渠道操作指引，<b>请按照指引进行推广操作</b>，祝您一切顺利，日进斗金！</p><p><br></p><p>当您在使用本网站时，遵守当地法律法规。<br>如果您有什么疑问可以联系管理员，Email: <a href=\"mailto:z@lanmedical.com\" target=\"_blank\">z@lanmedical.com</a></p><p>或直接扫码添加专属客服：</p><p><img src=\"/cgi-bin/viewfile?f=CBA8815A901695F875F28798521BEA8EE20AC74B8C9F82259E3B84E69726A978F06DE48D864A1654302E7DE183AAE7CD12AAC073E439DAFCEC090653C191E728A5F48C1FD00E1F4BC63E240EAA143667DF25D7476D6F7C790410871C559207BF&amp;usewmcache=1&amp;sid=Sfrk07kBX7D8HDBQ,7\" border=\"0\" width=\"111\" height=\"114\"></p><p><br></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p align=\"right\">优生慧</p>&nbsp;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div style=\"width:700px;margin:0 auto;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div style=\"padding:10px 10px 0;border-top:1px solid #ccc;color:#747474;margin-bottom:20px;line-height:1.3em;font-size:12px;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>此为系统邮件，请勿直接回复！<br>请保管好您的邮箱地址，避免账号被他人盗用&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>优生慧©2021</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div></td></tr></tbody></table>", "text/html;charset=UTF-8");
 
-        // 6. 发送邮件, 发到所有的收件地址, message.getAllRecipients() 获取到的是在创建邮件对象时添加的所有收件人, 抄送人, 密送人
-        transport.sendMessage(message, message.getAllRecipients());
+        MimeMultipart mm = new MimeMultipart();
+        mm.addBodyPart(text);
+        message.setContent(mm);
 
-        // 7. 关闭连接
-        transport.close();
+        message.saveChanges();
+
+        javaMailSender.send(message);
+
 
         return success();
     }
@@ -77,6 +75,9 @@ public class EmailController {
         props.setProperty("mail.smtp.socketFactory.fallback", "false");
         props.setProperty("mail.smtp.socketFactory.port", "465");
 
+        props.setProperty("mail.smtp.ssl.enable", "true");
+//        props.setProperty("mail.smtp.enable", "true");
+
 //        MailSSLSocketFactory mailSSLSocketFactory = new MailSSLSocketFactory();
 //        mailSSLSocketFactory.setTrustAllHosts(true);
 //        props.setProperty("mail.smtp.ssl.socketFactory", mailSSLSocketFactory);
@@ -85,7 +86,7 @@ public class EmailController {
         Session session = Session.getDefaultInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("account", "password");
+                return new PasswordAuthentication("service@lanmedical.com", "Y7HFWrfzfNnEyNnH");
             }
         });
         session.setDebug(true);

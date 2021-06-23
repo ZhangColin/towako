@@ -32,6 +32,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -68,18 +69,21 @@ public class ChannelAppService {
     private final UserAppService userAppService;
     private final RecommendAppService recommendAppService;
     private final ValueOperations<String, String> valueOperations;
+    private final JavaMailSender javaMailSender;
 
     private final ChannelConverter channelConverter = ChannelConverter.CONVERTER;
 
     public ChannelAppService(ChannelRepository repository, WeChatQrCodeAppService weChatQrCodeAppService,
                              UserAppService userAppService, RecommendAppService recommendAppService,
-                             SnowflakeIdWorker idWorker, ValueOperations<String, String> valueOperations) {
+                             SnowflakeIdWorker idWorker, ValueOperations<String, String> valueOperations,
+                             JavaMailSender javaMailSender) {
         this.repository = repository;
         this.weChatQrCodeAppService = weChatQrCodeAppService;
         this.idWorker = idWorker;
         this.userAppService = userAppService;
         this.recommendAppService = recommendAppService;
         this.valueOperations = valueOperations;
+        this.javaMailSender = javaMailSender;
     }
 
     public PageResult<ChannelDto> searchChannels(@NonNull ChannelQuery channelQuery, @NonNull Pageable pageable) {
@@ -201,41 +205,14 @@ public class ChannelAppService {
     }
 
     private void sendEmail(String email, String name, String content) throws Exception {
-        final Session session = initSession();
-        MimeMessage message = createMimeMessage(session, "service@lanmedical.com", email, name, content);
+        MimeMessage message = createMimeMessage("service@lanmedical.com", email, name, content);
 
-        Transport transport = session.getTransport();
-        transport.connect("service@lanmedical.com", "LqhqzBbUKckqem2n");
-
-        transport.sendMessage(message, message.getAllRecipients());
-
-        transport.close();
+        javaMailSender.send(message);
     }
 
-    private Session initSession(){
-        Properties props = new Properties();
-        props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.smtp.host", "smtp.exmail.qq.com");
-        props.setProperty("mail.smtp.port", "465");
-        props.setProperty("mail.smtp.auth", "true");
 
-        props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.setProperty("mail.smtp.socketFactory.fallback", "false");
-        props.setProperty("mail.smtp.socketFactory.port", "465");
-
-        Session session = Session.getDefaultInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("account", "password");
-            }
-        });
-        session.setDebug(true);
-
-        return session;
-    }
-
-    private MimeMessage createMimeMessage(Session session, String sendMail, String receiveMail, String name, String content) throws Exception {
-        MimeMessage message = new MimeMessage(session);
+    private MimeMessage createMimeMessage(String sendMail, String receiveMail, String name, String content) throws Exception {
+        MimeMessage message = javaMailSender.createMimeMessage();
 
         message.setFrom(new InternetAddress(sendMail, name+"_优生慧推广渠道注册成功", "UTF-8"));
         message.addRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMail, name, "UTF-8"));

@@ -10,6 +10,21 @@ spring:
     include: web, mysql
     active: local
 
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: service@lanmedical.com
+    password: Y7HFWrfzfNnEyNnH
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            socketFactory:
+              class: com.sun.mail.util.MailSSLSocketFactory
+              fallback: false
 
 cartisan:
   jwt:
