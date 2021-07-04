@@ -35,8 +35,8 @@ public interface UserDetailConverter extends Converter<User, UserDetailDto>{
         final RoleAppService roleAppService =
                 CartisanContext.getBean(RoleAppService.class);
 
-        final List<String> roleIds = userRoles.stream()
-                .map(userRole -> userRole.getRoleId().toString()).collect(toList());
+        final List<Long> roleIds = userRoles.stream()
+                .map(UserRole::getRoleId).collect(toList());
         return roleAppService.getAllEnableRoles().stream()
                 .filter(roleDto -> roleIds.contains(roleDto.getId()))
                 .collect(toList());
@@ -46,8 +46,8 @@ public interface UserDetailConverter extends Converter<User, UserDetailDto>{
         final OrganizationAppService organizationAppService =
                 CartisanContext.getBean(OrganizationAppService.class);
 
-        final List<String> organizationIds = userOrganizations.stream()
-                .map(userOrganization -> userOrganization.getOrganizationId().toString()).collect(toList());
+        final List<Long> organizationIds = userOrganizations.stream()
+                .map(UserOrganization::getOrganizationId).collect(toList());
         return organizationAppService.getAllOrganizations().stream()
                 .filter(organizationDto -> organizationIds.contains(organizationDto.getId()))
                 .findFirst()

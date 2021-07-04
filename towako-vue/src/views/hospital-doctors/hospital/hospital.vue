@@ -1,13 +1,8 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="24" class="filter-container">
-      <el-col :span="6">
-      </el-col>
-      <el-col :span="12">
-        <el-button class="filter-item" type="primary" @click="handleSearch">查询</el-button>
-        <el-button class="filter-item" type="primary" @click="handleAdd">新增</el-button>
-      </el-col>
-    </el-row>
+    <div class="filter-container">
+      <el-button type="primary" class="filter-item" @click="handleAdd()">新增</el-button>
+    </div>
     <el-table
       v-loading="loading"
       :data="dataSource"
@@ -19,7 +14,7 @@
       fit
       highlight-current-row
     >
-            <el-table-column align="center" label="医院Id" prop="id" />
+      <el-table-column align="center" label="医院Id" prop="id" />
       <el-table-column align="center" label="医院名称" prop="name" />
       <el-table-column align="center" label="描述" prop="description" />
       <el-table-column align="center" label="操作" width="120">
@@ -33,18 +28,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page.sync="page.currentPage"
-      :page-sizes="[5, 10, 20]"
-      :page-size="page.pageSize"
-      :total="page.total"
-      class="pagination-container"
-      background
-      align="right"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
     <el-drawer
       :title="drawerTitle"
       :visible.sync="drawerVisible"
@@ -53,13 +36,13 @@
     >
       <div class="drawer__content">
         <el-form ref="entityDataForm" :model="entityData" :rules="rules" label-width="120px">
-          
+
           <el-form-item label="医院名称" prop="name">
-             <el-input v-model="entityData.name" />
-           </el-form-item>
+            <el-input v-model="entityData.name" />
+          </el-form-item>
           <el-form-item label="描述" prop="description">
-             <el-input v-model="entityData.description" />
-           </el-form-item>
+            <el-input v-model="entityData.description" />
+          </el-form-item>
         </el-form>
         <div class="drawer__footer">
           <el-button @click="drawerVisible=false">取消</el-button>
@@ -71,31 +54,28 @@
 </template>
 
 <script>
-import { PaginationMixin } from '@/mixins/pagination-mixin'
+import { ListMixin } from '@/mixins/list-mixin'
 import { CudMixin } from '@/mixins/cud-mixin'
 
 export default {
   name: 'Role',
-  mixins: [PaginationMixin, CudMixin],
+  mixins: [ListMixin, CudMixin],
   data() {
     return {
-      apiBaseUrl: '/hospitals',
+      useSearch: false,
+      apiBaseUrl: '/hospital-doctors/hospitals',
 
       defaultData: {
-        
         name: '',
         description: ''
       },
       title: '医院',
       rules: {
         name: [
+          { required: true, message: '请输入医院名称', trigger: 'blur' }
         ]
       }
     }
-  },
-  created() {
-  },
-  methods: {
   }
 }
 </script>

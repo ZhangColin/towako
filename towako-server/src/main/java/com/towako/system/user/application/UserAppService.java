@@ -78,6 +78,10 @@ public class UserAppService {
         return repository.findByRealName(realName).map(userConverter::convert);
     }
 
+    public Optional<UserDetailDto> getUserByPhone(String phone) {
+        return repository.findByPhone(phone).map(userDetailConverter::convert);
+    }
+
 
     @Transactional(rollbackOn = Exception.class)
     public UserDetailDto createAccount(CreateAccountCommand command) {

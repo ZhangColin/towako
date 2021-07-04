@@ -33,7 +33,7 @@ public class UserDetailConverterTest {
         user = UserFixture.userOf();
 
         roleDto = new RoleDto();
-        roleDto.setId("1");
+        roleDto.setId(1L);
         roleDto.setName("admin");
 
         user.assignRoles(asList(1L));

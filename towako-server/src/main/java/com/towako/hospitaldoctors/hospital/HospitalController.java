@@ -1,21 +1,20 @@
 package com.towako.hospitaldoctors.hospital;
 
-import com.cartisan.dtos.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "医院医生：医院")
 @RestController
-@RequestMapping("/hospitals")
+@RequestMapping("/hospital-doctors/hospitals")
 @Validated
 @Slf4j
 public class HospitalController {
@@ -25,12 +24,10 @@ public class HospitalController {
         this.service = service;
     }
 
-    @ApiOperation(value = "搜索医院")
-    @GetMapping("/search")
-    public ResponseEntity<PageResult<HospitalDto>> searchHospitals(
-            @ApiParam(value = "查询参数") HospitalQuery hospitalQuery,
-            @PageableDefault Pageable pageable) {
-        return success(service.searchHospitals(hospitalQuery, pageable));
+    @ApiOperation(value = "获取所有医院")
+    @GetMapping()
+    public ResponseEntity<List<HospitalDto>> getAll() {
+        return success(service.getAll());
     }
 
     @ApiOperation(value = "获取医院")

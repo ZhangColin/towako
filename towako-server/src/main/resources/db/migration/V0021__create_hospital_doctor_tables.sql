@@ -22,10 +22,10 @@ CREATE TABLE `hd_doctors` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='医生';
 
 -- 医院医生关联表
-CREATE TABLE `hd_hospital_doctors` (
+CREATE TABLE `hd_doctor_hospitals` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `hospital_id` bigint NULL COMMENT '医院Id',
   `doctor_id` bigint NULL COMMENT '医生Id',
+  `hospital_id` bigint NULL COMMENT '医院Id',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `index_hospital_doctors_hospital_id_doctor_id`(`hospital_id`, `doctor_id`)
+  INDEX `index_hospital_doctors__doctor_idhospital_id`(`doctor_id`, `hospital_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='医院医生';

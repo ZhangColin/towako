@@ -5,9 +5,6 @@ import lombok.Data;
 
 @Data
 public class DoctorParam {
-    @ApiModelProperty(value = "用户Id")
-    private Long userId;
-
     @ApiModelProperty(value = "姓名")
     private String name;
 
@@ -16,8 +13,5 @@ public class DoctorParam {
 
     @ApiModelProperty(value = "职称")
     private String title;
-
-    @ApiModelProperty(value = "状态(0：禁用  1：启用 ）")
-    private Integer status;
 
 }

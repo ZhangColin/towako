@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class RoleDto {
     @ApiModelProperty(value = "角色Id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "角色名称")
     private String name;

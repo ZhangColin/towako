@@ -15,7 +15,7 @@ import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "医院医生：医生")
 @RestController
-@RequestMapping("/doctors")
+@RequestMapping("/hospital-doctors/doctors")
 @Validated
 @Slf4j
 public class DoctorController {
@@ -52,6 +52,22 @@ public class DoctorController {
             @ApiParam(value = "医生Id", required = true) @PathVariable Long id,
             @ApiParam(value = "医生信息", required = true) @Validated @RequestBody DoctorParam doctorParam) {
         return success(service.editDoctor(id, doctorParam));
+    }
+
+    @ApiOperation(value = "获取分配医院")
+    @GetMapping("/{id}/hospitals")
+    public ResponseEntity<?> getHospitals(
+            @ApiParam(value = "医生Id", required = true) @PathVariable Long id) {
+        return success(service.getHospitals(id));
+    }
+
+    @ApiOperation(value = "分配医院")
+    @PutMapping("/{id}/hospitals")
+    public ResponseEntity<?> assignHospitals(
+            @ApiParam(value = "医生Id", required = true) @PathVariable Long id,
+            @ApiParam(value = "医院Ids", required = true) @Validated @RequestBody AssignHospitalsCommand command) {
+        service.assignHospitals(id, command.getHospitalIds());
+        return success();
     }
 
     @ApiOperation(value = "删除医生")
