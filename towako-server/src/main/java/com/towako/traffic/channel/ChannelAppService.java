@@ -31,15 +31,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -47,10 +42,8 @@ import javax.mail.internet.MimeMultipart;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
-import static com.cartisan.responses.ResponseUtil.success;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
 import static com.google.common.primitives.Longs.asList;
 import static java.util.stream.Collectors.toList;

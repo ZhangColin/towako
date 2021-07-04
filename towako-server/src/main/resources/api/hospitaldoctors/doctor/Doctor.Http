@@ -1,0 +1,47 @@
+### 搜索医生
+GET http://{{host}}:{{port}}/doctors/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取医生
+GET http://{{host}}:{{port}}/doctors/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加医生
+POST http://{{host}}:{{port}}/doctors
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "userId": "",
+  "name": "",
+  "phone": "",
+  "title": "",
+  "status": ""
+}
+
+### 编辑医生
+PUT http://{{host}}:{{port}}/doctors/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "userId": "",
+  "name": "",
+  "phone": "",
+  "title": "",
+  "status": ""
+}
+
+### 删除医生
+DELETE http://{{host}}:{{port}}/doctors/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

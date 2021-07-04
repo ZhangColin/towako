@@ -1,0 +1,43 @@
+### 搜索医疗团队
+GET http://{{host}}:{{port}}/medicalTeams/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取医疗团队
+GET http://{{host}}:{{port}}/medicalTeams/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加医疗团队
+POST http://{{host}}:{{port}}/medicalTeams
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "medicalRecordId": "",
+  "doctorId": "",
+  "sort": ""
+}
+
+### 编辑医疗团队
+PUT http://{{host}}:{{port}}/medicalTeams/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "medicalRecordId": "",
+  "doctorId": "",
+  "sort": ""
+}
+
+### 删除医疗团队
+DELETE http://{{host}}:{{port}}/medicalTeams/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

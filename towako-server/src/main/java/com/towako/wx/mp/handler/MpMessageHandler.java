@@ -1,6 +1,5 @@
 package com.towako.wx.mp.handler;
 
-import com.towako.vip.membership.MembershipAppService;
 import com.towako.wx.mp.builder.TextBuilder;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;

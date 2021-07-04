@@ -1,0 +1,53 @@
+### 搜索疗程
+GET http://{{host}}:{{port}}/treatmentPeriods/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取疗程
+GET http://{{host}}:{{port}}/treatmentPeriods/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加疗程
+POST http://{{host}}:{{port}}/treatmentPeriods
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "medicalRecordId": "",
+  "period": "",
+  "lastMenstrualPeriod": "",
+  "bmi": "",
+  "amh": "",
+  "plan": "",
+  "report": "",
+  "reportDate": ""
+}
+
+### 编辑疗程
+PUT http://{{host}}:{{port}}/treatmentPeriods/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "medicalRecordId": "",
+  "period": "",
+  "lastMenstrualPeriod": "",
+  "bmi": "",
+  "amh": "",
+  "plan": "",
+  "report": "",
+  "reportDate": ""
+}
+
+### 删除疗程
+DELETE http://{{host}}:{{port}}/treatmentPeriods/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

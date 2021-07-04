@@ -1,0 +1,41 @@
+### 搜索医院
+GET http://{{host}}:{{port}}/hospitals/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取医院
+GET http://{{host}}:{{port}}/hospitals/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加医院
+POST http://{{host}}:{{port}}/hospitals
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "name": "",
+  "description": ""
+}
+
+### 编辑医院
+PUT http://{{host}}:{{port}}/hospitals/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "name": "",
+  "description": ""
+}
+
+### 删除医院
+DELETE http://{{host}}:{{port}}/hospitals/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

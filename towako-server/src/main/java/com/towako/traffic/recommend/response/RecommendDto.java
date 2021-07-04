@@ -3,7 +3,6 @@ package com.towako.traffic.recommend.response;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 /**

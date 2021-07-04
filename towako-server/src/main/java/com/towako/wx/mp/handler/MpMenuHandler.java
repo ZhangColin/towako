@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static me.chanjar.weixin.common.api.WxConsts.EventType;
-
 /**
  * @author colin
  */

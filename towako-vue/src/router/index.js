@@ -9,6 +9,8 @@ import Layout from '@/layout'
 /* Router Modules */
 import traffic from './modules/traffic'
 import vip from './modules/vip'
+import hospitalDoctors from './modules/hospital-doctors'
+import assistedReproduction from '@/router/modules/assisted-reproduction'
 import system from './modules/system'
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -90,6 +92,8 @@ export const constantRoutes = [
 export const asyncRoutes = [
   traffic,
   vip,
+  hospitalDoctors,
+  assistedReproduction,
   system
 ]
 

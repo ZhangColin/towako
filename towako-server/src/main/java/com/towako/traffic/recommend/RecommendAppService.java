@@ -1,14 +1,9 @@
 package com.towako.traffic.recommend;
 
 import com.cartisan.dtos.PageResult;
-import com.towako.traffic.channel.Channel;
-import com.towako.traffic.channel.ChannelAppService;
 import com.towako.traffic.channel.ChannelRepository;
-import com.towako.traffic.channel.request.ChannelQuery;
-import com.towako.traffic.channel.response.ChannelDto;
 import com.towako.traffic.recommend.response.RecommendConverter;
 import com.towako.traffic.recommend.response.RecommendDto;
-import com.towako.traffic.wechatqrcode.response.WeChatQrCodeDto;
 import com.towako.vip.membership.MembershipRepository;
 import com.towako.vip.membership.domain.Membership;
 import lombok.NonNull;
@@ -21,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
 import static java.util.stream.Collectors.toList;
 

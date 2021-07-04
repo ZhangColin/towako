@@ -1,10 +1,8 @@
 package com.towako.wx.mp.handler;
 
 import com.towako.traffic.channel.Channel;
-import com.towako.traffic.channel.ChannelAppService;
 import com.towako.traffic.channel.ChannelRepository;
 import com.towako.traffic.channel.ChannelType;
-import com.towako.traffic.channel.response.ChannelDto;
 import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.vip.membership.MembershipAppService;
 import com.towako.vip.membership.response.MembershipDto;

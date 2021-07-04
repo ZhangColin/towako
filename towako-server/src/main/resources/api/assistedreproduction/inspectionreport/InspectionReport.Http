@@ -1,0 +1,101 @@
+### 搜索检查报告
+GET http://{{host}}:{{port}}/inspectionReports/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取检查报告
+GET http://{{host}}:{{port}}/inspectionReports/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加检查报告
+POST http://{{host}}:{{port}}/inspectionReports
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "treatmentPeriodId": "",
+  "inspectionDate": "",
+  "cycleNumber": "",
+  "letrozole": "",
+  "hmg": "",
+  "mpa": "",
+  "cc": "",
+  "ganirelix": "",
+  "femoston": "",
+  "tadalafil": "",
+  "intima": "",
+  "intimaType": "",
+  "lof1": "",
+  "lof2": "",
+  "lof3": "",
+  "lof4": "",
+  "lof5": "",
+  "lof6": "",
+  "rof1": "",
+  "rof2": "",
+  "rof3": "",
+  "rof4": "",
+  "rof5": "",
+  "rof6": "",
+  "fsh": "",
+  "lh": "",
+  "e2": "",
+  "t": "",
+  "p": "",
+  "prl": "",
+  "bhcg": "",
+  "leucorrhea": ""
+}
+
+### 编辑检查报告
+PUT http://{{host}}:{{port}}/inspectionReports/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "treatmentPeriodId": "",
+  "inspectionDate": "",
+  "cycleNumber": "",
+  "letrozole": "",
+  "hmg": "",
+  "mpa": "",
+  "cc": "",
+  "ganirelix": "",
+  "femoston": "",
+  "tadalafil": "",
+  "intima": "",
+  "intimaType": "",
+  "lof1": "",
+  "lof2": "",
+  "lof3": "",
+  "lof4": "",
+  "lof5": "",
+  "lof6": "",
+  "rof1": "",
+  "rof2": "",
+  "rof3": "",
+  "rof4": "",
+  "rof5": "",
+  "rof6": "",
+  "fsh": "",
+  "lh": "",
+  "e2": "",
+  "t": "",
+  "p": "",
+  "prl": "",
+  "bhcg": "",
+  "leucorrhea": ""
+}
+
+### 删除检查报告
+DELETE http://{{host}}:{{port}}/inspectionReports/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

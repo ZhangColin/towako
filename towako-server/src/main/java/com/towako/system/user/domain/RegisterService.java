@@ -3,8 +3,8 @@ package com.towako.system.user.domain;
 import com.cartisan.constants.CodeMessage;
 import com.cartisan.exceptions.CartisanException;
 import com.cartisan.utils.SnowflakeIdWorker;
-import com.towako.system.user.UserRepository;
 import com.google.common.base.Strings;
+import com.towako.system.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

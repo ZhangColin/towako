@@ -1,0 +1,61 @@
+### 搜索病历
+GET http://{{host}}:{{port}}/medicalRecords/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取病历
+GET http://{{host}}:{{port}}/medicalRecords/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加病历
+POST http://{{host}}:{{port}}/medicalRecords
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "recordNo": "",
+  "ivf": "",
+  "name": "",
+  "phone": "",
+  "idCard": "",
+  "age": "",
+  "mainAppeal": "",
+  "hpi": "",
+  "medicalHistory": "",
+  "man": "",
+  "nation": "",
+  "maritalStatus": ""
+}
+
+### 编辑病历
+PUT http://{{host}}:{{port}}/medicalRecords/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "recordNo": "",
+  "ivf": "",
+  "name": "",
+  "phone": "",
+  "idCard": "",
+  "age": "",
+  "mainAppeal": "",
+  "hpi": "",
+  "medicalHistory": "",
+  "man": "",
+  "nation": "",
+  "maritalStatus": ""
+}
+
+### 删除病历
+DELETE http://{{host}}:{{port}}/medicalRecords/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

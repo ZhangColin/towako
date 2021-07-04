@@ -1,14 +1,11 @@
 package com.towako.vip.membership;
 
 import com.cartisan.repositories.Condition;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @author colin

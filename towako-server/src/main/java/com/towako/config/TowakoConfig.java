@@ -1,16 +1,12 @@
 package com.towako.config;
 
 import com.cartisan.repositories.CartisanRepositoryFactoryBean;
-import com.youzan.cloud.open.sdk.core.HttpConfig;
 import com.youzan.cloud.open.sdk.core.client.core.DefaultYZClient;
 import com.youzan.cloud.open.sdk.core.client.core.YouZanClient;
-import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author colin
