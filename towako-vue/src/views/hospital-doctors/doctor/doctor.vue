@@ -93,7 +93,6 @@
           <template v-for="hospital in hospitals">
             <el-checkbox :key="hospital.id" :label="hospital.id">{{ hospital.name }}</el-checkbox>
           </template>
-
         </el-checkbox-group>
         <div class="drawer__footer">
           <el-button @click="hospitalDrawerVisible=false">取消</el-button>
@@ -111,7 +110,7 @@ import { assignHospitals, getHospitals } from '@/api/hospital-doctors/doctor-api
 import { getAll } from '@/api/common-api'
 
 export default {
-  name: 'Role',
+  name: 'Doctor',
   mixins: [PaginationMixin, CudMixin],
   data() {
     return {
@@ -143,7 +142,7 @@ export default {
     handleHospitalsAssign(index, row) {
       getHospitals(row.id).then(response => {
         this.currentDoctorId = row.id
-        this.hospitalIds = response.data
+        this.hospitalIds = response.data.map(h => h.id)
         this.hospitalDrawerVisible = true
       })
     },

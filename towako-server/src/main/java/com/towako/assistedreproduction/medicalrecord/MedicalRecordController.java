@@ -15,7 +15,7 @@ import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：病历")
 @RestController
-@RequestMapping("/medicalRecords")
+@RequestMapping("/assisted-reproduction/medical-records")
 @Validated
 @Slf4j
 public class MedicalRecordController {
@@ -35,20 +35,20 @@ public class MedicalRecordController {
 
     @ApiOperation(value = "获取病历")
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalRecordDto> getMedicalRecord(@ApiParam(value = "病历Id", required = true) @PathVariable Long id){
+    public ResponseEntity<MedicalRecordDetailDto> getMedicalRecord(@ApiParam(value = "病历Id", required = true) @PathVariable Long id){
         return success(service.getMedicalRecord(id));
     }
 
     @ApiOperation(value = "添加病历")
     @PostMapping
-    public ResponseEntity<MedicalRecordDto> addMedicalRecord(
+    public ResponseEntity<MedicalRecordDetailDto> addMedicalRecord(
             @ApiParam(value = "病历信息", required = true) @Validated @RequestBody MedicalRecordParam medicalRecordParam) {
         return success(service.addMedicalRecord(medicalRecordParam));
     }
 
     @ApiOperation(value = "编辑病历")
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalRecordDto> editMedicalRecord(
+    public ResponseEntity<MedicalRecordDetailDto> editMedicalRecord(
             @ApiParam(value = "病历Id", required = true) @PathVariable Long id,
             @ApiParam(value = "病历信息", required = true) @Validated @RequestBody MedicalRecordParam medicalRecordParam) {
         return success(service.editMedicalRecord(id, medicalRecordParam));

@@ -58,7 +58,7 @@ import { ListMixin } from '@/mixins/list-mixin'
 import { CudMixin } from '@/mixins/cud-mixin'
 
 export default {
-  name: 'Role',
+  name: 'Hospital',
   mixins: [ListMixin, CudMixin],
   data() {
     return {

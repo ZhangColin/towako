@@ -1,6 +1,7 @@
 -- 病历表
 CREATE TABLE `ar_medical_records` (
    `id` bigint NOT NULL COMMENT '病历Id',
+   `hospital_id` bigint NULL COMMENT '医院Id',
    `record_no` varchar(32) NOT NULL COMMENT '病案号',
    `ivf` varchar(32) NOT NULL COMMENT 'IVF(AIH)号',
    `name` varchar(32) NOT NULL COMMENT '姓名',
@@ -54,6 +55,7 @@ CREATE TABLE `ar_treatment_periods` (
 CREATE TABLE `ar_inspection_reports` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
   `treatment_period_id` bigint NULL COMMENT '疗程Id',
+  `hospital_id` bigint NULL COMMENT '医院Id',
   `inspection_date` date NULL COMMENT '检查日期',
   `cycle_number` tinyint NULL COMMENT '周期天数',
   `letrozole` varchar(32) NULL COMMENT '来曲唑',

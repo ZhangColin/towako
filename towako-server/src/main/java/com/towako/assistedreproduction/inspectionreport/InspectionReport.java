@@ -21,6 +21,9 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
     @Column(name = "treatment_period_id")
     private Long treatmentPeriodId;
 
+    @Column(name = "hospital_id")
+    private Long hospitalId;
+
     @Column(name = "inspection_date")
     private Date inspectionDate;
 

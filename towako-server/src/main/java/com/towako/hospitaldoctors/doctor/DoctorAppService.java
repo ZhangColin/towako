@@ -6,7 +6,9 @@ import com.cartisan.exceptions.CartisanException;
 import com.cartisan.utils.SnowflakeIdWorker;
 import com.towako.hospitaldoctors.doctor.mapper.DoctorQueryMapper;
 import com.towako.hospitaldoctors.hospital.Hospital;
+import com.towako.hospitaldoctors.hospital.HospitalDto;
 import com.towako.hospitaldoctors.hospital.HospitalRepository;
+import com.towako.security.CurrentUser;
 import com.towako.system.role.response.RoleDto;
 import com.towako.system.user.application.UserAppService;
 import com.towako.system.user.request.AssignRolesCommand;
@@ -34,17 +36,19 @@ public class DoctorAppService {
     private final HospitalRepository hospitalRepository;
     private final UserAppService userAppService;
     private final DoctorQueryMapper doctorQueryMapper;
+    private final CurrentUser currentUser;
     private final SnowflakeIdWorker idWorker;
 
     private final DoctorConverter converter = DoctorConverter.CONVERTER;
 
     public DoctorAppService(DoctorRepository repository, HospitalRepository hospitalRepository,
                             UserAppService userAppService, DoctorQueryMapper doctorQueryMapper,
-                            SnowflakeIdWorker idWorker) {
+                            CurrentUser currentUser, SnowflakeIdWorker idWorker) {
         this.repository = repository;
         this.hospitalRepository = hospitalRepository;
         this.userAppService = userAppService;
         this.doctorQueryMapper = doctorQueryMapper;
+        this.currentUser = currentUser;
         this.idWorker = idWorker;
     }
 
@@ -60,6 +64,10 @@ public class DoctorAppService {
 
     public DoctorDto getDoctor(Long id) {
         return converter.convert(requirePresent(repository.findById(id)));
+    }
+
+    public DoctorDto getDoctorByCurrentUser() {
+        return converter.convert(requirePresent(repository.findByUserId(currentUser.getUserId())));
     }
 
     public List<Long> getHospitals(Long id) {
@@ -133,5 +141,13 @@ public class DoctorAppService {
 
         doctor.assignHospitals(ensureHospitalIds);
         repository.save(doctor);
+    }
+
+    public List<HospitalDto> getDoctorHospitals(Long doctorId) {
+        return doctorQueryMapper.getDoctorHospitals(doctorId);
+    }
+
+    public List<HospitalDto> getMyHospitals() {
+        return doctorQueryMapper.getHospitalsByUserId(currentUser.getUserId());
     }
 }

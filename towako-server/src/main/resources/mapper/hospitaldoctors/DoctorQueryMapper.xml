@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.towako.hospitaldoctors.doctor.mapper.DoctorQueryMapper">
+  <select id="getDoctorIdsByHospitalId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select dh.doctor_id
+    from hd_doctor_hospitals as dh
+    where dh.hospital_id = ${hospitalId}
+  </select>
+
+  <select id="getDoctorHospitals" parameterType="java.lang.Long" resultType="com.towako.hospitaldoctors.hospital.HospitalDto">
+    select hh.id, hh.name, hh.description
+    from hd_doctor_hospitals as hdh
+        inner join hd_hospitals as hh on hdh.doctor_id = ${doctorId} and hdh.hospital_id=hh.id
+  </select>
+
+  <select id="getHospitalsByUserId" parameterType="java.lang.Long" resultType="com.towako.hospitaldoctors.hospital.HospitalDto">
+    select hh.id, hh.name, hh.description
+    from hd_doctor_hospitals as hdh
+        inner join hd_hospitals as hh on hdh.hospital_id=hh.id
+        inner join hd_doctors as hd on hdh.doctor_id=hd.id and hd.user_id=${userId}
+  </select>
+</mapper>

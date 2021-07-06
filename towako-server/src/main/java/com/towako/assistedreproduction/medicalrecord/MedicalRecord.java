@@ -19,6 +19,9 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "hospital_id")
+    private Long hospitalId;
+
     @Column(name = "record_no")
     private String recordNo;
 
@@ -57,8 +60,9 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
 
     private MedicalRecord() {}
 
-    public MedicalRecord(Long id, String recordNo, String ivf, String name, String phone, String idCard, Integer age, String mainAppeal, String hpi, String medicalHistory, String man, String nation, Integer maritalStatus) {
+    public MedicalRecord(Long id, Long hospitalId, String recordNo, String ivf, String name, String phone, String idCard, Integer age, String mainAppeal, String hpi, String medicalHistory, String man, String nation, Integer maritalStatus) {
         this.id = id;
+        this.hospitalId = hospitalId;
         this.recordNo = recordNo;
         this.ivf = ivf;
         this.name = name;

@@ -4,7 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class MedicalRecordParam {
+public class MedicalRecordDetailDto {
+    @ApiModelProperty(value = "病历Id")
+    private Long id;
+
+    @ApiModelProperty(value = "医院Id")
+    private Long hospitalId;
+
     @ApiModelProperty(value = "病案号")
     private String recordNo;
 
@@ -13,9 +19,6 @@ public class MedicalRecordParam {
 
     @ApiModelProperty(value = "姓名")
     private String name;
-
-    @ApiModelProperty(value = "医院")
-    private Long hospitalId;
 
     @ApiModelProperty(value = "电话")
     private String phone;

@@ -8,6 +8,10 @@ export function getAll(baseUrl) {
   return request.get(baseUrl)
 }
 
+export function get(baseUrl, id) {
+  return request.get(`${baseUrl}/${id}`)
+}
+
 export function add(baseUrl, params) {
   return request.post(baseUrl, params)
 }
