@@ -62,6 +62,14 @@ public class DoctorAppService {
                 converter.convert(searchResult.getContent()));
     }
 
+    public List<DoctorDto> searchDoctors(@NonNull DoctorQuery doctorQuery) {
+        final List<Doctor> searchResult = doctorQuery.getHospitalId() != null ?
+                repository.findByIdIn(doctorQueryMapper.getDoctorIdsByHospitalId(doctorQuery.getHospitalId())) :
+                repository.findAll();
+
+        return converter.convert(searchResult);
+    }
+
     public DoctorDto getDoctor(Long id) {
         return converter.convert(requirePresent(repository.findById(id)));
     }

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：疗程")
@@ -27,10 +29,9 @@ public class TreatmentPeriodController {
 
     @ApiOperation(value = "搜索疗程")
     @GetMapping("/search")
-    public ResponseEntity<PageResult<TreatmentPeriodDto>> searchTreatmentPeriods(
-            @ApiParam(value = "查询参数") TreatmentPeriodQuery treatmentPeriodQuery,
-            @PageableDefault Pageable pageable) {
-        return success(service.searchTreatmentPeriods(treatmentPeriodQuery, pageable));
+    public ResponseEntity<List<TreatmentPeriodDto>> searchTreatmentPeriods(
+            @ApiParam(value = "查询参数") @Validated TreatmentPeriodQuery treatmentPeriodQuery) {
+        return success(service.searchTreatmentPeriods(treatmentPeriodQuery));
     }
 
     @ApiOperation(value = "获取疗程")

@@ -36,6 +36,13 @@ public class DoctorController {
         return success(service.searchDoctors(doctorQuery, pageable));
     }
 
+    @ApiOperation(value = "搜索医生列表")
+    @GetMapping("/list")
+    public ResponseEntity<List<DoctorDto>> searchDoctors(
+            @ApiParam(value = "查询参数") DoctorQuery doctorQuery) {
+        return success(service.searchDoctors(doctorQuery));
+    }
+
     @ApiOperation(value = "获取医生")
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDto> getDoctor(@ApiParam(value = "医生Id", required = true) @PathVariable Long id){

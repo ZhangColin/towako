@@ -32,7 +32,8 @@
           <el-dropdown split-button @click="handleEdit(scope.$index, scope.row)">
             编辑
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="handleDelete(scope.$index, scope.row)">删除</el-dropdown-item>
+              <el-dropdown-item @click.native="handleTreatmentPeriod(scope.$index, scope.row)">疗程</el-dropdown-item>
+              <el-dropdown-item @click.native="handleMedicalTeam(scope.$index, scope.row)">医疗团队</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -60,7 +61,7 @@
         <el-form ref="entityDataForm" :model="entityData" :rules="rules" label-width="120px">
           <el-form-item label="医院" prop="hospitalId">
             <el-select v-model="entityData.hospitalId" placeholder="请选择医院" style="width: 100%">
-              <el-option v-for="hospital in hospitals" :label="hospital.name" :value="hospital.id" />
+              <el-option v-for="hospital in hospitals" :key="hospital.id" :label="hospital.name" :value="hospital.id" />
             </el-select>
           </el-form-item>
           <el-form-item label="病案号" prop="recordNo">
@@ -160,6 +161,12 @@ export default {
         this.drawerTitle = `编辑${this.title}`
         this.drawerVisible = true
       })
+    },
+    handleTreatmentPeriod(index, row) {
+      this.$router.push({ path: '/assisted-reproduction/treatment-period', query: { medicalRecordId: row.id }})
+    },
+    handleMedicalTeam(index, row) {
+      this.$router.push({ path: '/assisted-reproduction/medical-team', query: { medicalRecordId: row.id }})
     }
   }
 }

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
 
@@ -22,12 +24,10 @@ public class InspectionReportAppService {
         this.repository = repository;
     }
 
-    public PageResult<InspectionReportDto> searchInspectionReports(@NonNull InspectionReportQuery inspectionReportQuery, @NonNull Pageable pageable) {
-        final Page<InspectionReport> searchResult = repository.findAll(querySpecification(inspectionReportQuery),
-                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+    public List<InspectionReportDto> searchInspectionReports(@NonNull InspectionReportQuery inspectionReportQuery) {
+        final List<InspectionReport> searchResult = repository.findAll(querySpecification(inspectionReportQuery));
 
-        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
-                converter.convert(searchResult.getContent()));
+        return converter.convert(searchResult);
     }
 
     public InspectionReportDto getInspectionReport(Long id) {

@@ -11,11 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：医疗团队")
 @RestController
-@RequestMapping("/medicalTeams")
+@RequestMapping("/assisted-reproduction/medical-teams")
 @Validated
 @Slf4j
 public class MedicalTeamController {
@@ -27,10 +29,9 @@ public class MedicalTeamController {
 
     @ApiOperation(value = "搜索医疗团队")
     @GetMapping("/search")
-    public ResponseEntity<PageResult<MedicalTeamDto>> searchMedicalTeams(
-            @ApiParam(value = "查询参数") MedicalTeamQuery medicalTeamQuery,
-            @PageableDefault Pageable pageable) {
-        return success(service.searchMedicalTeams(medicalTeamQuery, pageable));
+    public ResponseEntity<List<MedicalTeamDto>> searchMedicalTeams(
+            @ApiParam(value = "查询参数") @Validated MedicalTeamQuery medicalTeamQuery) {
+        return success(service.searchMedicalTeams(medicalTeamQuery));
     }
 
     @ApiOperation(value = "获取医疗团队")

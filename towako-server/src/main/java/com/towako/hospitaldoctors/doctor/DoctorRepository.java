@@ -13,4 +13,5 @@ public interface DoctorRepository extends BaseRepository<Doctor, Long> {
     Optional<Doctor> findByUserId(Long userId);
 
     Page<Doctor> findByIdIn(List<Long> hospitalIds, Pageable pageable);
+    List<Doctor> findByIdIn(List<Long> hospitalIds);
 }

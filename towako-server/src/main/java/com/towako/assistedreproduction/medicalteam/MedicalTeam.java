@@ -35,9 +35,7 @@ public class MedicalTeam extends AbstractEntity implements AggregateRoot {
         this.sort = sort;
     }
 
-    public void describe(Long medicalRecordId, Long doctorId, Integer sort) {
-        this.medicalRecordId = medicalRecordId;
-        this.doctorId = doctorId;
+    public void changeSort(Integer sort) {
         this.sort = sort;
     }
 }

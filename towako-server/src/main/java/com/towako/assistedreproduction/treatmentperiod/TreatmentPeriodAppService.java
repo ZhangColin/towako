@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
 
@@ -22,12 +24,10 @@ public class TreatmentPeriodAppService {
         this.repository = repository;
     }
 
-    public PageResult<TreatmentPeriodDto> searchTreatmentPeriods(@NonNull TreatmentPeriodQuery treatmentPeriodQuery, @NonNull Pageable pageable) {
-        final Page<TreatmentPeriod> searchResult = repository.findAll(querySpecification(treatmentPeriodQuery),
-                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+    public List<TreatmentPeriodDto> searchTreatmentPeriods(@NonNull TreatmentPeriodQuery treatmentPeriodQuery) {
+        final List<TreatmentPeriod> searchResult = repository.findAll(querySpecification(treatmentPeriodQuery));
 
-        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
-                converter.convert(searchResult.getContent()));
+        return converter.convert(searchResult);
     }
 
     public TreatmentPeriodDto getTreatmentPeriod(Long id) {

@@ -1,13 +1,10 @@
 package com.towako.assistedreproduction.medicalteam;
 
-import com.cartisan.dtos.PageResult;
 import lombok.NonNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
@@ -22,12 +19,10 @@ public class MedicalTeamAppService {
         this.repository = repository;
     }
 
-    public PageResult<MedicalTeamDto> searchMedicalTeams(@NonNull MedicalTeamQuery medicalTeamQuery, @NonNull Pageable pageable) {
-        final Page<MedicalTeam> searchResult = repository.findAll(querySpecification(medicalTeamQuery),
-                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+    public List<MedicalTeamDto> searchMedicalTeams(@NonNull MedicalTeamQuery medicalTeamQuery) {
+        final List<MedicalTeam> searchResult = repository.findAll(querySpecification(medicalTeamQuery));
 
-        return new PageResult<>(searchResult.getTotalElements(), searchResult.getTotalPages(),
-                converter.convert(searchResult.getContent()));
+        return converter.convert(searchResult);
     }
 
     public MedicalTeamDto getMedicalTeam(Long id) {
@@ -36,9 +31,13 @@ public class MedicalTeamAppService {
 
     @Transactional(rollbackOn = Exception.class)
     public MedicalTeamDto addMedicalTeam(MedicalTeamParam medicalTeamParam) {
+        if (repository.existsByMedicalRecordIdAndDoctorId(medicalTeamParam.getMedicalRecordId(), medicalTeamParam.getDoctorId())) {
+            return null;
+        }
+
         final MedicalTeam medicalTeam = new MedicalTeam(medicalTeamParam.getMedicalRecordId(),
-        medicalTeamParam.getDoctorId(),
-        medicalTeamParam.getSort());
+                medicalTeamParam.getDoctorId(),
+                medicalTeamParam.getSort());
 
         return converter.convert(repository.save(medicalTeam));
     }
@@ -47,9 +46,7 @@ public class MedicalTeamAppService {
     public MedicalTeamDto editMedicalTeam(Long id, MedicalTeamParam medicalTeamParam) {
         final MedicalTeam medicalTeam = requirePresent(repository.findById(id));
 
-        medicalTeam.describe(medicalTeamParam.getMedicalRecordId(),
-        medicalTeamParam.getDoctorId(),
-        medicalTeamParam.getSort());
+        medicalTeam.changeSort(medicalTeamParam.getSort());
 
         return converter.convert(repository.save(medicalTeam));
     }

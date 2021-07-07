@@ -9,12 +9,12 @@ const hospitalDoctors = {
   name: 'hospital-doctors',
   meta: { title: '医院医生', icon: 'component' },
   children: [{
-    path: '/doctor',
+    path: 'doctor',
     name: 'doctor',
     component: () => import('@/views/hospital-doctors/doctor/doctor'),
     meta: { title: '医生管理', icon: 'nested' }
   }, {
-    path: '/hospital',
+    path: 'hospital',
     name: 'hospital',
     component: () => import('@/views/hospital-doctors/hospital/hospital'),
     meta: { title: '医院管理', icon: 'nested' }

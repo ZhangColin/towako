@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：检查报告")
@@ -27,10 +29,9 @@ public class InspectionReportController {
 
     @ApiOperation(value = "搜索检查报告")
     @GetMapping("/search")
-    public ResponseEntity<PageResult<InspectionReportDto>> searchInspectionReports(
-            @ApiParam(value = "查询参数") InspectionReportQuery inspectionReportQuery,
-            @PageableDefault Pageable pageable) {
-        return success(service.searchInspectionReports(inspectionReportQuery, pageable));
+    public ResponseEntity<List<InspectionReportDto>> searchInspectionReports(
+            @ApiParam(value = "查询参数") @Validated InspectionReportQuery inspectionReportQuery) {
+        return success(service.searchInspectionReports(inspectionReportQuery));
     }
 
     @ApiOperation(value = "获取检查报告")
