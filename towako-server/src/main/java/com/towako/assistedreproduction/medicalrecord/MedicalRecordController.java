@@ -39,6 +39,12 @@ public class MedicalRecordController {
         return success(service.getMedicalRecord(id));
     }
 
+    @ApiOperation(value = "获取病历完整信息")
+    @GetMapping("/{id}/fullInfo")
+    public ResponseEntity<MedicalRecordFullInfoDto> getMedicalRecordFullInfo(@ApiParam(value = "病历Id", required = true) @PathVariable Long id){
+        return success(service.getMedicalRecordFullInfo(id));
+    }
+
     @ApiOperation(value = "添加病历")
     @PostMapping
     public ResponseEntity<MedicalRecordDetailDto> addMedicalRecord(

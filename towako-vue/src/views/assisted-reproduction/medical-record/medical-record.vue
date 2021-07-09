@@ -32,7 +32,7 @@
           <el-dropdown split-button @click="handleEdit(scope.$index, scope.row)">
             编辑
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="handleTreatmentPeriod(scope.$index, scope.row)">疗程</el-dropdown-item>
+              <el-dropdown-item @click.native="handleViewMedicalRecord(scope.$index, scope.row)">查看病历</el-dropdown-item>
               <el-dropdown-item @click.native="handleMedicalTeam(scope.$index, scope.row)">医疗团队</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -86,10 +86,10 @@
             <el-input v-model="entityData.mainAppeal" />
           </el-form-item>
           <el-form-item label="现病史" prop="hpi">
-            <el-input v-model="entityData.hpi" />
+            <el-input v-model="entityData.hpi" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"/>
           </el-form-item>
           <el-form-item label="既往史" prop="medicalHistory">
-            <el-input v-model="entityData.medicalHistory" />
+            <el-input v-model="entityData.medicalHistory" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"/>
           </el-form-item>
           <el-form-item label="男方" prop="man">
             <el-input v-model="entityData.man" />
@@ -116,11 +116,11 @@
 <script>
 import { PaginationMixin } from '@/mixins/pagination-mixin'
 import { CudMixin } from '@/mixins/cud-mixin'
-import { getMyhospitals } from '@/api/hospital-doctors/doctor-api'
+import { getMyHospitals } from '@/api/hospital-doctors/doctor-api'
 import { get } from '@/api/common-api'
 
 export default {
-  name: 'Role',
+  name: 'MedicalRecord',
   mixins: [PaginationMixin, CudMixin],
   data() {
     return {
@@ -149,7 +149,7 @@ export default {
     }
   },
   created() {
-    getMyhospitals().then(response => {
+    getMyHospitals().then(response => {
       this.hospitals = response.data
     })
   },
@@ -162,8 +162,8 @@ export default {
         this.drawerVisible = true
       })
     },
-    handleTreatmentPeriod(index, row) {
-      this.$router.push({ path: '/assisted-reproduction/treatment-period', query: { medicalRecordId: row.id }})
+    handleViewMedicalRecord(index, row) {
+      this.$router.push({ path: '/assisted-reproduction/medical-record-full-info', query: { medicalRecordId: row.id }})
     },
     handleMedicalTeam(index, row) {
       this.$router.push({ path: '/assisted-reproduction/medical-team', query: { medicalRecordId: row.id }})

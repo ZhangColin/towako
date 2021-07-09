@@ -1,12 +1,9 @@
 package com.towako.assistedreproduction.treatmentperiod;
 
-import com.cartisan.dtos.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +14,7 @@ import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：疗程")
 @RestController
-@RequestMapping("/treatmentPeriods")
+@RequestMapping("/assisted-reproduction/treatment-periods")
 @Validated
 @Slf4j
 public class TreatmentPeriodController {
@@ -53,6 +50,14 @@ public class TreatmentPeriodController {
             @ApiParam(value = "疗程Id", required = true) @PathVariable Long id,
             @ApiParam(value = "疗程信息", required = true) @Validated @RequestBody TreatmentPeriodParam treatmentPeriodParam) {
         return success(service.editTreatmentPeriod(id, treatmentPeriodParam));
+    }
+
+    @ApiOperation(value = "诊断报告")
+    @PutMapping("/{id}/report")
+    public ResponseEntity<TreatmentPeriodDto> reportTreatmentPeriod(
+            @ApiParam(value = "疗程Id", required = true) @PathVariable Long id,
+            @ApiParam(value = "诊断报告", required = true) @Validated @RequestBody TreatmentPeriodReportParam treatmentPeriodReportParam) {
+        return success(service.reportTreatmentPeriod(id, treatmentPeriodReportParam));
     }
 
     @ApiOperation(value = "删除疗程")

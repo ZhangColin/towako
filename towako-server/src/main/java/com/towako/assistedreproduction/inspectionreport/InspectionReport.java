@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "ar_inspection_reports")
@@ -25,7 +25,7 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
     private Long hospitalId;
 
     @Column(name = "inspection_date")
-    private Date inspectionDate;
+    private LocalDate inspectionDate;
 
     @Column(name = "cycle_number")
     private Integer cycleNumber;
@@ -119,7 +119,7 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
 
     private InspectionReport() {}
 
-    public InspectionReport(Long treatmentPeriodId, Date inspectionDate, Integer cycleNumber, String letrozole, String hmg, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea) {
+    public InspectionReport(Long treatmentPeriodId, LocalDate inspectionDate, Integer cycleNumber, String letrozole, String hmg, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea) {
 
         this.treatmentPeriodId = treatmentPeriodId;
         this.inspectionDate = inspectionDate;
@@ -155,7 +155,7 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
         this.leucorrhea = leucorrhea;
     }
 
-    public void describe(Long treatmentPeriodId, Date inspectionDate, Integer cycleNumber, String letrozole, String hmg, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea) {
+    public void describe(Long treatmentPeriodId, LocalDate inspectionDate, Integer cycleNumber, String letrozole, String hmg, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea) {
         this.treatmentPeriodId = treatmentPeriodId;
         this.inspectionDate = inspectionDate;
         this.cycleNumber = cycleNumber;

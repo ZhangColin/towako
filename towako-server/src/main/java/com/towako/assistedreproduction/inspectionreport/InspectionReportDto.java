@@ -3,7 +3,8 @@ package com.towako.assistedreproduction.inspectionreport;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Data
 public class InspectionReportDto {
@@ -14,7 +15,7 @@ public class InspectionReportDto {
     private Long treatmentPeriodId;
 
     @ApiModelProperty(value = "检查日期")
-    private Date inspectionDate;
+    private LocalDate inspectionDate;
 
     @ApiModelProperty(value = "周期天数")
     private Integer cycleNumber;

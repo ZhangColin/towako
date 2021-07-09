@@ -1,12 +1,9 @@
 package com.towako.assistedreproduction.inspectionreport;
 
-import com.cartisan.dtos.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +14,7 @@ import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：检查报告")
 @RestController
-@RequestMapping("/inspectionReports")
+@RequestMapping("/assisted-reproduction/inspection-reports")
 @Validated
 @Slf4j
 public class InspectionReportController {

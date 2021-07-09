@@ -21,16 +21,10 @@ const assistedReproduction = {
     meta: { title: '医疗团队', icon: 'nested' },
     hidden: true
   }, {
-    path: 'treatment-period',
+    path: 'medical-record-full-info',
     // name: 'treatment-period',
-    component: () => import('@/views/assisted-reproduction/treatment-period/treatment-period'),
-    meta: { title: '疗程', icon: 'nested' },
-    hidden: true
-  }, {
-    path: 'inspection-report',
-    // name: 'inspection-report',
-    component: () => import('@/views/assisted-reproduction/inspection-report/inspection-report'),
-    meta: { title: '检查报告', icon: 'nested' },
+    component: () => import('@/views/assisted-reproduction/medical-record/medical-record-full-info'),
+    meta: { title: '病历详情', icon: 'nested' },
     hidden: true
   }]
 }

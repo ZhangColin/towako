@@ -4,7 +4,7 @@ export function getHospitals(id) {
   return request.get(`/hospital-doctors/doctors/${id}/hospitals`)
 }
 
-export function getMyhospitals() {
+export function getMyHospitals() {
   return request.get(`/hospital-doctors/doctors/myHospitals`)
 }
 

@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.towako.assistedreproduction.medicalrecord.mapper.MedicalRecordQueryMapper;
 import com.towako.assistedreproduction.medicalteam.MedicalTeamAppService;
 import com.towako.assistedreproduction.medicalteam.MedicalTeamParam;
+import com.towako.assistedreproduction.treatmentperiod.TreatmentPeriodAppService;
 import com.towako.hospitaldoctors.doctor.DoctorAppService;
 import com.towako.hospitaldoctors.doctor.DoctorDto;
 import com.towako.security.CurrentUser;
@@ -24,6 +25,7 @@ public class MedicalRecordAppService {
     private final MedicalRecordRepository repository;
     private final MedicalRecordQueryMapper medicalRecordQueryMapper;
     private final MedicalTeamAppService medicalTeamAppService;
+    private final TreatmentPeriodAppService treatmentPeriodAppService;
     private final DoctorAppService doctorAppService;
     private final CurrentUser currentUser;
     private final SnowflakeIdWorker idWorker;
@@ -31,11 +33,13 @@ public class MedicalRecordAppService {
     private final MedicalRecordConverter converter = MedicalRecordConverter.CONVERTER;
 
     public MedicalRecordAppService(MedicalRecordRepository repository, MedicalRecordQueryMapper medicalRecordQueryMapper,
-                                   MedicalTeamAppService medicalTeamAppService, DoctorAppService doctorAppService,
+                                   MedicalTeamAppService medicalTeamAppService, TreatmentPeriodAppService treatmentPeriodAppService,
+                                   DoctorAppService doctorAppService,
                                    CurrentUser currentUser, SnowflakeIdWorker idWorker) {
         this.repository = repository;
         this.medicalRecordQueryMapper = medicalRecordQueryMapper;
         this.medicalTeamAppService = medicalTeamAppService;
+        this.treatmentPeriodAppService = treatmentPeriodAppService;
         this.doctorAppService = doctorAppService;
         this.currentUser = currentUser;
         this.idWorker = idWorker;
@@ -53,6 +57,14 @@ public class MedicalRecordAppService {
 
     public MedicalRecordDetailDto getMedicalRecord(Long id) {
         return converter.convert(requirePresent(repository.findById(id)));
+    }
+
+    public MedicalRecordFullInfoDto getMedicalRecordFullInfo(Long id) {
+        final MedicalRecordFullInfoDto medicalRecordFullInfoDto = new MedicalRecordFullInfoDto();
+        medicalRecordFullInfoDto.setMedicalRecordDetail(this.getMedicalRecord(id));
+        medicalRecordFullInfoDto.setTreatmentPeriods(treatmentPeriodAppService.findByMedicalRecordId(id));
+
+        return medicalRecordFullInfoDto;
     }
 
     @Transactional(rollbackOn = Exception.class)

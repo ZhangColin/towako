@@ -3,7 +3,7 @@ package com.towako.assistedreproduction.treatmentperiod;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class TreatmentPeriodDto {
@@ -17,7 +17,7 @@ public class TreatmentPeriodDto {
     private Integer period;
 
     @ApiModelProperty(value = "末次月经")
-    private Date lastMenstrualPeriod;
+    private LocalDate lastMenstrualPeriod;
 
     @ApiModelProperty(value = "BMI")
     private String bmi;
@@ -32,6 +32,6 @@ public class TreatmentPeriodDto {
     private String report;
 
     @ApiModelProperty(value = "报告日期")
-    private Date reportDate;
+    private LocalDate reportDate;
 
 }

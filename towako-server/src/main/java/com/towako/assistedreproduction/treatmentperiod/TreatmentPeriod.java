@@ -6,7 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ar_treatment_periods")
@@ -25,7 +26,7 @@ public class TreatmentPeriod extends AbstractEntity implements AggregateRoot {
     private Integer period;
 
     @Column(name = "last_menstrual_period")
-    private Date lastMenstrualPeriod;
+    private LocalDate lastMenstrualPeriod;
 
     @Column(name = "bmi")
     private String bmi;
@@ -40,30 +41,30 @@ public class TreatmentPeriod extends AbstractEntity implements AggregateRoot {
     private String report;
 
     @Column(name = "report_date")
-    private Date reportDate;
+    private LocalDate reportDate;
 
     private TreatmentPeriod() {}
 
-    public TreatmentPeriod(Long medicalRecordId, Integer period, Date lastMenstrualPeriod, String bmi, String amh, String plan, String report, Date reportDate) {
-
+    public TreatmentPeriod(Long medicalRecordId, Integer period, LocalDate lastMenstrualPeriod, String bmi, String amh, String plan) {
         this.medicalRecordId = medicalRecordId;
         this.period = period;
         this.lastMenstrualPeriod = lastMenstrualPeriod;
         this.bmi = bmi;
         this.amh = amh;
         this.plan = plan;
-        this.report = report;
-        this.reportDate = reportDate;
     }
 
-    public void describe(Long medicalRecordId, Integer period, Date lastMenstrualPeriod, String bmi, String amh, String plan, String report, Date reportDate) {
+    public void describe(Long medicalRecordId, Integer period, LocalDate lastMenstrualPeriod, String bmi, String amh, String plan) {
         this.medicalRecordId = medicalRecordId;
         this.period = period;
         this.lastMenstrualPeriod = lastMenstrualPeriod;
         this.bmi = bmi;
         this.amh = amh;
         this.plan = plan;
+    }
+
+    public void report(String report) {
         this.report = report;
-        this.reportDate = reportDate;
+        this.reportDate = LocalDate.now();
     }
 }
