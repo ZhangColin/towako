@@ -23,11 +23,11 @@ public interface MembershipRecommendMapper {
     List<MembershipRecommendDto> findByMemberIds(@Param("memberIds")List<Long> memberIds);
 
     @Select("select phone from vip_memberships\n" +
-            "where phone<>''\n" +
+            "where phone<>'' and active=true\n" +
             "group by phone\n" +
             "having count(phone)>=2")
     List<String> findDuplicatePhone();
 
     @Update("update vip_memberships set created=#{createDateTime, jdbcType=TIMESTAMP} where id=#{memberId}")
-    void updateMembershipCreateDate(Long memberId, LocalDateTime createDateTime);
+    void updateMembershipCreateDate(@Param("memberId") Long memberId, @Param("createDateTime") LocalDateTime createDateTime);
 }

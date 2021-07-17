@@ -6,7 +6,7 @@
       </el-col><el-col :span="6">
         <el-input v-model="queryParam.phone" class="filter-item" placeholder="请输入会员手机查询" />
       </el-col>
-      <el-col :span="6">
+      <el-col :span="12">
         <el-date-picker
           v-model="registerRange"
           type="daterange"

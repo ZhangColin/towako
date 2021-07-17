@@ -67,14 +67,39 @@
         </el-form-item>
       </el-col>
     </el-form>
-    <el-row :gutter="24" class="filter-container">
+    <el-card v-if="medicalRecordFullInfo.treatmentPeriods.length>0">
+      <div slot="header" class="clearfix">
+        <span>诊断小结</span>
+      </div>
+      <el-collapse>
+        <el-collapse-item v-for="period in medicalRecordFullInfo.treatmentPeriods" :key="period.treatmentPeriod.id" :title="`第 ${ period.treatmentPeriod.period } 疗程`">
+          <p>{{ period.treatmentPeriod.report || '尚未出具诊断小结' }}</p>
+          <p align="right">{{ period.treatmentPeriod.reportDate }}</p>
+        </el-collapse-item>
+      </el-collapse>
+      <!--      <el-timeline>-->
+      <!--        <el-timeline-item-->
+      <!--          v-for="period in medicalRecordFullInfo.treatmentPeriods"-->
+      <!--          :key="period.treatmentPeriod.id"-->
+      <!--          :type="period.treatmentPeriod.report?'success':''"-->
+      <!--          :timestamp="`第 ${ period.treatmentPeriod.period } 疗程`"-->
+      <!--          placement="top"-->
+      <!--        >-->
+      <!--          <el-card>-->
+      <!--            <p>{{ period.treatmentPeriod.report || '尚未出具诊断小结' }}</p>-->
+      <!--            <p align="right">{{ period.treatmentPeriod.reportDate }}</p>-->
+      <!--          </el-card>-->
+      <!--        </el-timeline-item>-->
+      <!--      </el-timeline>-->
+    </el-card>
+    <el-row :gutter="24" class="filter-container" style="padding-top: 10px">
       <el-col align="right">
         <el-button type="primary" align="right" @click="handleEditMedicalRecord()">编辑</el-button>
         <el-button type="primary" align="right" @click="handleAddTreatmentPeriod()">新疗程</el-button>
       </el-col>
     </el-row>
     <el-tabs v-if="medicalRecordFullInfo.treatmentPeriods.length>0" type="border-card">
-      <el-tab-pane v-for="period in medicalRecordFullInfo.treatmentPeriods" :key="period.treatmentPeriod.id" :label="`第 ${ period.treatmentPeriod.period } 疗程` ">
+      <el-tab-pane v-for="period in medicalRecordFullInfo.treatmentPeriods" :key="period.treatmentPeriod.id" :label="`第 ${ period.treatmentPeriod.period } 疗程`">
         <el-form label-position="right" label-width="140px">
           <el-col :span="12">
             <el-form-item label="末次月经">
@@ -102,10 +127,10 @@
             <el-button type="primary" align="right" @click="handleEditTreatmentPeriod(period.treatmentPeriod)">编辑</el-button>
             <el-button type="primary" align="right" @click="handleReportTreatmentPeriod(period.treatmentPeriod)">填写诊断报告</el-button>
             <el-button type="primary" align="right" @click="handleAddInspectionReport(period.treatmentPeriod.id)">填写检查</el-button>
-            <el-button v-if="period.inspectionReports.length>0" type="primary" align="right" @click="handleEditInspectionReport(period.inspectionReports[period.inspectionReports.length-1])">修改检查</el-button>
           </el-col>
         </el-row>
         <el-table
+          v-if="!!period.inspectionReports.length"
           :data="inspectionReportRowToCol(period.inspectionReports)"
           row-key="key"
           class="table-container"
@@ -114,14 +139,19 @@
           border
           fit
           highlight-current-row
-          :show-header="false"
+          :show-header="!!period.inspectionReports.length && period.treatmentPeriod.period===medicalRecordFullInfo.treatmentPeriods.length"
         >
           <el-table-column align="center" label="" prop="column0">
             <template slot-scope="{row}">
               <span><b v-html="row.column0 || '&nbsp;'" /></span>
             </template>
           </el-table-column>
-          <el-table-column v-for="item in (period.inspectionReports.length>5?period.inspectionReports.length:5)" :key="item" align="center" label="" :prop="'column'+item" />
+          <el-table-column v-for="item in period.inspectionReports.length" :key="item" align="center" label="" :prop="'column'+item">
+            <template v-if="item <= period.inspectionReports.length" slot="header" slot-scope="">
+              <el-button type="primary" @click="handleEditInspectionReport(period.inspectionReports[item-1])">编辑</el-button>
+              <el-button @click="handleDeleteInspectionReport(period.inspectionReports[item-1].id)">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <el-divider />
         <el-form label-position="right" label-width="140px">
@@ -241,7 +271,7 @@
       <div class="drawer__content">
         <el-form ref="reportTreatmentPeriodForm" :model="treatmentPeriod" label-width="120px">
           <el-form-item label="诊断报告" prop="report">
-            <el-input v-model="treatmentPeriod.report" />
+            <el-input v-model="treatmentPeriod.report" type="textarea" :autosize="{ minRows: 6, maxRows: 10}" />
           </el-form-item>
         </el-form>
         <div class="drawer__footer">
@@ -370,7 +400,7 @@
 <script>
 import { getMedicalRecordFullInfo, reportTreatmentPeriod } from '@/api/assisted-reproduction/medical-record-api'
 import { getMyHospitals } from '@/api/hospital-doctors/doctor-api'
-import { add, edit } from '@/api/common-api'
+import { add, edit, remove } from '@/api/common-api'
 
 export default {
   data() {
@@ -526,24 +556,21 @@ export default {
         })
       }
     },
+    handleDeleteInspectionReport(id) {
+      remove('/assisted-reproduction/inspection-reports', id).then(() => {
+        this.$notify.success({
+          title: '成功',
+          message: '检查报告删除成功'
+        })
+        this.inspectionReportDrawerVisible = false
+        this.fetchData()
+      }).catch(() => {
+      })
+    },
     inspectionReportRowToCol(inspectionReports) {
-      const defaultData = {
-        column0: '',
-        column1: '',
-        column2: '',
-        column3: '',
-        column4: '',
-        column5: '',
-        column6: '',
-        column7: '',
-        column8: '',
-        column9: '',
-        column10: ''
-      }
-
       const datas = []
       for (let i = 0; i < 31; i++) {
-        datas.push({ ...defaultData, key: i })
+        datas.push({ key: i })
       }
 
       datas[0]['column0'] = '检查日期'

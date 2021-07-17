@@ -2,6 +2,7 @@ package com.towako.hospitaldoctors.doctor;
 
 import com.cartisan.dtos.PageResult;
 import com.towako.hospitaldoctors.hospital.HospitalDto;
+import com.towako.traffic.channel.response.ChannelDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,6 +48,12 @@ public class DoctorController {
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDto> getDoctor(@ApiParam(value = "医生Id", required = true) @PathVariable Long id){
         return success(service.getDoctor(id));
+    }
+
+    @ApiOperation(value = "当前医生信息")
+    @GetMapping("/currentDoctor")
+    public ResponseEntity<DoctorDto> myChannel() {
+        return success(service.getDoctorByCurrentUser());
     }
 
     @ApiOperation(value = "获取医生所属医院")
@@ -97,6 +104,15 @@ public class DoctorController {
     public ResponseEntity<?> removeDoctor(
             @ApiParam(value = "医生Id", required = true) @PathVariable Long id) {
         service.removeDoctor(id);
+        return success();
+    }
+
+    @ApiOperation(value = "注册医生")
+    @PostMapping("/register")
+    public ResponseEntity<?> registerChannel(
+            @ApiParam(value = "注册信息", required = true) @Validated @RequestBody RegisterDoctorCommand command) {
+        service.registerDoctor(command);
+
         return success();
     }
 }

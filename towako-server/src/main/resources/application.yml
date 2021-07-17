@@ -61,6 +61,8 @@ cartisan:
         - /traffic/mychannel/recommendPoster
         - /traffic/mychannel/qrcode
         - /traffic/mychannel/register
+        - /hospital-doctors/hospitals
+        - /hospital-doctors/doctors/register
         - /captcha/**
 
 management:
