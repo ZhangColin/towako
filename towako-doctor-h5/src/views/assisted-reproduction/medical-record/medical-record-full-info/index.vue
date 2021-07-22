@@ -62,6 +62,8 @@
                     <van-cell title="周期天数" :value="inpectionReport.cycleNumber" />
                     <van-cell title="来曲唑" :value="inpectionReport.letrozole" />
                     <van-cell title="HMG(IU)" :value="inpectionReport.hmg" />
+                    <van-cell title="HCG" :value="inpectionReport.hcg" />
+                    <van-cell title="达必佳" :value="inpectionReport.decapeptyl" />
                     <van-cell title="MPA(mg)" :value="inpectionReport.mpa" />
                     <van-cell title="CC(mg)" :value="inpectionReport.cc" />
                     <van-cell title="加尼瑞克/思则瑞'" :value="inpectionReport.ganirelix" />
@@ -89,6 +91,7 @@
                     <van-cell title="PRL(ng/ml)" :value="inpectionReport.prl" />
                     <van-cell title="B-HCG(mlU/ml)" :value="inpectionReport.bhcg" />
                     <van-cell title="白带检查" :value="inpectionReport.leucorrhea" />
+                    <van-cell title="取卵时间" :value="inpectionReport.takeOvumDate" />
                   </van-row>
                 </div>
               </template>

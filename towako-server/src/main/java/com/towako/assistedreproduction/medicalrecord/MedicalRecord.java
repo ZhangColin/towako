@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "ar_medical_records")
@@ -37,6 +38,9 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
     @Column(name = "id_card")
     private String idCard;
 
+    @Column(name = "birthday")
+    private LocalDate birthday;
+
     @Column(name = "age")
     private Integer age;
 
@@ -60,7 +64,7 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
 
     private MedicalRecord() {}
 
-    public MedicalRecord(Long id, Long hospitalId, String recordNo, String ivf, String name, String phone, String idCard, Integer age, String mainAppeal, String hpi, String medicalHistory, String man, String nation, Integer maritalStatus) {
+    public MedicalRecord(Long id, Long hospitalId, String recordNo, String ivf, String name, String phone, String idCard, LocalDate birthday, Integer age, String mainAppeal, String hpi, String medicalHistory, String man, String nation, Integer maritalStatus) {
         this.id = id;
         this.hospitalId = hospitalId;
         this.recordNo = recordNo;
@@ -68,6 +72,7 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
         this.name = name;
         this.phone = phone;
         this.idCard = idCard;
+        this.birthday = birthday;
         this.age = age;
         this.mainAppeal = mainAppeal;
         this.hpi = hpi;
@@ -77,12 +82,14 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
         this.maritalStatus = maritalStatus;
     }
 
-    public void describe(String recordNo, String ivf, String name, String phone, String idCard, Integer age, String mainAppeal, String hpi, String medicalHistory, String man, String nation, Integer maritalStatus) {
+    public void describe(Long hospitalId, String recordNo, String ivf, String name, String phone, String idCard, LocalDate birthday, Integer age, String mainAppeal, String hpi, String medicalHistory, String man, String nation, Integer maritalStatus) {
+        this.hospitalId = hospitalId;
         this.recordNo = recordNo;
         this.ivf = ivf;
         this.name = name;
         this.phone = phone;
         this.idCard = idCard;
+        this.birthday = birthday;
         this.age = age;
         this.mainAppeal = mainAppeal;
         this.hpi = hpi;

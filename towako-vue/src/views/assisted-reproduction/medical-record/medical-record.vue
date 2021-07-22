@@ -79,6 +79,14 @@
           <el-form-item label="身份证" prop="idCard">
             <el-input v-model="entityData.idCard" />
           </el-form-item>
+          <el-form-item label="出生日期" prop="birthday">
+            <el-date-picker
+              v-model="entityData.birthday"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期"
+            />
+          </el-form-item>
           <el-form-item label="年龄" prop="age">
             <el-input v-model="entityData.age" />
           </el-form-item>
@@ -86,10 +94,10 @@
             <el-input v-model="entityData.mainAppeal" />
           </el-form-item>
           <el-form-item label="现病史" prop="hpi">
-            <el-input v-model="entityData.hpi" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"/>
+            <el-input v-model="entityData.hpi" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" />
           </el-form-item>
           <el-form-item label="既往史" prop="medicalHistory">
-            <el-input v-model="entityData.medicalHistory" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"/>
+            <el-input v-model="entityData.medicalHistory" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" />
           </el-form-item>
           <el-form-item label="男方" prop="man">
             <el-input v-model="entityData.man" />
@@ -132,6 +140,7 @@ export default {
         name: '',
         phone: '',
         idCard: '',
+        birthday: '',
         age: '',
         mainAppeal: '',
         hpi: '',
@@ -142,8 +151,9 @@ export default {
       },
       title: '病历',
       rules: {
-        name: [
-        ]
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        birthday: [{ required: true, message: '请输入出生日期', trigger: 'blur' }]
       },
       hospitals: []
     }

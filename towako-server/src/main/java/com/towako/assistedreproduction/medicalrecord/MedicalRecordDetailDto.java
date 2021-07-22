@@ -3,6 +3,8 @@ package com.towako.assistedreproduction.medicalrecord;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class MedicalRecordDetailDto {
     @ApiModelProperty(value = "病历Id")
@@ -25,6 +27,9 @@ public class MedicalRecordDetailDto {
 
     @ApiModelProperty(value = "身份证")
     private String idCard;
+
+    @ApiModelProperty(value = "出生日期")
+    private LocalDate birthday;
 
     @ApiModelProperty(value = "年龄")
     private Integer age;

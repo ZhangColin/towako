@@ -41,6 +41,8 @@ public class InspectionReportAppService {
                 inspectionReportParam.getCycleNumber(),
                 inspectionReportParam.getLetrozole(),
                 inspectionReportParam.getHmg(),
+                inspectionReportParam.getHcg(),
+                inspectionReportParam.getDecapeptyl(),
                 inspectionReportParam.getMpa(),
                 inspectionReportParam.getCc(),
                 inspectionReportParam.getGanirelix(),
@@ -67,7 +69,8 @@ public class InspectionReportAppService {
                 inspectionReportParam.getP(),
                 inspectionReportParam.getPrl(),
                 inspectionReportParam.getBhcg(),
-                inspectionReportParam.getLeucorrhea());
+                inspectionReportParam.getLeucorrhea(),
+                inspectionReportParam.getTakeOvumDate());
 
         return converter.convert(repository.save(inspectionReport));
     }
@@ -81,6 +84,8 @@ public class InspectionReportAppService {
                 inspectionReportParam.getCycleNumber(),
                 inspectionReportParam.getLetrozole(),
                 inspectionReportParam.getHmg(),
+                inspectionReportParam.getHcg(),
+                inspectionReportParam.getDecapeptyl(),
                 inspectionReportParam.getMpa(),
                 inspectionReportParam.getCc(),
                 inspectionReportParam.getGanirelix(),
@@ -107,7 +112,8 @@ public class InspectionReportAppService {
                 inspectionReportParam.getP(),
                 inspectionReportParam.getPrl(),
                 inspectionReportParam.getBhcg(),
-                inspectionReportParam.getLeucorrhea());
+                inspectionReportParam.getLeucorrhea(),
+                inspectionReportParam.getTakeOvumDate());
 
         return converter.convert(repository.save(inspectionReport));
     }

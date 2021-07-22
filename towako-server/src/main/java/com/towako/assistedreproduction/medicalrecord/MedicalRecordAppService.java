@@ -76,6 +76,7 @@ public class MedicalRecordAppService {
                 medicalRecordParam.getName(),
                 medicalRecordParam.getPhone(),
                 medicalRecordParam.getIdCard(),
+                medicalRecordParam.getBirthday(),
                 medicalRecordParam.getAge(),
                 medicalRecordParam.getMainAppeal(),
                 medicalRecordParam.getHpi(),
@@ -99,11 +100,14 @@ public class MedicalRecordAppService {
     public MedicalRecordDetailDto editMedicalRecord(Long id, MedicalRecordParam medicalRecordParam) {
         final MedicalRecord medicalRecord = requirePresent(repository.findById(id));
 
-        medicalRecord.describe(medicalRecordParam.getRecordNo(),
+        medicalRecord.describe(
+                medicalRecord.getHospitalId(),
+                medicalRecordParam.getRecordNo(),
                 medicalRecordParam.getIvf(),
                 medicalRecordParam.getName(),
                 medicalRecordParam.getPhone(),
                 medicalRecordParam.getIdCard(),
+                medicalRecordParam.getBirthday(),
                 medicalRecordParam.getAge(),
                 medicalRecordParam.getMainAppeal(),
                 medicalRecordParam.getHpi(),

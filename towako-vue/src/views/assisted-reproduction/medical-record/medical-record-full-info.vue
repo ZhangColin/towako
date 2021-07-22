@@ -27,6 +27,11 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
+        <el-form-item label="出生日期">
+          <el-input v-model="medicalRecordFullInfo.medicalRecordDetail.birthday" :readonly="true" />
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
         <el-form-item label="年龄">
           <el-input v-model="medicalRecordFullInfo.medicalRecordDetail.age" :readonly="true" />
         </el-form-item>
@@ -176,7 +181,7 @@
       size="50%"
     >
       <div class="drawer__content">
-        <el-form ref="medicalRecordForm" :model="medicalRecordDetail" label-width="120px">
+        <el-form ref="medicalRecordForm" :model="medicalRecordDetail" :rules="medicalRecordDetailRules" label-width="120px">
           <el-form-item label="医院" prop="hospitalId">
             <el-select v-model="medicalRecordDetail.hospitalId" placeholder="请选择医院" style="width: 100%">
               <el-option v-for="hospital in hospitals" :key="hospital.id" :label="hospital.name" :value="hospital.id" />
@@ -196,6 +201,14 @@
           </el-form-item>
           <el-form-item label="身份证" prop="idCard">
             <el-input v-model="medicalRecordDetail.idCard" />
+          </el-form-item>
+          <el-form-item label="出生日期" prop="birthday">
+            <el-date-picker
+              v-model="medicalRecordDetail.birthday"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期"
+            />
           </el-form-item>
           <el-form-item label="年龄" prop="age">
             <el-input v-model="medicalRecordDetail.age" />
@@ -288,7 +301,7 @@
       size="50%"
     >
       <div class="drawer__content">
-        <el-form ref="entityDataForm" :model="inspectionReport" label-width="120px">
+        <el-form ref="inspectionReportForm" :model="inspectionReport" :rules="inspectionReportRules" label-width="120px">
           <el-form-item label="检查日期" prop="inspectionDate">
             <el-date-picker
               v-model="inspectionReport.inspectionDate"
@@ -305,6 +318,12 @@
           </el-form-item>
           <el-form-item label="HMG(IU)" prop="hmg">
             <el-input v-model="inspectionReport.hmg" />
+          </el-form-item>
+          <el-form-item label="HCG" prop="hmg">
+            <el-input v-model="inspectionReport.hcg" />
+          </el-form-item>
+          <el-form-item label="达必佳" prop="decapeptyl">
+            <el-input v-model="inspectionReport.decapeptyl" />
           </el-form-item>
           <el-form-item label="MPA(mg)" prop="mpa">
             <el-input v-model="inspectionReport.mpa" />
@@ -387,6 +406,14 @@
           <el-form-item label="白带检查" prop="leucorrhea">
             <el-input v-model="inspectionReport.leucorrhea" />
           </el-form-item>
+          <el-form-item label="取卵时间" prop="takeOvumDate">
+            <el-date-picker
+              v-model="inspectionReport.takeOvumDate"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期"
+            />
+          </el-form-item>
         </el-form>
         <div class="drawer__footer">
           <el-button @click="inspectionReportDrawerVisible=false">取消</el-button>
@@ -431,6 +458,11 @@ export default {
 
       medicalRecordDrawerVisible: false,
       medicalRecordDetail: {},
+      medicalRecordDetailRules: {
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        birthday: [{ required: true, message: '请输入出生日期', trigger: 'blur' }]
+      },
 
       treatmentPeriodDrawerTitle: '',
       treatmentPeriodDrawerVisible: false,
@@ -441,7 +473,10 @@ export default {
 
       inspectionReportDrawerTitle: '',
       inspectionReportDrawerVisible: false,
-      inspectionReport: {}
+      inspectionReport: {},
+      inspectionReportRules: {
+        inspectionDate: [{ required: true, message: '请输入检查日期', trigger: 'blur' }]
+      }
     }
   },
   mounted() {
@@ -462,14 +497,18 @@ export default {
       this.medicalRecordDrawerVisible = true
     },
     handleMedicalRecordConfirm() {
-      edit('/assisted-reproduction/medical-records', this.medicalRecordId, this.medicalRecordDetail).then(() => {
-        this.$notify.success({
-          title: '成功',
-          message: '病历修改成功'
-        })
-        this.medicalRecordDrawerVisible = false
-        this.fetchData()
-      }).catch(() => {})
+      this.$refs['medicalRecordForm'].validate((valid) => {
+        if (valid) {
+          edit('/assisted-reproduction/medical-records', this.medicalRecordId, this.medicalRecordDetail).then(() => {
+            this.$notify.success({
+              title: '成功',
+              message: '病历修改成功'
+            })
+            this.medicalRecordDrawerVisible = false
+            this.fetchData()
+          }).catch(() => {})
+        }
+      })
     },
     handleAddTreatmentPeriod() {
       this.treatmentPeriodDrawerTitle = `第 ${this.medicalRecordFullInfo.treatmentPeriods.length + 1} 疗程`
@@ -534,27 +573,31 @@ export default {
       this.inspectionReportDrawerVisible = true
     },
     handleInspectionReportConfirm() {
-      if (!this.inspectionReport.id) {
-        add('/assisted-reproduction/inspection-reports', this.inspectionReport).then(() => {
-          this.$notify.success({
-            title: '成功',
-            message: '检查报告填写成功'
-          })
-          this.inspectionReportDrawerVisible = false
-          this.fetchData()
-        }).catch(() => {
-        })
-      } else {
-        edit('/assisted-reproduction/inspection-reports', this.inspectionReport.id, this.inspectionReport).then(() => {
-          this.$notify.success({
-            title: '成功',
-            message: '检查报告填写成功'
-          })
-          this.inspectionReportDrawerVisible = false
-          this.fetchData()
-        }).catch(() => {
-        })
-      }
+      this.$refs['inspectionReportForm'].validate((valid) => {
+        if (valid) {
+          if (!this.inspectionReport.id) {
+            add('/assisted-reproduction/inspection-reports', this.inspectionReport).then(() => {
+              this.$notify.success({
+                title: '成功',
+                message: '检查报告填写成功'
+              })
+              this.inspectionReportDrawerVisible = false
+              this.fetchData()
+            }).catch(() => {
+            })
+          } else {
+            edit('/assisted-reproduction/inspection-reports', this.inspectionReport.id, this.inspectionReport).then(() => {
+              this.$notify.success({
+                title: '成功',
+                message: '检查报告填写成功'
+              })
+              this.inspectionReportDrawerVisible = false
+              this.fetchData()
+            }).catch(() => {
+            })
+          }
+        }
+      })
     },
     handleDeleteInspectionReport(id) {
       remove('/assisted-reproduction/inspection-reports', id).then(() => {
@@ -569,7 +612,7 @@ export default {
     },
     inspectionReportRowToCol(inspectionReports) {
       const datas = []
-      for (let i = 0; i < 31; i++) {
+      for (let i = 0; i < 34; i++) {
         datas.push({ key: i })
       }
 
@@ -577,33 +620,36 @@ export default {
       datas[1]['column0'] = '周期天数'
       datas[2]['column0'] = '来曲唑'
       datas[3]['column0'] = 'HMG(IU)'
-      datas[4]['column0'] = 'MPA(mg)'
-      datas[5]['column0'] = 'CC(mg)'
-      datas[6]['column0'] = '加尼瑞克/思则瑞'
-      datas[7]['column0'] = '芬吗通'
-      datas[8]['column0'] = '他达拉非'
-      datas[9]['column0'] = '内膜'
-      datas[10]['column0'] = '内膜类型'
-      datas[11]['column0'] = 'LOF'
-      datas[12]['column0'] = ''
-      datas[13]['column0'] = ''
+      datas[4]['column0'] = 'HCG'
+      datas[5]['column0'] = '达必佳'
+      datas[6]['column0'] = 'MPA(mg)'
+      datas[7]['column0'] = 'CC(mg)'
+      datas[8]['column0'] = '加尼瑞克/思则瑞'
+      datas[9]['column0'] = '芬吗通'
+      datas[10]['column0'] = '他达拉非'
+      datas[11]['column0'] = '内膜'
+      datas[12]['column0'] = '内膜类型'
+      datas[13]['column0'] = 'LOF'
       datas[14]['column0'] = ''
       datas[15]['column0'] = ''
       datas[16]['column0'] = ''
-      datas[17]['column0'] = 'ROF'
+      datas[17]['column0'] = ''
       datas[18]['column0'] = ''
-      datas[19]['column0'] = ''
+      datas[19]['column0'] = 'ROF'
       datas[20]['column0'] = ''
       datas[21]['column0'] = ''
       datas[22]['column0'] = ''
-      datas[23]['column0'] = 'FSH(mlU/ml)'
-      datas[24]['column0'] = 'LH(mlU/ml)'
-      datas[25]['column0'] = 'E2(pg/ml)'
-      datas[26]['column0'] = 'T(ng/dl)'
-      datas[27]['column0'] = 'P(ng/ml)'
-      datas[28]['column0'] = 'PRL(ng/ml)'
-      datas[29]['column0'] = 'B-HCG(mlU/ml)'
-      datas[30]['column0'] = '白带检查'
+      datas[23]['column0'] = ''
+      datas[24]['column0'] = ''
+      datas[25]['column0'] = 'FSH(mlU/ml)'
+      datas[26]['column0'] = 'LH(mlU/ml)'
+      datas[27]['column0'] = 'E2(pg/ml)'
+      datas[28]['column0'] = 'T(ng/dl)'
+      datas[29]['column0'] = 'P(ng/ml)'
+      datas[30]['column0'] = 'PRL(ng/ml)'
+      datas[31]['column0'] = 'B-HCG(mlU/ml)'
+      datas[32]['column0'] = '白带检查'
+      datas[33]['column0'] = '取卵时间'
 
       for (let i = 0; i < inspectionReports.length; i++) {
         const report = inspectionReports[i]
@@ -612,33 +658,36 @@ export default {
         datas[1]['column' + (i + 1)] = report.cycleNumber
         datas[2]['column' + (i + 1)] = report.letrozole
         datas[3]['column' + (i + 1)] = report.hmg
-        datas[4]['column' + (i + 1)] = report.mpa
-        datas[5]['column' + (i + 1)] = report.cc
-        datas[6]['column' + (i + 1)] = report.ganirelix
-        datas[7]['column' + (i + 1)] = report.femoston
-        datas[8]['column' + (i + 1)] = report.tadalafil
-        datas[9]['column' + (i + 1)] = report.intima
-        datas[10]['column' + (i + 1)] = report.intimaType
-        datas[11]['column' + (i + 1)] = report.lof1
-        datas[12]['column' + (i + 1)] = report.lof2
-        datas[13]['column' + (i + 1)] = report.lof3
-        datas[14]['column' + (i + 1)] = report.lof4
-        datas[15]['column' + (i + 1)] = report.lof5
-        datas[16]['column' + (i + 1)] = report.lof6
-        datas[17]['column' + (i + 1)] = report.rof1
-        datas[18]['column' + (i + 1)] = report.rof2
-        datas[19]['column' + (i + 1)] = report.rof3
-        datas[20]['column' + (i + 1)] = report.rof4
-        datas[21]['column' + (i + 1)] = report.rof5
-        datas[22]['column' + (i + 1)] = report.rof6
-        datas[23]['column' + (i + 1)] = report.fsh
-        datas[24]['column' + (i + 1)] = report.lh
-        datas[25]['column' + (i + 1)] = report.e2
-        datas[26]['column' + (i + 1)] = report.t
-        datas[27]['column' + (i + 1)] = report.p
-        datas[28]['column' + (i + 1)] = report.prl
-        datas[29]['column' + (i + 1)] = report.bhcg
-        datas[30]['column' + (i + 1)] = report.leucorrhea
+        datas[4]['column' + (i + 1)] = report.hcg
+        datas[5]['column' + (i + 1)] = report.decapeptyl
+        datas[6]['column' + (i + 1)] = report.mpa
+        datas[7]['column' + (i + 1)] = report.cc
+        datas[8]['column' + (i + 1)] = report.ganirelix
+        datas[9]['column' + (i + 1)] = report.femoston
+        datas[10]['column' + (i + 1)] = report.tadalafil
+        datas[11]['column' + (i + 1)] = report.intima
+        datas[12]['column' + (i + 1)] = report.intimaType
+        datas[13]['column' + (i + 1)] = report.lof1
+        datas[14]['column' + (i + 1)] = report.lof2
+        datas[15]['column' + (i + 1)] = report.lof3
+        datas[16]['column' + (i + 1)] = report.lof4
+        datas[17]['column' + (i + 1)] = report.lof5
+        datas[18]['column' + (i + 1)] = report.lof6
+        datas[19]['column' + (i + 1)] = report.rof1
+        datas[20]['column' + (i + 1)] = report.rof2
+        datas[21]['column' + (i + 1)] = report.rof3
+        datas[22]['column' + (i + 1)] = report.rof4
+        datas[23]['column' + (i + 1)] = report.rof5
+        datas[24]['column' + (i + 1)] = report.rof6
+        datas[25]['column' + (i + 1)] = report.fsh
+        datas[26]['column' + (i + 1)] = report.lh
+        datas[27]['column' + (i + 1)] = report.e2
+        datas[28]['column' + (i + 1)] = report.t
+        datas[29]['column' + (i + 1)] = report.p
+        datas[30]['column' + (i + 1)] = report.prl
+        datas[31]['column' + (i + 1)] = report.bhcg
+        datas[32]['column' + (i + 1)] = report.leucorrhea
+        datas[33]['column' + (i + 1)] = report.takeOvumDate
       }
 
       return datas

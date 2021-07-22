@@ -3,6 +3,7 @@ package com.towako.assistedreproduction.inspectionreport;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Data
@@ -21,6 +22,12 @@ public class InspectionReportParam {
 
     @ApiModelProperty(value = "HMG(IU)")
     private String hmg;
+
+    @ApiModelProperty(value = "HCG")
+    private String hcg;
+
+    @ApiModelProperty(value = "达必佳")
+    private String decapeptyl;
 
     @ApiModelProperty(value = "MPA(mg)")
     private String mpa;
@@ -102,5 +109,8 @@ public class InspectionReportParam {
 
     @ApiModelProperty(value = "白带检查")
     private String leucorrhea;
+
+    @ApiModelProperty(value = "取卵时间")
+    private LocalDate takeOvumDate;
 
 }

@@ -3,7 +3,7 @@ const isProd = process.env.NODE_ENV === 'production'
 // gzip
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
-const port = process.env.port || process.env.npm_config_port || 8082
+const port = process.env.port || process.env.npm_config_port || 8083
 
 module.exports = {
   configureWebpack: config => {

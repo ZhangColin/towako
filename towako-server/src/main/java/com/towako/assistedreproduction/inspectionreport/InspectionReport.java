@@ -36,6 +36,12 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
     @Column(name = "hmg")
     private String hmg;
 
+    @Column(name = "hcg")
+    private String hcg;
+
+    @Column(name = "decapeptyl")
+    private String decapeptyl;
+
     @Column(name = "mpa")
     private String mpa;
 
@@ -117,15 +123,20 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
     @Column(name = "leucorrhea")
     private String leucorrhea;
 
+    @Column(name = "take_ovum_date")
+    private LocalDate takeOvumDate;
+
     private InspectionReport() {}
 
-    public InspectionReport(Long treatmentPeriodId, LocalDate inspectionDate, Integer cycleNumber, String letrozole, String hmg, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea) {
+    public InspectionReport(Long treatmentPeriodId, LocalDate inspectionDate, Integer cycleNumber, String letrozole, String hmg, String hcg, String decapeptyl, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea, LocalDate takeOvumDate) {
 
         this.treatmentPeriodId = treatmentPeriodId;
         this.inspectionDate = inspectionDate;
         this.cycleNumber = cycleNumber;
         this.letrozole = letrozole;
         this.hmg = hmg;
+        this.hcg = hcg;
+        this.decapeptyl = decapeptyl;
         this.mpa = mpa;
         this.cc = cc;
         this.ganirelix = ganirelix;
@@ -153,15 +164,18 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
         this.prl = prl;
         this.bhcg = bhcg;
         this.leucorrhea = leucorrhea;
+        this.takeOvumDate = takeOvumDate;
     }
 
-    public void describe(Long treatmentPeriodId, LocalDate inspectionDate, Integer cycleNumber, String letrozole, String hmg, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea) {
+    public void describe(Long treatmentPeriodId, LocalDate inspectionDate, Integer cycleNumber, String letrozole, String hmg, String hcg, String decapeptyl, String mpa, String cc, String ganirelix, String femoston, String tadalafil, String intima, String intimaType, String lof1, String lof2, String lof3, String lof4, String lof5, String lof6, String rof1, String rof2, String rof3, String rof4, String rof5, String rof6, String fsh, String lh, String e2, String t, String p, String prl, String bhcg, String leucorrhea, LocalDate takeOvumDate) {
         this.treatmentPeriodId = treatmentPeriodId;
         this.inspectionDate = inspectionDate;
         this.cycleNumber = cycleNumber;
         this.letrozole = letrozole;
         this.hmg = hmg;
         this.mpa = mpa;
+        this.hcg = hcg;
+        this.decapeptyl = decapeptyl;
         this.cc = cc;
         this.ganirelix = ganirelix;
         this.femoston = femoston;
@@ -188,5 +202,6 @@ public class InspectionReport extends AbstractEntity implements AggregateRoot {
         this.prl = prl;
         this.bhcg = bhcg;
         this.leucorrhea = leucorrhea;
+        this.takeOvumDate = takeOvumDate;
     }
 }
