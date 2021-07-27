@@ -43,7 +43,7 @@
               </div>
             </div>
             <div class="aui-me-content-card">
-              <h3><i class="aui-icon aui-card-me" />医生</h3>
+              <h3><i class="aui-icon aui-card-me" />{{ doctor.title }}</h3>
             </div>
           </div>
         </div>

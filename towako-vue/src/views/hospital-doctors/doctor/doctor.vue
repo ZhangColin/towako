@@ -70,7 +70,13 @@
             <el-input v-model="entityData.phone" />
           </el-form-item>
           <el-form-item label="职称" prop="title">
-            <el-input v-model="entityData.title" />
+            <el-select v-model="entityData.title" placeholder="请选择职称">
+              <el-option label="主任医师" value="主任医师" />
+              <el-option label="副主任医师" value="副主任医师" />
+              <el-option label="主治医师" value="主治医师" />
+              <el-option label="住院医师" value="住院医师" />
+              <el-option label="医助" value="医助" />
+            </el-select>
           </el-form-item>
         </el-form>
         <div class="drawer__footer">

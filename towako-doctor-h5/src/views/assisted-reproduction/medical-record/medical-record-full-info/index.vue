@@ -57,41 +57,49 @@
                     <van-cell title="AMH" :value="period.treatmentPeriod.amh" />
                     <van-cell title="方案" :value="period.treatmentPeriod.plan" />
                   </van-row>
-                  <van-row v-for="inpectionReport in period.inspectionReports" :key="inpectionReport.inspectionDate">
+                  <van-row style="padding-top: 5px;">
+                    <van-search
+                      v-model="reportFilter"
+                      style="padding: 10px;"
+                      shape="round"
+                      placeholder=""
+                    />
+                  </van-row>
+                  <van-row v-for="(inpectionReport,index) in period.inspectionReports" :key="index">
                     <h1 style="padding-top: 15px; padding-bottom: 5px;">{{ inpectionReport.inspectionDate }}</h1>
-                    <van-cell title="周期天数" :value="inpectionReport.cycleNumber" />
-                    <van-cell title="来曲唑" :value="inpectionReport.letrozole" />
-                    <van-cell title="HMG(IU)" :value="inpectionReport.hmg" />
-                    <van-cell title="HCG" :value="inpectionReport.hcg" />
-                    <van-cell title="达必佳" :value="inpectionReport.decapeptyl" />
-                    <van-cell title="MPA(mg)" :value="inpectionReport.mpa" />
-                    <van-cell title="CC(mg)" :value="inpectionReport.cc" />
-                    <van-cell title="加尼瑞克/思则瑞'" :value="inpectionReport.ganirelix" />
-                    <van-cell title="芬吗通" :value="inpectionReport.femoston" />
-                    <van-cell title="他达拉非" :value="inpectionReport.tadalafil" />
-                    <van-cell title="内膜" :value="inpectionReport.intima" />
-                    <van-cell title="内膜类型" :value="inpectionReport.intimaType" />
-                    <van-cell title="LOF" :value="inpectionReport.lof1" />
-                    <van-cell title="" :value="inpectionReport.lof2" />
-                    <van-cell title="" :value="inpectionReport.lof3" />
-                    <van-cell title="" :value="inpectionReport.lof4" />
-                    <van-cell title="" :value="inpectionReport.lof5" />
-                    <van-cell title="" :value="inpectionReport.lof6" />
-                    <van-cell title="ROF" :value="inpectionReport.rof1" />
-                    <van-cell title="" :value="inpectionReport.rof2" />
-                    <van-cell title="" :value="inpectionReport.rof3" />
-                    <van-cell title="" :value="inpectionReport.rof4" />
-                    <van-cell title="" :value="inpectionReport.rof5" />
-                    <van-cell title="" :value="inpectionReport.rof6" />
-                    <van-cell title="FSH(mlU/ml)" :value="inpectionReport.fsh" />
-                    <van-cell title="LH(mlU/ml)" :value="inpectionReport.lh" />
-                    <van-cell title="E2(pg/ml)" :value="inpectionReport.e2" />
-                    <van-cell title="T(ng/dl)" :value="inpectionReport.t" />
-                    <van-cell title="P(ng/ml)" :value="inpectionReport.p" />
-                    <van-cell title="PRL(ng/ml)" :value="inpectionReport.prl" />
-                    <van-cell title="B-HCG(mlU/ml)" :value="inpectionReport.bhcg" />
-                    <van-cell title="白带检查" :value="inpectionReport.leucorrhea" />
-                    <van-cell title="取卵时间" :value="inpectionReport.takeOvumDate" />
+                    <van-cell v-show="reportIsShow('周期天数')" title="周期天数" :value="inpectionReport.cycleNumber" />
+                    <van-cell v-show="reportIsShow('来曲唑')" title="来曲唑" :value="inpectionReport.letrozole" />
+                    <van-cell v-show="reportIsShow('hmg')" title="HMG(IU)" :value="inpectionReport.hmg" />
+                    <van-cell v-show="reportIsShow('hcg')" title="HCG" :value="inpectionReport.hcg" />
+                    <van-cell v-show="reportIsShow('达必佳')" title="达必佳" :value="inpectionReport.decapeptyl" />
+                    <van-cell v-show="reportIsShow('mpa')" title="MPA(mg)" :value="inpectionReport.mpa" />
+                    <van-cell v-show="reportIsShow('cc')" title="CC(mg)" :value="inpectionReport.cc" />
+                    <van-cell v-show="reportIsShow('加尼瑞克/思则瑞')" title="加尼瑞克/思则瑞" :value="inpectionReport.ganirelix" />
+                    <van-cell v-show="reportIsShow('芬吗通')" title="芬吗通" :value="inpectionReport.femoston" />
+                    <van-cell v-show="reportIsShow('他达拉非')" title="他达拉非" :value="inpectionReport.tadalafil" />
+                    <van-cell v-show="reportIsShow('内膜')" title="内膜" :value="inpectionReport.intima" />
+                    <van-cell v-show="reportIsShow('内膜类型')" title="内膜类型" :value="inpectionReport.intimaType" />
+                    <van-cell v-show="reportIsShow('lof')" title="LOF" :value="inpectionReport.lof1" />
+                    <van-cell v-show="reportIsShow('lof')" title="" :value="inpectionReport.lof2" />
+                    <van-cell v-show="reportIsShow('lof')" title="" :value="inpectionReport.lof3" />
+                    <van-cell v-show="reportIsShow('lof')" title="" :value="inpectionReport.lof4" />
+                    <van-cell v-show="reportIsShow('lof')" title="" :value="inpectionReport.lof5" />
+                    <van-cell v-show="reportIsShow('lof')" title="" :value="inpectionReport.lof6" />
+                    <van-cell v-show="reportIsShow('rof')" title="ROF" :value="inpectionReport.rof1" />
+                    <van-cell v-show="reportIsShow('rof')" title="" :value="inpectionReport.rof2" />
+                    <van-cell v-show="reportIsShow('rof')" title="" :value="inpectionReport.rof3" />
+                    <van-cell v-show="reportIsShow('rof')" title="" :value="inpectionReport.rof4" />
+                    <van-cell v-show="reportIsShow('rof')" title="" :value="inpectionReport.rof5" />
+                    <van-cell v-show="reportIsShow('rof')" title="" :value="inpectionReport.rof6" />
+                    <van-cell v-show="reportIsShow('fsh')" title="FSH(mlU/ml)" :value="inpectionReport.fsh" />
+                    <van-cell v-show="reportIsShow('lh')" title="LH(mlU/ml)" :value="inpectionReport.lh" />
+                    <van-cell v-show="reportIsShow('e2')" title="E2(pg/ml)" :value="inpectionReport.e2" />
+                    <van-cell v-show="reportIsShow('t')" title="T(ng/dl)" :value="inpectionReport.t" />
+                    <van-cell v-show="reportIsShow('p')" title="P(ng/ml)" :value="inpectionReport.p" />
+                    <van-cell v-show="reportIsShow('prl')" title="PRL(ng/ml)" :value="inpectionReport.prl" />
+                    <van-cell v-show="reportIsShow('b-hcg')" title="B-HCG(mlU/ml)" :value="inpectionReport.bhcg" />
+                    <van-cell v-show="reportIsShow('白带检查')" title="白带检查" :value="inpectionReport.leucorrhea" />
+                    <van-cell v-show="reportIsShow('取卵时间')" title="取卵时间" :value="inpectionReport.takeOvumDate" />
                   </van-row>
                 </div>
               </template>
@@ -138,6 +146,8 @@ export default {
       collapseNames: [],
 
       periodActive: 0,
+
+      reportFilter: '',
 
       showEditReport: false,
       report: {
@@ -213,6 +223,15 @@ export default {
       } else {
         this.$router.back(-1)
       }
+    },
+    reportIsShow(title) {
+      if (!this.reportFilter) {
+        return true
+      }
+
+      const str = this.reportFilter.replace('，', ',')
+
+      return str.split(',').filter(s => title.toLowerCase().startsWith(s.trim().toLowerCase())).length > 0
     }
   }
 }

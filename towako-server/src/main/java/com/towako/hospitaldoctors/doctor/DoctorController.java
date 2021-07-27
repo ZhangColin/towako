@@ -83,13 +83,6 @@ public class DoctorController {
         return success(service.editDoctor(id, doctorParam));
     }
 
-//    @ApiOperation(value = "获取分配医院")
-//    @GetMapping("/{id}/hospitals")
-//    public ResponseEntity<?> getHospitals(
-//            @ApiParam(value = "医生Id", required = true) @PathVariable Long id) {
-//        return success(service.getHospitals(id));
-//    }
-
     @ApiOperation(value = "分配医院")
     @PutMapping("/{id}/hospitals")
     public ResponseEntity<?> assignHospitals(

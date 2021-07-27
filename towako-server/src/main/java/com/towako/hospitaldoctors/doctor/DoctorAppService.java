@@ -319,31 +319,31 @@ public class DoctorAppService {
     }
 
     private void sendSuccessSms(String phone) {
-//        try {
-//            Credential cred = new Credential("AKIDLbgsjNrGlmbXFjKSilbEfs6NSLHxuccP", "vTFduoW45EsrYIuWDjTCiZEmdCfw7221");
-//            HttpProfile httpProfile = new HttpProfile();
-//            httpProfile.setReqMethod("POST");
-//            httpProfile.setConnTimeout(60);
-//            httpProfile.setEndpoint("sms.tencentcloudapi.com");
-//            ClientProfile clientProfile = new ClientProfile();
-//            clientProfile.setSignMethod("HmacSHA256");
-//            clientProfile.setHttpProfile(httpProfile);
-//            SmsClient client = new SmsClient(cred, "",clientProfile);
-//            SendSmsRequest req = new SendSmsRequest();
-//            String appid = "1400486413";
-//            req.setSmsSdkAppid(appid);
-//            String sign = "优生慧";
-//            req.setSign(sign);
-//            String templateID = "880371";
-//            req.setTemplateID(templateID);
-//
-//            String[] phoneNumbers = {"+86"+ phone};
-//            req.setPhoneNumberSet(phoneNumbers);
-//
-//            SendSmsResponse res = client.SendSms(req);
-//            log.info("腾讯短信接口返回结果：[{}]", SendSmsResponse.toJsonString(res) );
-//        } catch (TencentCloudSDKException e) {
-//            log.error("腾讯短信接口调用失败：[{}]", e.getMessage());
-//        }
+        try {
+            Credential cred = new Credential("AKIDLbgsjNrGlmbXFjKSilbEfs6NSLHxuccP", "vTFduoW45EsrYIuWDjTCiZEmdCfw7221");
+            HttpProfile httpProfile = new HttpProfile();
+            httpProfile.setReqMethod("POST");
+            httpProfile.setConnTimeout(60);
+            httpProfile.setEndpoint("sms.tencentcloudapi.com");
+            ClientProfile clientProfile = new ClientProfile();
+            clientProfile.setSignMethod("HmacSHA256");
+            clientProfile.setHttpProfile(httpProfile);
+            SmsClient client = new SmsClient(cred, "",clientProfile);
+            SendSmsRequest req = new SendSmsRequest();
+            String appid = "1400486413";
+            req.setSmsSdkAppid(appid);
+            String sign = "优生慧";
+            req.setSign(sign);
+            String templateID = "1046737";
+            req.setTemplateID(templateID);
+
+            String[] phoneNumbers = {"+86"+ phone};
+            req.setPhoneNumberSet(phoneNumbers);
+
+            SendSmsResponse res = client.SendSms(req);
+            log.info("腾讯短信接口返回结果：[{}]", SendSmsResponse.toJsonString(res) );
+        } catch (TencentCloudSDKException e) {
+            log.error("腾讯短信接口调用失败：[{}]", e.getMessage());
+        }
     }
 }

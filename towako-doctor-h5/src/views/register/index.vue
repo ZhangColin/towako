@@ -1,4 +1,3 @@
-
 <template>
   <div class="login">
     <div class="header">
@@ -62,7 +61,8 @@
             size="mini"
             type="primary"
             @click="onSendSmsCode"
-          >{{ config.sms_text }}</van-button>
+          >{{ config.sms_text }}
+          </van-button>
         </template>
       </van-field>
       <van-field
@@ -87,10 +87,22 @@
         :error-message="fields.confirmPassword ? rule.confirmPassword.message : ''"
       />
       <van-field
-        v-model="form.title"
+        readonly
+        clickable
+        name="picker"
+        :value="form.title"
         label="职称"
-        placeholder="请输入职称"
+        placeholder="点击选择职称"
+        @click="showTitlePicker = true"
       />
+      <van-popup v-model="showTitlePicker" position="bottom">
+        <van-picker
+          show-toolbar
+          :columns="['主任医师','副主任医师','主治医师','住院医师','医助']"
+          @confirm="onTitleConfirm"
+          @cancel="showTitlePicker = false"
+        />
+      </van-popup>
     </div>
 
     <van-checkbox
@@ -114,7 +126,8 @@
           block
           size="normal"
           @click="onSubmit"
-        >注册</van-button>
+        >注册
+        </van-button>
       </div>
     </div>
   </div>
@@ -126,12 +139,14 @@ import { doctorRegister } from '@/api/hospital-doctors/doctor-api'
 import { getAllHospitals } from '@/api/hospital-doctors/hospital-api'
 import Schema from 'async-validator'
 import { encrypt } from '@/utils/crypto'
+
 export default {
   components: {},
   data() {
     return {
       hospitals: [],
       showPicker: false,
+      showTitlePicker: false,
       config: {
         agreement: false,
         sms_text: '发送验证码'
@@ -186,8 +201,7 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
     getAllHospitals().then(response => {
       this.hospitals = response.data
@@ -257,7 +271,8 @@ export default {
         forbidClick: true,
         duration: 0
       })
-      const response = await sendCode(this.form.phone).catch(() => {})
+      const response = await sendCode(this.form.phone).catch(() => {
+      })
       if (response.data) {
         this.$toast('已发送短信验证码')
         this.onCountdownSms()
@@ -289,6 +304,10 @@ export default {
     onConfirm(value) {
       this.form.hospitalId = value.id
       this.showPicker = false
+    },
+    onTitleConfirm(value) {
+      this.form.title = value
+      this.showTitlePicker = false
     }
   }
 }
