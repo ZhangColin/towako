@@ -5,7 +5,8 @@ import { Toast, Dialog } from 'vant';
 import store from '@/store/index.js';
 
 // 这样的话就可以使用 this.$axios 方法
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : '/';
+// axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : '/';
+axios.defaults.baseURL = process.env.VUE_APP_BASE_API;
 axios.defaults.headers.common['Accept-Language'] = getLanguage();
 const service = axios.create({
 	// baseURL: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : '/', // url = baseURL + request url

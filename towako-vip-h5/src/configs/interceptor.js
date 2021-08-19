@@ -12,17 +12,16 @@ Vue.use(wechatAuth, {
 router.beforeEach(async(to, from, next) => {
 	const { loginStatus } = store.state.user;
 
-	console.log('loginStatus', loginStatus)
 	switch (loginStatus) {
 	case 0:
 		wechatAuth.redirect_uri = processUrl();
-		console.log('redirect_uri', wechatAuth.authUrl)
 		await store.dispatch('user/setLoginStatus', 1);
 		window.location.href = wechatAuth.authUrl;
 		break;
 	case 1:
 		try {
-			wechatAuth.returnFromWechat(to.fullPath);
+			// wechatAuth.returnFromWechat(to.fullPath);
+			wechatAuth.returnFromWechat(window.location.href);
 			await processLogin(wechatAuth.code);
 			if (router.history.list) {
 				router.history.list.push(to);
@@ -58,6 +57,12 @@ router.afterEach((to, from) => {
 });
 
 function processUrl() {
+	// 本地环境换通过auth.html拿code
+	if (process.env.NODE_ENV === 'development') {
+		// 中间授权页地址
+		return `${process.env.VUE_APP_WECHAT_AUTH_URL}?backUrl=${window.location.href}`
+	}
+
 	const url = window.location.href;
 	// 解决多次登录url添加重复的code与state问题
 	const urlParams = qs.parse(url.split('?')[1]);
@@ -77,18 +82,17 @@ function processUrl() {
 }
 
 function processLogin(code) {
-	const data = { code };
+	// const data = { code };
 
 	// eslint-disable-next-line no-async-promise-executor
 	return new Promise(async(resolve, reject) => {
 		try {
-			// const { userInfo, accessToken } = await login(data);
+			const result = await login(code);
+			const { userInfo, accessToken } = result.data;
 
 			await store.dispatch('user/setLoginStatus', 2);
-			// await store.dispatch('user/setAccessToken', accessToken);
-			await store.dispatch('user/setAccessToken', '');
-			// await store.dispatch('user/setUserInfo', userInfo);
-			await store.dispatch('user/setUserInfo', {});
+			await store.dispatch('user/setAccessToken', accessToken);
+			await store.dispatch('user/setUserInfo', userInfo);
 
 			resolve({ status: 1, data: '登录成功' });
 		} catch (err) {

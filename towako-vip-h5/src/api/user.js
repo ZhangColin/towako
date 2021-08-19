@@ -1,8 +1,8 @@
 
 import request from '@/utils/request.js';
 
-export function login(param) {
-	return request.post('/auth/wechat', param)
+export function login(code) {
+	return request.get(`/mp/login?code=${code}`);
 }
 
 /**

@@ -37,7 +37,8 @@ public class CommonController {
     @PostMapping("/import")
     public ResponseEntity<String> importData(MultipartFile file, HttpServletRequest request) throws IOException {
         String format = sdf.format(new Date());
-        String realPath = request.getServletContext().getRealPath("/upload") + format;
+//        String realPath = request.getServletContext().getRealPath("/upload") + format;
+        String realPath = request.getServletContext().getRealPath("/") + format;
 
         File folder = new File(realPath);
         if (!folder.exists()) {

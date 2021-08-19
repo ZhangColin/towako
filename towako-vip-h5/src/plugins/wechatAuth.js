@@ -63,7 +63,8 @@ class VueWechatAuthPlugin {
 
 	returnFromWechat(redirect_uri) {
 		const parsedUrl = qs.parse(redirect_uri.split('?')[1]);
-
+		console.log('redirect_url', redirect_uri)
+		console.log('parsedUrl', parsedUrl);
 		if (process.env.NODE_ENV === 'development') {
 			this.state = null;
 			this._code = parsedUrl.code;
