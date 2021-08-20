@@ -4,10 +4,7 @@ import com.cartisan.dtos.PageResult;
 import com.cartisan.security.LoginService;
 import com.cartisan.utils.AesUtil;
 import com.towako.system.user.UserRepository;
-import com.towako.system.user.domain.AssignService;
-import com.towako.system.user.domain.ChangePasswordService;
-import com.towako.system.user.domain.RegisterService;
-import com.towako.system.user.domain.User;
+import com.towako.system.user.domain.*;
 import com.towako.system.user.request.AssignOrganizationsCommand;
 import com.towako.system.user.request.AssignRolesCommand;
 import com.towako.system.user.request.CreateAccountCommand;
@@ -25,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.cartisan.repositories.ConditionSpecifications.querySpecification;
 import static com.cartisan.utils.AssertionUtil.requirePresent;
@@ -160,5 +158,11 @@ public class UserAppService {
         user.setAvatar(avatar);
 
         repository.save(user);
+    }
+
+    public boolean hasRole(Long userId, Long roleId) {
+        return repository.findById(userId)
+                .map(user -> user.getRoles().stream().map(UserRole::getRoleId).collect(Collectors.toList()).contains(roleId))
+                .orElse(false);
     }
 }

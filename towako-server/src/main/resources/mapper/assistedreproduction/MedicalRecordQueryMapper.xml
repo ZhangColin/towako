@@ -12,4 +12,14 @@
       where amr.record_no like concat('%', #{blurry},'%') or amr.name like concat('%', #{blurry},'%') or amr.phone like concat('%', #{blurry},'%')
     </if>
   </select>
+
+  <select id="searchMedicalRecordForManager" resultType="com.towako.assistedreproduction.medicalrecord.MedicalRecordDto">
+    select amr.id, amr.record_no as recordNo, amr.ivf, amr.name, amr.phone, amr.age,
+           amr.hospital_id as hospitalId, hh.name as hospitalName
+    from ar_medical_records as amr
+           left join hd_hospitals hh on amr.hospital_id = hh.id
+    <if test="blurry!=null">
+      where amr.record_no like concat('%', #{blurry},'%') or amr.name like concat('%', #{blurry},'%') or amr.phone like concat('%', #{blurry},'%')
+    </if>
+  </select>
 </mapper>

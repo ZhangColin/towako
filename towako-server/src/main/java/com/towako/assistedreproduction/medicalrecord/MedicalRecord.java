@@ -4,6 +4,7 @@ import com.cartisan.domains.AbstractEntity;
 import com.cartisan.domains.AggregateRoot;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,10 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
 
     @Column(name = "hospital_id")
     private Long hospitalId;
+
+    @Column(name = "member_id")
+    @Setter
+    private Long memberId;
 
     @Column(name = "record_no")
     private String recordNo;
@@ -98,4 +103,5 @@ public class MedicalRecord extends AbstractEntity implements AggregateRoot {
         this.nation = nation;
         this.maritalStatus = maritalStatus;
     }
+
 }

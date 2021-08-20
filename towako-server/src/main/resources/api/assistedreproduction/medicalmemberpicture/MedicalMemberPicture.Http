@@ -1,0 +1,43 @@
+### 搜索用户自传病历图片
+GET http://{{host}}:{{port}}/medicalMemberPictures/search?name=&status=&page=0&size=10
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 获取用户自传病历图片
+GET http://{{host}}:{{port}}/medicalMemberPictures/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+### 添加用户自传病历图片
+POST http://{{host}}:{{port}}/medicalMemberPictures
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "medicalRecordId": "",
+  "memberId": "",
+  "url": ""
+}
+
+### 编辑用户自传病历图片
+PUT http://{{host}}:{{port}}/medicalMemberPictures/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}
+
+{
+  
+  "medicalRecordId": "",
+  "memberId": "",
+  "url": ""
+}
+
+### 删除用户自传病历图片
+DELETE http://{{host}}:{{port}}/medicalMemberPictures/1
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Authorization: {{auth_token}}

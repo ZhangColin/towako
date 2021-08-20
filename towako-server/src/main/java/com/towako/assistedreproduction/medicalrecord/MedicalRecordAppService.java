@@ -11,6 +11,9 @@ import com.towako.assistedreproduction.treatmentperiod.TreatmentPeriodAppService
 import com.towako.hospitaldoctors.doctor.DoctorAppService;
 import com.towako.hospitaldoctors.doctor.DoctorDto;
 import com.towako.security.CurrentUser;
+import com.towako.system.user.application.UserAppService;
+import com.towako.vip.membership.MembershipRepository;
+import com.towako.vip.membership.domain.Membership;
 import lombok.NonNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,8 @@ public class MedicalRecordAppService {
     private final MedicalTeamAppService medicalTeamAppService;
     private final TreatmentPeriodAppService treatmentPeriodAppService;
     private final DoctorAppService doctorAppService;
+    private final MembershipRepository membershipRepository;
+    private final UserAppService userAppService;
     private final CurrentUser currentUser;
     private final SnowflakeIdWorker idWorker;
 
@@ -34,13 +39,16 @@ public class MedicalRecordAppService {
 
     public MedicalRecordAppService(MedicalRecordRepository repository, MedicalRecordQueryMapper medicalRecordQueryMapper,
                                    MedicalTeamAppService medicalTeamAppService, TreatmentPeriodAppService treatmentPeriodAppService,
-                                   DoctorAppService doctorAppService,
+                                   DoctorAppService doctorAppService, MembershipRepository membershipRepository,
+                                   UserAppService userAppService,
                                    CurrentUser currentUser, SnowflakeIdWorker idWorker) {
         this.repository = repository;
         this.medicalRecordQueryMapper = medicalRecordQueryMapper;
         this.medicalTeamAppService = medicalTeamAppService;
         this.treatmentPeriodAppService = treatmentPeriodAppService;
         this.doctorAppService = doctorAppService;
+        this.membershipRepository = membershipRepository;
+        this.userAppService = userAppService;
         this.currentUser = currentUser;
         this.idWorker = idWorker;
     }
@@ -48,11 +56,12 @@ public class MedicalRecordAppService {
     public PageResult<MedicalRecordDto> searchMedicalRecords(@NonNull MedicalRecordQuery medicalRecordQuery, @NonNull Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
 
-        final List<MedicalRecordDto> medicalRecordDtos = medicalRecordQueryMapper.searchMedicalRecord(currentUser.getUserId(), medicalRecordQuery.getBlurry());
+        final List<MedicalRecordDto> medicalRecordDtos = userAppService.hasRole(currentUser.getUserId(), 8L) ?
+                medicalRecordQueryMapper.searchMedicalRecordForManager(medicalRecordQuery.getBlurry())
+                : medicalRecordQueryMapper.searchMedicalRecord(currentUser.getUserId(), medicalRecordQuery.getBlurry());
         final PageInfo<MedicalRecordDto> medicalRecordDtoPageInfo = new PageInfo<>(medicalRecordDtos);
 
-        return new PageResult<>(medicalRecordDtoPageInfo.getTotal(), medicalRecordDtoPageInfo.getPages(),
-                medicalRecordDtoPageInfo.getList());
+        return new PageResult<>(medicalRecordDtoPageInfo.getTotal(), medicalRecordDtoPageInfo.getPages(), medicalRecordDtoPageInfo.getList());
     }
 
     public MedicalRecordDetailDto getMedicalRecord(Long id) {
@@ -93,7 +102,36 @@ public class MedicalRecordAppService {
         medicalTeamParam.setSort(10);
         medicalTeamAppService.addMedicalTeam(medicalTeamParam);
 
+        final List<Membership> matchMembers = membershipRepository.findByPhone(medicalRecordParam.getPhone());
+        matchMembers.stream().findFirst().ifPresent(member -> medicalRecord.setMemberId(member.getId()));
+
         return converter.convert(repository.save(medicalRecord));
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void addMedicalRecord(AddMedicalRecordByMembership addMedicalRecordByMembership) {
+        if (repository.existsByMemberId(addMedicalRecordByMembership.getMemberId())) {
+            return;
+        }
+
+        final MedicalRecord medicalRecord = new MedicalRecord(idWorker.nextId(),
+                0L,
+                "",
+                "",
+                addMedicalRecordByMembership.getName(),
+                addMedicalRecordByMembership.getPhone(),
+                "",
+                addMedicalRecordByMembership.getBirthday(),
+                0,
+                "",
+                "",
+                "",
+                "",
+                "",
+                1);
+
+        medicalRecord.setMemberId(addMedicalRecordByMembership.getMemberId());
+        repository.save(medicalRecord);
     }
 
     @Transactional(rollbackOn = Exception.class)

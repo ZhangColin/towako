@@ -1,8 +1,10 @@
 <template>
   <div class="app-container">
     <el-row :gutter="24" class="filter-container">
-      <el-col :span="6" />
+      <el-col :span="6">
+      </el-col>
       <el-col :span="12">
+        <el-button class="filter-item" type="primary" @click="handleSearch">查询</el-button>
         <el-button class="filter-item" type="primary" @click="handleAdd">新增</el-button>
       </el-col>
     </el-row>
@@ -17,14 +19,10 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="医生" prop="doctorId">
-        <template slot-scope="{row}">
-          <span>{{
-            (doctors.find(doctor=>row.doctorId===doctor.id) || {name: ''}).name
-          }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="排序" prop="sort" />
+            <el-table-column align="center" label="主键" prop="id" />
+      <el-table-column align="center" label="病历Id" prop="medicalRecordId" />
+      <el-table-column align="center" label="用户Id" prop="memberId" />
+      <el-table-column align="center" label="图片地址" prop="url" />
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
           <el-dropdown split-button @click="handleEdit(scope.$index, scope.row)">
@@ -36,6 +34,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      :current-page.sync="page.currentPage"
+      :page-sizes="[5, 10, 20]"
+      :page-size="page.pageSize"
+      :total="page.total"
+      class="pagination-container"
+      background
+      align="right"
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
     <el-drawer
       :title="drawerTitle"
       :visible.sync="drawerVisible"
@@ -44,14 +54,16 @@
     >
       <div class="drawer__content">
         <el-form ref="entityDataForm" :model="entityData" :rules="rules" label-width="120px">
-          <el-form-item label="医生" prop="doctorId">
-            <el-select v-model="entityData.doctorId" placeholder="请选择医生" style="width: 100%">
-              <el-option v-for="doctor in doctors" :key="doctor.id" :label="doctor.name" :value="doctor.id" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="排序" prop="sort">
-            <el-input v-model="entityData.sort" />
-          </el-form-item>
+          
+          <el-form-item label="病历Id" prop="medicalRecordId">
+             <el-input v-model="entityData.medicalRecordId" />
+           </el-form-item>
+          <el-form-item label="用户Id" prop="memberId">
+             <el-input v-model="entityData.memberId" />
+           </el-form-item>
+          <el-form-item label="图片地址" prop="url">
+             <el-input v-model="entityData.url" />
+           </el-form-item>
         </el-form>
         <div class="drawer__footer">
           <el-button @click="drawerVisible=false">取消</el-button>
@@ -63,46 +75,32 @@
 </template>
 
 <script>
-import { ListMixin } from '@/mixins/list-mixin'
+import { PaginationMixin } from '@/mixins/pagination-mixin'
 import { CudMixin } from '@/mixins/cud-mixin'
-import { getAll, search } from '@/api/common-api'
 
 export default {
-  name: 'Role',
-  mixins: [ListMixin, CudMixin],
+  name: 'MedicalMemberPicture',
+  mixins: [PaginationMixin, CudMixin],
   data() {
     return {
-      apiBaseUrl: '/assisted-reproduction/medical-teams',
-      useSearch: true,
+      apiBaseUrl: '/medicalMemberPictures',
 
-      medicalRecordId: 0,
       defaultData: {
+        
         medicalRecordId: '',
-        doctorId: '',
-        sort: 0
+        memberId: '',
+        url: ''
       },
-      title: '医疗团队',
+      title: '用户自传病历图片',
       rules: {
         name: [
         ]
-      },
-      doctors: []
+      }
     }
   },
   created() {
-    getAll('/hospital-doctors/doctors/list').then(response => { this.doctors = response.data })
   },
   methods: {
-    fetchData() {
-      this.medicalRecordId = this.$route.query.medicalRecordId
-      this.queryParam.medicalRecordId = this.medicalRecordId
-      this.defaultData.medicalRecordId = this.medicalRecordId
-      this.loading = true
-      search(this.apiBaseUrl, this.queryParam).then(response => {
-        this.dataSource = response.data
-        this.loading = false
-      })
-    }
   }
 }
 </script>

@@ -2,6 +2,8 @@ package com.towako.wx.mp.controller;
 
 import com.cartisan.security.LoginService;
 import com.cartisan.utils.AesUtil;
+import com.towako.assistedreproduction.medicalrecord.AddMedicalRecordByMembership;
+import com.towako.assistedreproduction.medicalrecord.MedicalRecordAppService;
 import com.towako.system.user.application.LoginAppService;
 import com.towako.traffic.channel.ChannelRepository;
 import com.towako.traffic.recommend.RecommendAppService;
@@ -35,6 +37,7 @@ public class WxMpLoginController {
     private final MembershipAppService membershipAppService;
     private final RecommendAppService recommendAppService;
     private final LoginService loginService;
+    private final MedicalRecordAppService medicalRecordAppService;
 
     @GetMapping("/login")
     public Map<String, Object> login(@RequestParam String code) throws WxErrorException {
@@ -70,6 +73,13 @@ public class WxMpLoginController {
                 membershipAppService.recordLogin(userOptional.get().getId());
                 membershipDto = userOptional.get();
             }
+
+            final AddMedicalRecordByMembership addMedicalRecordByMembership = new AddMedicalRecordByMembership();
+            addMedicalRecordByMembership.setMemberId(membershipDto.getId());
+            addMedicalRecordByMembership.setName(membershipDto.getNickname());
+            addMedicalRecordByMembership.setPhone(membershipDto.getPhone());
+            addMedicalRecordByMembership.setBirthday(membershipDto.getBirthday());
+            medicalRecordAppService.addMedicalRecord(addMedicalRecordByMembership);
 
             final String token = loginService.login("WechatMember_" + membershipDto.getId(), "L@nmedic@1");
 

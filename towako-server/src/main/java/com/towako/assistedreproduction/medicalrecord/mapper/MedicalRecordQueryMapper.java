@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface MedicalRecordQueryMapper {
     List<MedicalRecordDto> searchMedicalRecord(@Param("currentUserId") Long currentUserId, @Param("blurry") String blurry);
+    List<MedicalRecordDto> searchMedicalRecordForManager(@Param("blurry") String blurry);
 }

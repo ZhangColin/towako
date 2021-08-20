@@ -3,6 +3,8 @@ const isProd = process.env.NODE_ENV === 'production';
 // gzip
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
+const port = process.env.port || process.env.npm_config_port || 8084;
+
 module.exports = {
 	publicPath: './',
 
@@ -54,18 +56,26 @@ module.exports = {
 	},
 
 	devServer: {
-		proxy: {
-			'^/': {
-				target: process.env.VUE_APP_BASE_API,
-				changeOrigin: true, // 是否在本地虚拟一个服务器接受并代发请求
-				secure: false, // 是否拒绝使用了无效证书（ssl）的后端服务器
-				pathRewrite: {
-					'^/': '',
-				},
-			},
+		port: port,
+		open: false,
+		overlay: {
+			warnings: false,
+			errors: true,
 		},
-		disableHostCheck: true,
 	},
+	// devServer: {
+	// 	proxy: {
+	// 		'^/': {
+	// 			target: process.env.VUE_APP_BASE_API,
+	// 			changeOrigin: true, // 是否在本地虚拟一个服务器接受并代发请求
+	// 			secure: false, // 是否拒绝使用了无效证书（ssl）的后端服务器
+	// 			pathRewrite: {
+	// 				'^/': '',
+	// 			},
+	// 		},
+	// 	},
+	// 	disableHostCheck: true,
+	// },
 
 	// 设置为 true 后你就可以在 Vue 组件中使用 template 选项了，但是这会让你的应用额外增加 10kb 左右。
 	// https://cli.vuejs.org/zh/config/#runtimecompiler
