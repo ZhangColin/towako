@@ -31,6 +31,7 @@ const mutations = {
 
 const actions = {
 	setLoginStatus({ commit, state }, query) {
+		console.log('setLoginStatus', state, query)
 		if ((query === 0 || query === 1) && process.env.NODE_ENV === 'production') {
 			storage.remove(ACCESS_TOKEN);
 			storage.remove(USER_INFO);

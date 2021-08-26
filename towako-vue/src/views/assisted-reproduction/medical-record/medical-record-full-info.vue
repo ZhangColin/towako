@@ -174,6 +174,12 @@
       </el-tab-pane>
     </el-tabs>
 
+    <el-card v-if="medicalRecordFullInfo.pictures && medicalRecordFullInfo.pictures.length>0">
+      <div slot="header" class="clearfix">
+        <span>病人自主上传病历图片</span>
+      </div>
+      <el-image v-for="url in medicalRecordFullInfo.pictures" style="width: 200px; height: 200px" :key="url" :src="url" fit="contain" :preview-src-list="medicalRecordFullInfo.pictures"/>
+    </el-card>
     <el-drawer
       title="修改病历"
       :visible.sync="medicalRecordDrawerVisible"

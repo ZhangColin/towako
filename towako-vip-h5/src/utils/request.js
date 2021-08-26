@@ -23,10 +23,10 @@ const service = axios.create({
 });
 Vue.prototype.$axios = axios;
 
-const defaultParams = {
-	api_version: '1.0.0',
-	ts: Math.round(new Date() / 1000),
-};
+// const defaultParams = {
+// 	api_version: '1.0.0',
+// 	ts: Math.round(new Date() / 1000),
+// };
 
 // request interceptor
 service.interceptors.request.use(
@@ -34,11 +34,11 @@ service.interceptors.request.use(
 		const { accessToken } = store.getters;
 		// 在请求发出之前进行一些操作
 		if (accessToken) {
-			config.headers.Authorization = `JWT ${accessToken}`;
+			config.headers.Authorization = `Bearer ${accessToken}`;
 		}
 
 		console.log(`--------> http ajax request`, config);
-		config.data = Object.assign({}, defaultParams, config.data);
+		// config.data = Object.assign({}, defaultParams, config.data);
 
 		return config;
 	},
@@ -67,7 +67,7 @@ service.interceptors.response.use(
 	error => {
 		if (error.response.status === 401 || error.response.status === 403) {
 			// Toast(`会话已过期，请重新登录`);
-			store.dispatch('setLoginStatus', 0)
+			store.dispatch('user/setLoginStatus', 0)
 				.then(() => location.reload());
 		} else {
 			Toast.clear();

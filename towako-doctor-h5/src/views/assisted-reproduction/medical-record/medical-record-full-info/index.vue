@@ -16,6 +16,11 @@
     <van-row class="section">
       <van-tabs v-model="active" sticky animated>
         <van-tab title="基本信息">
+          <van-swipe v-if="medicalRecordFullInfo.pictures && medicalRecordFullInfo.pictures.length>0" :autoplay="3000" style="height: 200px;">
+            <van-swipe-item v-for="(image, index) in medicalRecordFullInfo.pictures" :key="index" @click="picturesPreview(index)">
+              <van-image :src="image" fit="contain" width="100%" height="100%" />
+            </van-swipe-item>
+          </van-swipe>
           <van-cell-group>
             <van-cell title="医院" :value="(hospitals.find(hospital=>medicalRecordFullInfo.medicalRecordDetail.hospitalId===hospital.id) || {name: ''}).name" />
             <van-cell title="病案号" :value="medicalRecordFullInfo.medicalRecordDetail.recordNo" />
@@ -134,7 +139,7 @@
 import { getMedicalRecordFullInfo } from '@/api/assisted-reproduction/medical-records-api'
 import { getMyHospitals } from '@/api/hospital-doctors/doctor-api'
 import { reportTreatmentPeriod } from '@/api/assisted-reproduction/medical-records-api'
-import { Notify } from 'vant'
+import { Notify, ImagePreview } from 'vant'
 
 export default {
   components: {},
@@ -232,6 +237,12 @@ export default {
       const str = this.reportFilter.replace('，', ',')
 
       return str.split(',').filter(s => title.toLowerCase().startsWith(s.trim().toLowerCase())).length > 0
+    },
+    picturesPreview(index) {
+      ImagePreview({
+        images: this.medicalRecordFullInfo.pictures,
+        startPosition: index
+      })
     }
   }
 }

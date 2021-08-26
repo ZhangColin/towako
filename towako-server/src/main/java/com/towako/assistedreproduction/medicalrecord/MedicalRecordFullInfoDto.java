@@ -12,5 +12,7 @@ import java.util.List;
 public class MedicalRecordFullInfoDto {
     MedicalRecordDetailDto medicalRecordDetail;
 
+    List<String> pictures;
+
     List<TreatmentPeriodFullDto> treatmentPeriods;
 }

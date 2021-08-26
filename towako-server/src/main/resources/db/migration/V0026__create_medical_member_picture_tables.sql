@@ -4,7 +4,7 @@ alter table ar_medical_records
 
 -- 用户自传病历图片
 CREATE TABLE `ar_medical_member_pictures` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint NOT NULL COMMENT '主键',
   `medical_record_id` bigint NULL COMMENT '病历Id',
   `member_id` bigint NULL COMMENT '用户Id',
   `url` varchar(256) NULL COMMENT '图片地址',

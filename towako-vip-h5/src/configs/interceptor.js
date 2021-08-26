@@ -21,7 +21,7 @@ router.beforeEach(async(to, from, next) => {
 	case 1:
 		try {
 			// wechatAuth.returnFromWechat(to.fullPath);
-			wechatAuth.returnFromWechat(window.location.href);
+			wechatAuth.returnFromWechat(window.location.href.split('#')[0]);
 			await processLogin(wechatAuth.code);
 			if (router.history.list) {
 				router.history.list.push(to);
@@ -58,12 +58,13 @@ router.afterEach((to, from) => {
 
 function processUrl() {
 	// 本地环境换通过auth.html拿code
-	if (process.env.NODE_ENV === 'development') {
-		// 中间授权页地址
-		return `${process.env.VUE_APP_WECHAT_AUTH_URL}?backUrl=${window.location.href}`
-	}
+	// if (process.env.NODE_ENV === 'development') {
+	// 中间授权页地址
+	// return `${process.env.VUE_APP_WECHAT_AUTH_URL}?backUrl=${window.location.href}`
+	// }
 
-	const url = window.location.href;
+	// 暂时把Url中#号及右边的内容全部清除
+	const url = window.location.href.split('#')[0];
 	// 解决多次登录url添加重复的code与state问题
 	const urlParams = qs.parse(url.split('?')[1]);
 	let redirectUrl = url;

@@ -13,6 +13,9 @@ import java.lang.String;
 
 @Data
 public class MedicalMemberPictureParam {
+    @ApiModelProperty(value = "id")
+    private Long pictureId;
+
     @ApiModelProperty(value = "病历Id")
     private Long medicalRecordId;
 

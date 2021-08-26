@@ -38,11 +38,4 @@ public class CosController {
         return success(TencentCOS.uploadfile(file, key));
     }
 
-    private void deleteFile(File... files) {
-        for (File file : files) {
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-    }
 }

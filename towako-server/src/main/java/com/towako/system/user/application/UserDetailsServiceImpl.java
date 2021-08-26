@@ -40,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (username.startsWith("WechatMember_")){
             final User member = requireUserPresent(membershipRepository.findById(Long.parseLong(username.replace("WechatMember_", "")))
-                    .map(membership -> new User(membership.getId(), membership.getNickname(), membership.getPhone(),
+                    .map(membership -> new User(membership.getId(), username, membership.getPhone(),
                             "", new BCryptPasswordEncoder().encode("L@nmedic@1"), membership.getNickname())));
             return buildUserDetails(member, new ArrayList<>());
         }

@@ -4,6 +4,8 @@ import com.cartisan.dtos.PageResult;
 import com.cartisan.utils.SnowflakeIdWorker;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.towako.assistedreproduction.medicalmemberpicture.MedicalMemberPicture;
+import com.towako.assistedreproduction.medicalmemberpicture.MedicalMemberPictureRepository;
 import com.towako.assistedreproduction.medicalrecord.mapper.MedicalRecordQueryMapper;
 import com.towako.assistedreproduction.medicalteam.MedicalTeamAppService;
 import com.towako.assistedreproduction.medicalteam.MedicalTeamParam;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cartisan.utils.AssertionUtil.requirePresent;
 
@@ -32,6 +35,7 @@ public class MedicalRecordAppService {
     private final DoctorAppService doctorAppService;
     private final MembershipRepository membershipRepository;
     private final UserAppService userAppService;
+    private final MedicalMemberPictureRepository medicalMemberPictureRepository;
     private final CurrentUser currentUser;
     private final SnowflakeIdWorker idWorker;
 
@@ -40,7 +44,7 @@ public class MedicalRecordAppService {
     public MedicalRecordAppService(MedicalRecordRepository repository, MedicalRecordQueryMapper medicalRecordQueryMapper,
                                    MedicalTeamAppService medicalTeamAppService, TreatmentPeriodAppService treatmentPeriodAppService,
                                    DoctorAppService doctorAppService, MembershipRepository membershipRepository,
-                                   UserAppService userAppService,
+                                   UserAppService userAppService, MedicalMemberPictureRepository medicalMemberPictureRepository,
                                    CurrentUser currentUser, SnowflakeIdWorker idWorker) {
         this.repository = repository;
         this.medicalRecordQueryMapper = medicalRecordQueryMapper;
@@ -49,6 +53,7 @@ public class MedicalRecordAppService {
         this.doctorAppService = doctorAppService;
         this.membershipRepository = membershipRepository;
         this.userAppService = userAppService;
+        this.medicalMemberPictureRepository = medicalMemberPictureRepository;
         this.currentUser = currentUser;
         this.idWorker = idWorker;
     }
@@ -72,6 +77,7 @@ public class MedicalRecordAppService {
         final MedicalRecordFullInfoDto medicalRecordFullInfoDto = new MedicalRecordFullInfoDto();
         medicalRecordFullInfoDto.setMedicalRecordDetail(this.getMedicalRecord(id));
         medicalRecordFullInfoDto.setTreatmentPeriods(treatmentPeriodAppService.findByMedicalRecordId(id));
+        medicalRecordFullInfoDto.setPictures(medicalMemberPictureRepository.findByMedicalRecordId(id).stream().map(MedicalMemberPicture::getUrl).collect(Collectors.toList()));
 
         return medicalRecordFullInfoDto;
     }
@@ -160,5 +166,9 @@ public class MedicalRecordAppService {
     @Transactional(rollbackOn = Exception.class)
     public void removeMedicalRecord(long id) {
         repository.deleteById(id);
+    }
+
+    public Long getMedicalRecordIdByMemberId(Long memberId) {
+        return requirePresent(repository.findByMemberId(memberId)).getId();
     }
 }

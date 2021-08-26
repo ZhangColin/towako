@@ -3,6 +3,10 @@ package com.towako.assistedreproduction.medicalmemberpicture;
 import com.cartisan.constants.CodeMessage;
 import com.cartisan.dtos.PageResult;
 import com.cartisan.exceptions.CartisanException;
+import com.cartisan.utils.SnowflakeIdWorker;
+import com.towako.assistedreproduction.medicalrecord.MedicalRecordAppService;
+import com.towako.security.CurrentUser;
+import com.towako.system.common.TencentCOS;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -12,50 +16,74 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.cartisan.responses.ResponseUtil.success;
 
 @Api(tags = "生殖辅助：用户自传病历图片")
 @RestController
-@RequestMapping("/medicalMemberPictures")
+@RequestMapping("/assisted-reproduction/medical-member-pictures")
 @Validated
 @Slf4j
 public class MedicalMemberPictureController {
     private final MedicalMemberPictureAppService service;
+    private final CurrentUser currentUser;
+    private final MedicalRecordAppService medicalRecordAppService;
+    private final SnowflakeIdWorker idWorker;
 
-    public MedicalMemberPictureController(MedicalMemberPictureAppService service) {
+    public MedicalMemberPictureController(MedicalMemberPictureAppService service,
+                                          CurrentUser currentUser,
+                                          MedicalRecordAppService medicalRecordAppService,
+                                          SnowflakeIdWorker idWorker) {
         this.service = service;
+        this.currentUser = currentUser;
+        this.medicalRecordAppService = medicalRecordAppService;
+        this.idWorker = idWorker;
     }
 
-    @ApiOperation(value = "搜索用户自传病历图片")
-    @GetMapping("/search")
-    public ResponseEntity<PageResult<MedicalMemberPictureDto>> searchMedicalMemberPictures(
-            @ApiParam(value = "查询参数") MedicalMemberPictureQuery medicalMemberPictureQuery,
-            @PageableDefault Pageable pageable) {
-        return success(service.searchMedicalMemberPictures(medicalMemberPictureQuery, pageable));
-    }
-
-    @ApiOperation(value = "获取用户自传病历图片")
-    @GetMapping("/{id}")
-    public ResponseEntity<MedicalMemberPictureDto> getMedicalMemberPicture(@ApiParam(value = "用户自传病历图片Id", required = true) @PathVariable Long id){
-        return success(service.getMedicalMemberPicture(id));
+    @ApiOperation(value = "获取当前用户的病历图片")
+    @GetMapping()
+    public ResponseEntity<List<MedicalMemberPictureDto>> getMedicalMemberPictures() {
+        return success(service.getMedicalMemberPictures());
     }
 
     @ApiOperation(value = "添加用户自传病历图片")
     @PostMapping
-    public ResponseEntity<MedicalMemberPictureDto> addMedicalMemberPicture(
-            @ApiParam(value = "用户自传病历图片信息", required = true) @Validated @RequestBody MedicalMemberPictureParam medicalMemberPictureParam) {
+    public ResponseEntity<MedicalMemberPictureDto> addMedicalMemberPicture(@RequestParam("file") MultipartFile file) throws IOException {
+        if (file == null) {
+            throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs("上传的文件为空"));
+        }
+
+        final Long medicalRecordId = medicalRecordAppService.getMedicalRecordIdByMemberId(currentUser.getUserId());
+
+        final long pictureId = idWorker.nextId();
+        final String key = "/" + medicalRecordId + "/" + pictureId +
+                file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+
+        final String url = TencentCOS.uploadfile(file, key);
+
+        MedicalMemberPictureParam medicalMemberPictureParam = new MedicalMemberPictureParam();
+        medicalMemberPictureParam.setPictureId(pictureId);
+        medicalMemberPictureParam.setMemberId(currentUser.getUserId());
+        medicalMemberPictureParam.setMedicalRecordId(medicalRecordId);
+        medicalMemberPictureParam.setUrl(url);
+
         return success(service.addMedicalMemberPicture(medicalMemberPictureParam));
     }
 
-    @ApiOperation(value = "编辑用户自传病历图片")
-    @PutMapping("/{id}")
-    public ResponseEntity<MedicalMemberPictureDto> editMedicalMemberPicture(
-            @ApiParam(value = "用户自传病历图片Id", required = true) @PathVariable Long id,
-            @ApiParam(value = "用户自传病历图片信息", required = true) @Validated @RequestBody MedicalMemberPictureParam medicalMemberPictureParam) {
-        return success(service.editMedicalMemberPicture(id, medicalMemberPictureParam));
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
+        if (file == null) {
+            throw new CartisanException(CodeMessage.VALIDATE_ERROR.fillArgs("上传的文件为空"));
+        }
+
+        final String key = "/" + idWorker.nextId() + "/" + idWorker.nextId() +
+                file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        return success(TencentCOS.uploadfile(file, key));
     }
 
     @ApiOperation(value = "删除用户自传病历图片")

@@ -22,7 +22,6 @@ import static java.util.stream.Collectors.toList;
 @EqualsAndHashCode(callSuper = true)
 public class MedicalMemberPicture extends AbstractEntity implements AggregateRoot {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -37,14 +36,8 @@ public class MedicalMemberPicture extends AbstractEntity implements AggregateRoo
 
     private MedicalMemberPicture() {}
 
-    public MedicalMemberPicture(Long medicalRecordId, Long memberId, String url) {
-
-        this.medicalRecordId = medicalRecordId;
-        this.memberId = memberId;
-        this.url = url;
-    }
-
-    public void describe(Long medicalRecordId, Long memberId, String url) {
+    public MedicalMemberPicture(Long id, Long medicalRecordId, Long memberId, String url) {
+        this.id = id;
         this.medicalRecordId = medicalRecordId;
         this.memberId = memberId;
         this.url = url;
