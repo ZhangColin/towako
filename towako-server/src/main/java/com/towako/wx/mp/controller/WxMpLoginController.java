@@ -1,21 +1,17 @@
 package com.towako.wx.mp.controller;
 
 import com.cartisan.security.LoginService;
-import com.cartisan.utils.AesUtil;
 import com.towako.assistedreproduction.medicalrecord.AddMedicalRecordByMembership;
 import com.towako.assistedreproduction.medicalrecord.MedicalRecordAppService;
-import com.towako.system.user.application.LoginAppService;
-import com.towako.traffic.channel.ChannelRepository;
 import com.towako.traffic.recommend.RecommendAppService;
 import com.towako.vip.membership.MembershipAppService;
 import com.towako.vip.membership.response.MembershipDto;
-import com.towako.vip.wechateventrecord.WechatEventRecordAppService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,13 +40,13 @@ public class WxMpLoginController {
 //        if (!this.wxService.switchover(appid)) {
 //            throw new IllegalArgumentException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));
 //        }
-        WxMpOAuth2AccessToken accessToken = wxMpService.getOAuth2Service().getAccessToken(code);
-        WxMpUser user = wxMpService.getOAuth2Service().getUserInfo(accessToken, null);
+        final WxOAuth2AccessToken accessToken = wxMpService.getOAuth2Service().getAccessToken(code);
+        final WxOAuth2UserInfo user = wxMpService.getOAuth2Service().getUserInfo(accessToken, null);
 
         if (user != null) {
             final String appId = wxMpService.getWxMpConfigStorage().getAppId();
 
-            final Optional<MembershipDto> userOptional = membershipAppService.findByOpenId(appId, user.getOpenId());
+            final Optional<MembershipDto> userOptional = membershipAppService.findByOpenId(appId, user.getOpenid());
 
             MembershipDto membershipDto;
 
@@ -58,10 +54,10 @@ public class WxMpLoginController {
                 String unionId = user.getUnionId();
                 if (unionId == null) {
                     // 没有开通第三方公众平台时，使用openId来替代
-                    unionId = user.getOpenId();
+                    unionId = user.getOpenid();
                 }
 
-                membershipDto = membershipAppService.registerByWechat(appId, user.getOpenId(), unionId,
+                membershipDto = membershipAppService.registerByWechat(appId, user.getOpenid(), unionId,
                         "", user.getNickname(), user.getHeadImgUrl(), user.getSex(),
                         user.getCity(), user.getProvince(), user.getCountry(), "");
 

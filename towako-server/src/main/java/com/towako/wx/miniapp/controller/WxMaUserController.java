@@ -93,12 +93,17 @@ public class WxMaUserController {
 
         final String appId = wxMaService.getWxMaConfig().getAppid();
 
-        String unionId = wxMaUserInfo.getUnionId();
+//        String unionId = wxMaUserInfo.getUnionId();
+        String unionId = wxMaUserInfo.getNickName();
         if (unionId == null) {
 //            unionId="mock-"+UUID.randomUUID();
             unionId="mock";
         }
-        final MembershipDto membershipDto = membershipAppService.registerByMiniApp(appId, wxMaUserInfo.getOpenId(), unionId,
+//        final MembershipDto membershipDto = membershipAppService.registerByMiniApp(appId, wxMaUserInfo.getOpenId(), unionId,
+//                "", wxMaUserInfo.getNickName(), wxMaUserInfo.getAvatarUrl(), Integer.parseInt(wxMaUserInfo.getGender()),
+//                wxMaUserInfo.getCity(), wxMaUserInfo.getProvince(), wxMaUserInfo.getCountry());
+
+        final MembershipDto membershipDto = membershipAppService.registerByMiniApp(appId, wxMaUserInfo.getNickName(), unionId,
                 "", wxMaUserInfo.getNickName(), wxMaUserInfo.getAvatarUrl(), Integer.parseInt(wxMaUserInfo.getGender()),
                 wxMaUserInfo.getCity(), wxMaUserInfo.getProvince(), wxMaUserInfo.getCountry());
 

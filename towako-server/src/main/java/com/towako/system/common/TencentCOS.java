@@ -51,6 +51,30 @@ public class TencentCOS {
         return "https://"+bucketName+".cos."+regionName+".myqcloud.com"+key;
     }
 
+    public static String uploadfile(File file, String key) throws IOException {
+        COSClient cosClient = new COSClient(credentials, clientConfig);
+
+        String fileName = file.getName();
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.length());
+        metadata.setContentEncoding("UTF-8");
+
+        if (".png".equals(fileName.substring(fileName.lastIndexOf(".")))) {
+            metadata.setContentType("image/png");
+        } else if (".jpg".equals(fileName.substring(fileName.lastIndexOf(".")))) {
+            metadata.setContentType("image/jpeg");
+        }
+
+        final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
+        putObjectRequest.setStorageClass(StorageClass.Standard);
+
+        final PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+
+        cosClient.shutdown();
+
+        return "https://"+bucketName+".cos."+regionName+".myqcloud.com"+key;
+    }
+
     public static void downFile() {
         final COSClient cosClient = new COSClient(credentials, clientConfig);
         String key = "down/demo1.jpg";

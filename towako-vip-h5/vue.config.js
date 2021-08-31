@@ -62,6 +62,7 @@ module.exports = {
 			warnings: false,
 			errors: true,
 		},
+		disableHostCheck: true,
 	},
 	// devServer: {
 	// 	proxy: {
