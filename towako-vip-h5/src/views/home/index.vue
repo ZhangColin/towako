@@ -12,25 +12,23 @@
 		</div>
 		<div class="section">
 			<van-sticky :offset-top="1">
-				<!--								<van-uploader-->
-				<!--									upload-text="上传病历图片"-->
-				<!--									:max-size="10 * 1024 * 1024"-->
-				<!--									:after-read="afterRead"-->
-				<!--									@oversize="onOversize"-->
-				<!--								/>-->
 				<van-button icon="photograph" @click="uploadImage">上传</van-button>
 			</van-sticky>
-<!--      <van-steps direction="vertical">-->
-<!--        <van-step v-for="group in pictures" :key="group">-->
-<!--          <h3>{{ group }}</h3>-->
-<!--          <p>2016-07-12 12:40</p>-->
-<!--        </van-step>-->
-<!--      </van-steps>-->
-			<van-grid :border="false" :column-num="2" :square="true" :center="true" :clickable="true">
-				<van-grid-item v-for="(picture, index) in pictures" :key="picture.id" @click="picturesPreview(index)">
-					<van-image :src="picture.url" fit="contain" width="100%" height="100%" />
-				</van-grid-item>
-			</van-grid>
+			<van-steps direction="vertical" :active="pictureGroups.length">
+				<van-step v-for="g in pictureGroups" :key="g.group">
+					<h3>{{ g.group }}</h3>
+					<van-grid :border="false" :column-num="2" :square="true" :center="true" :clickable="true">
+						<van-grid-item v-for="(picture, index) in g.data" :key="picture.id">
+							<van-badge style="display: inline-block; position: relative; width: 100%; height: 100%" color="rgba(50, 50, 51, 0.60)">
+								<van-image :src="picture.url" fit="contain" width="100%" height="100%" @click="picturesPreview(g.group, index)" />
+								<template #content>
+									<van-icon name="cross" class="badge-icon" @click.prevent="deletePicture(picture.id)" />
+								</template>
+							</van-badge>
+						</van-grid-item>
+					</van-grid>
+				</van-step>
+			</van-steps>
 		</div>
 		<div class="footer">
 			<!--  -->
@@ -50,7 +48,7 @@ export default {
 	data() {
 		return {
 		  imgData: '',
-		  pictures: [],
+		  pictureGroups: [],
 		};
 	},
 	computed: {
@@ -110,12 +108,12 @@ export default {
 		},
 		fetchData() {
 			request.get('/assisted-reproduction/medical-member-pictures').then(response => {
-				this.pictures = response.data;
+				this.pictureGroups = response.data;
 			});
 		},
 		// 图片上传
 		uploadImage() {
-	    let that = this;
+	    const that = this;
 			wx.chooseImage({
 				count: 1,
 				sizeType: ['original', 'compressed'],
@@ -128,11 +126,12 @@ export default {
 						success: function(r) {
 						  // console.log('serverid', r.serverId);
 							request.post('/assisted-reproduction/medical-member-pictures/wechatMedia/' + r.serverId)
-								.then(result => {
+								.then(() => {
 									// alert(JSON.stringify(result.data));
 									// alert(JSON.stringify(this.pictures));
 									that.$toast('上传成功');
-									that.pictures.push(result.data);
+									that.fetchData();
+									// that.pictures.push(result.data);
 								});
 						},
 					});
@@ -144,25 +143,40 @@ export default {
 				},
 			});
 		},
-		onOversize() {
-			this.$toast('文件大小不能超过 10MB');
-		},
-		afterRead(file) {
-		  const formData = new FormData();
-			formData.append('file', file.file, file.file.name);
-			const config = { headers: {
-				'Content-Type': 'multipart/form-data' }};
-			request.post('/assisted-reproduction/medical-member-pictures', formData, config)
-				.then(response => {
-					this.$toast('上传成功');
-				  this.pictures.push(response.data);
+		// onOversize() {
+		// 	this.$toast('文件大小不能超过 10MB');
+		// },
+		// afterRead(file) {
+		//   const formData = new FormData();
+		// 	formData.append('file', file.file, file.file.name);
+		// 	const config = { headers: {
+		// 		'Content-Type': 'multipart/form-data' }};
+		// 	request.post('/assisted-reproduction/medical-member-pictures', formData, config)
+		// 		.then(response => {
+		// 			this.$toast('上传成功');
+		// 		  this.pictures.push(response.data);
+		// 		})
+		// 		.catch(err => console.log(err));
+		// },
+		deletePicture(id) {
+			request.delete(`/assisted-reproduction/medical-member-pictures/${id}`)
+				.then(() => {
+					this.$toast('删除成功');
+					this.fetchData();
 				})
 				.catch(err => console.log(err));
 		},
-		picturesPreview(index) {
+		picturesPreview(group, index) {
+	    let count = 0;
+			for (let i = 0; i < this.pictureGroups.length; i++) {
+				if (this.pictureGroups[i].group === group) {
+					break;
+				}
+				count += this.pictureGroups[i].data.length;
+			}
 		  ImagePreview({
-				images: this.pictures.map(picture => picture.url),
-				startPosition: index,
+				images: this.pictureGroups.flatMap(g => g.data.map(p => p.url)),
+				startPosition: count + index,
 			});
 		},
 	},

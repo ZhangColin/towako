@@ -174,11 +174,15 @@
       </el-tab-pane>
     </el-tabs>
 
-    <el-card v-if="medicalRecordFullInfo.pictures && medicalRecordFullInfo.pictures.length>0">
+    <el-card v-if="medicalRecordFullInfo.pictureGroups && medicalRecordFullInfo.pictureGroups.length>0">
       <div slot="header" class="clearfix">
         <span>病人自主上传病历图片</span>
       </div>
-      <el-image v-for="url in medicalRecordFullInfo.pictures" style="width: 200px; height: 200px" :key="url" :src="url" fit="contain" :preview-src-list="medicalRecordFullInfo.pictures"/>
+      <el-timeline>
+        <el-timeline-item v-for="group in medicalRecordFullInfo.pictureGroups" :key="group.group" :timestamp="group.group" placement="top">
+          <el-image v-for="picture in group.data" :key="picture.id" style="width: 200px; height: 200px" :src="picture.url" fit="contain" :preview-src-list="medicalRecordFullInfo.pictureGroups.flatMap(group=>group.data.map(p=>p.url))" />
+        </el-timeline-item>
+      </el-timeline>
     </el-card>
     <el-drawer
       title="修改病历"

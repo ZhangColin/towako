@@ -5,6 +5,7 @@ import com.cartisan.utils.SnowflakeIdWorker;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.towako.assistedreproduction.medicalmemberpicture.MedicalMemberPicture;
+import com.towako.assistedreproduction.medicalmemberpicture.MedicalMemberPictureAppService;
 import com.towako.assistedreproduction.medicalmemberpicture.MedicalMemberPictureRepository;
 import com.towako.assistedreproduction.medicalrecord.mapper.MedicalRecordQueryMapper;
 import com.towako.assistedreproduction.medicalteam.MedicalTeamAppService;
@@ -17,6 +18,7 @@ import com.towako.system.user.application.UserAppService;
 import com.towako.vip.membership.MembershipRepository;
 import com.towako.vip.membership.domain.Membership;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,8 @@ public class MedicalRecordAppService {
     private final DoctorAppService doctorAppService;
     private final MembershipRepository membershipRepository;
     private final UserAppService userAppService;
-    private final MedicalMemberPictureRepository medicalMemberPictureRepository;
+    @Autowired
+    private MedicalMemberPictureAppService medicalMemberPictureAppService;
     private final CurrentUser currentUser;
     private final SnowflakeIdWorker idWorker;
 
@@ -44,7 +47,7 @@ public class MedicalRecordAppService {
     public MedicalRecordAppService(MedicalRecordRepository repository, MedicalRecordQueryMapper medicalRecordQueryMapper,
                                    MedicalTeamAppService medicalTeamAppService, TreatmentPeriodAppService treatmentPeriodAppService,
                                    DoctorAppService doctorAppService, MembershipRepository membershipRepository,
-                                   UserAppService userAppService, MedicalMemberPictureRepository medicalMemberPictureRepository,
+                                   UserAppService userAppService, // MedicalMemberPictureRepository medicalMemberPictureRepository,
                                    CurrentUser currentUser, SnowflakeIdWorker idWorker) {
         this.repository = repository;
         this.medicalRecordQueryMapper = medicalRecordQueryMapper;
@@ -53,7 +56,7 @@ public class MedicalRecordAppService {
         this.doctorAppService = doctorAppService;
         this.membershipRepository = membershipRepository;
         this.userAppService = userAppService;
-        this.medicalMemberPictureRepository = medicalMemberPictureRepository;
+//        this.medicalMemberPictureRepository = medicalMemberPictureRepository;
         this.currentUser = currentUser;
         this.idWorker = idWorker;
     }
@@ -77,7 +80,7 @@ public class MedicalRecordAppService {
         final MedicalRecordFullInfoDto medicalRecordFullInfoDto = new MedicalRecordFullInfoDto();
         medicalRecordFullInfoDto.setMedicalRecordDetail(this.getMedicalRecord(id));
         medicalRecordFullInfoDto.setTreatmentPeriods(treatmentPeriodAppService.findByMedicalRecordId(id));
-        medicalRecordFullInfoDto.setPictures(medicalMemberPictureRepository.findByMedicalRecordId(id).stream().map(MedicalMemberPicture::getUrl).collect(Collectors.toList()));
+        medicalRecordFullInfoDto.setPictureGroups(medicalMemberPictureAppService.getMedicalMemberPicturesByMedicalRecordId(id));
 
         return medicalRecordFullInfoDto;
     }

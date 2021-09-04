@@ -16,11 +16,6 @@
     <van-row class="section">
       <van-tabs v-model="active" sticky animated>
         <van-tab title="基本信息">
-          <van-swipe v-if="medicalRecordFullInfo.pictures && medicalRecordFullInfo.pictures.length>0" :autoplay="3000" style="height: 200px;">
-            <van-swipe-item v-for="(image, index) in medicalRecordFullInfo.pictures" :key="index" @click="picturesPreview(index)">
-              <van-image :src="image" fit="contain" width="100%" height="100%" />
-            </van-swipe-item>
-          </van-swipe>
           <van-cell-group>
             <van-cell title="医院" :value="(hospitals.find(hospital=>medicalRecordFullInfo.medicalRecordDetail.hospitalId===hospital.id) || {name: ''}).name" />
             <van-cell title="病案号" :value="medicalRecordFullInfo.medicalRecordDetail.recordNo" />
@@ -36,6 +31,16 @@
             <van-cell title="民族" :value="medicalRecordFullInfo.medicalRecordDetail.nation" />
             <van-cell title="婚姻状况" :value="{0:'未婚', 1:'已婚'}[medicalRecordFullInfo.medicalRecordDetail.maritalStatus]" />
           </van-cell-group>
+          <van-steps v-if="medicalRecordFullInfo.pictureGroups.length>0" direction="vertical" :active="medicalRecordFullInfo.pictureGroups.length">
+            <van-step v-for="g in medicalRecordFullInfo.pictureGroups" :key="g.group">
+              <h3>{{ g.group }}</h3>
+              <van-grid :border="false" :column-num="2" :square="true" :center="true" :clickable="true">
+                <van-grid-item v-for="(picture, index) in g.data" :key="picture.id">
+                  <van-image :src="picture.url" fit="contain" width="100%" height="100%" @click="picturesPreview(g.group, index)" />
+                </van-grid-item>
+              </van-grid>
+            </van-step>
+          </van-steps>
         </van-tab>
         <van-tab title="诊断小节">
           <van-collapse v-model="collapseNames">
@@ -178,6 +183,7 @@ export default {
           nation: '',
           maritalStatus: ''
         },
+        pictureGroups: [],
         treatmentPeriods: [
 
         ]
@@ -207,10 +213,12 @@ export default {
         }
 
         this.medicalRecordFullInfo = response.data
-        this.collapseNames = this.medicalRecordFullInfo.treatmentPeriods.map(p => p.treatmentPeriod.period)
-        this.periodActive = this.medicalRecordFullInfo.treatmentPeriods[0].treatmentPeriod.period
-        this.report.content = this.medicalRecordFullInfo.treatmentPeriods[0].treatmentPeriod.report
-        this.report.periodId = this.medicalRecordFullInfo.treatmentPeriods[0].treatmentPeriod.id
+        if (this.medicalRecordFullInfo.treatmentPeriods.length > 0) {
+          this.collapseNames = this.medicalRecordFullInfo.treatmentPeriods.map(p => p.treatmentPeriod.period)
+          this.periodActive = this.medicalRecordFullInfo.treatmentPeriods[0].treatmentPeriod.period
+          this.report.content = this.medicalRecordFullInfo.treatmentPeriods[0].treatmentPeriod.report
+          this.report.periodId = this.medicalRecordFullInfo.treatmentPeriods[0].treatmentPeriod.id
+        }
       })
     },
     submitReport() {
@@ -238,10 +246,17 @@ export default {
 
       return str.split(',').filter(s => title.toLowerCase().startsWith(s.trim().toLowerCase())).length > 0
     },
-    picturesPreview(index) {
+    picturesPreview(group, index) {
+      let count = 0
+      for (let i = 0; i < this.medicalRecordFullInfo.pictureGroups.length; i++) {
+        if (this.medicalRecordFullInfo.pictureGroups[i].group === group) {
+          break
+        }
+        count += this.medicalRecordFullInfo.pictureGroups[i].data.length
+      }
       ImagePreview({
-        images: this.medicalRecordFullInfo.pictures,
-        startPosition: index
+        images: this.medicalRecordFullInfo.pictureGroups.flatMap(g => g.data.map(p => p.url)),
+        startPosition: count + index
       })
     }
   }

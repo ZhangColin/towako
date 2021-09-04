@@ -19,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.cartisan.responses.ResponseUtil.success;
 
@@ -49,7 +51,7 @@ public class MedicalMemberPictureController {
 
     @ApiOperation(value = "获取当前用户的病历图片")
     @GetMapping()
-    public ResponseEntity<List<MedicalMemberPictureDto>> getMedicalMemberPictures() {
+    public ResponseEntity<List<PictureGroupDto>> getMedicalMemberPictures() {
         return success(service.getMedicalMemberPictures());
     }
 
